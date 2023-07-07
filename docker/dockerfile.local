@@ -1,0 +1,17 @@
+FROM node:16
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install -g npm@latest
+RUN npm install -g @ionic/cli
+RUN npm install -g firebase-tools
+
+COPY secret-firebase.json /app/secret-firebase.json
+
+COPY ./docker/docker-entrypoint.local.sh /docker-entrypoint.local.sh
+RUN chmod +x /docker-entrypoint.local.sh
+
+EXPOSE 8100
+
+ENTRYPOINT /docker-entrypoint.local.sh

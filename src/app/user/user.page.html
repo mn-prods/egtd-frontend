@@ -1,0 +1,123 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'profile.toolbar.title' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="entity" [formGroup]="form">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="auto">
+        <ion-avatar id="avatar">
+          <img [src]="'data:image/png;base64,' + entity.avatar" />
+        </ion-avatar>
+      </ion-col>
+      <ion-col>
+          <ion-icon slot="end" name="pencil" size="small"></ion-icon>
+          <ion-input
+            fill="outline"
+            labelPlacement="stacked"
+            [label]="'profile.content.username' | translate"
+            formControlName="userName"
+            type="text"
+          >
+          </ion-input>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6">
+          <ion-input
+            fill="outline"
+            labelPlacement="stacked"
+            [label]="'profile.content.age' | translate"
+            formControlName="age"
+            type="number"
+          ></ion-input>
+      </ion-col>
+      <ion-col size="6">
+          <ion-select
+            fill="outline"
+            labelPlacement="stacked"
+            [label]="'profile.content.gender.lbl' | translate"
+            [multiple]="false"
+            formControlName="gender"
+          >
+            <ion-select-option value="M"
+              >{{ 'profile.content.gender.M' | translate }}</ion-select-option
+            >
+            <ion-select-option value="F"
+              >{{ 'profile.content.gender.F' | translate }}</ion-select-option
+            >
+          </ion-select>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6">
+          <ion-input
+            fill="outline"
+            labelPlacement="stacked"
+            [label]="'profile.content.height' | translate"
+            formControlName="height"
+            type="number"
+          ></ion-input>
+          <div slot="end" class="text-small">cm</div>
+      </ion-col>
+      <ion-col size="6">
+          <ion-input
+            fill="outline"
+            [label]="'profile.content.weight' | translate"
+            labelPlacement="stacked"
+            formControlName="weight"
+            type="number"
+          ></ion-input>
+          <div slot="end" class="text-small">kg</div>
+        
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <div class="flex flex-column ion-justify-content-center m-1">
+          <ion-text class="ion-text-center"
+            >{{ 'profile.content.activityLevel' | translate }}</ion-text
+          >
+          <ion-range
+            [min]="0"
+            [max]="4"
+            [dualKnobs]="false"
+            [pin]="true"
+            [snaps]="true"
+            [step]="1"
+            [ticks]="true"
+            color="primary"
+            formControlName="activityLevel"
+          >
+            <ion-label slot="start">0</ion-label>
+            <ion-label slot="end">4</ion-label>
+          </ion-range>
+          <ion-item lines="none">
+            <ion-icon slot="end" name="information-circle-outline"></ion-icon>
+            <ion-text
+              *ngIf="form.controls.activityLevel.value !== undefined && form.controls.activityLevel.value !== null"
+            >
+              {{ 'activityLevel.' +
+              activityLevels[form.controls.activityLevel.value] | translate}}
+            </ion-text>
+          </ion-item>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label>TDEE: </ion-label>
+          <ion-text color="primary">
+            {{ tdee | number : '1.2-2' }} kcal
+          </ion-text>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
