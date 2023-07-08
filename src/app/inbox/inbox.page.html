@@ -3,22 +3,35 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
-    <ion-title>inbox</ion-title>
+
+    <ion-title>{{ 'inbox.title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">inbox</ion-title>
+      <ion-title size="large">{{ 'inbox.title' | translate }}</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <ion-list>
-    <ion-item *ngFor="let item of items">
-      <ion-label> {{item.label}} </ion-label>
+  <div class="flex flex-col">
+    <ion-item *ngFor="let item of items" [class.order-last]="item.isClosed">
+      <ion-checkbox
+        justify="space-between"
+        mode="ios"
+        [(ngModel)]="item.isClosed"
+        (ionChange)="openCloseItem(item.id,  $any($event))"
+      >
+        <span
+          [class.line-through]="item.isClosed"
+          [class.text-slate-600]="item.isClosed"
+          class="decoration-sky-600"
+          >{{item.label}}</span
+        >
+      </ion-checkbox>
     </ion-item>
-  </ion-list>
+  </div>
 </ion-content>
 
 <ion-footer>
@@ -29,12 +42,15 @@
         type="text"
         [placeholder]="'inbox.item.placeholder' | translate"
       ></ion-input>
-      <ion-button
-        (click)="createInboxItem(newItem!.value)"
-        [disabled]="newItem.invalid"
-      >
-        <ion-icon slot="icon-only" name="send"></ion-icon>
-      </ion-button>
+      <ion-buttons slot="end">
+        <ion-button
+          fill="clear"
+          (click)="createInboxItem(newItem!.value)"
+          [disabled]="newItem.invalid"
+        >
+          <ion-icon slot="icon-only" name="send"></ion-icon>
+        </ion-button>
+      </ion-buttons>
     </ion-item>
   </ion-toolbar>
 </ion-footer>

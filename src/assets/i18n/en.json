@@ -1,7 +1,8 @@
 {
     "inbox": {
+        "title": "Inbox",
         "item": {
-            "placeholder": "Loose end..."
+            "placeholder": "Capture a loose end..."
         }
     }
 }

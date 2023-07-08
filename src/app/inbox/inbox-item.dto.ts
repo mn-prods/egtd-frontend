@@ -12,4 +12,10 @@ export interface InboxItem {
   status: InboxItemStatus;
 
   label: string;
+
+  isClosed: boolean;
+
+  created: Date;
+
+  modified: Date;
 }
