@@ -27,6 +27,8 @@ export class InboxPage implements IonViewWillEnter {
 
   items: InboxItem[] = [];
 
+  showCompleted = true;
+
   async ionViewWillEnter() {
     this.items = await this.inbox.getItems();
   }

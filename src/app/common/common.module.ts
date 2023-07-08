@@ -5,7 +5,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { AsStringPipe } from './pipes/as.pipe';
 import { PipesModule } from './pipes/pipes.module';
 
 @NgModule({

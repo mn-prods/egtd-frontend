@@ -3,7 +3,11 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
-
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="showCompleted = !showCompleted">
+        <ion-icon slot="icon-only" name="filter-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-title>{{ 'inbox.title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -16,7 +20,10 @@
   </ion-header>
 
   <div class="flex flex-col">
-    <ion-item *ngFor="let item of items" [class.order-last]="item.isClosed">
+    <ion-item
+      *ngFor="let item of items | filter : 'isClosed' : false : showCompleted"
+      [class.order-last]="item.isClosed"
+    >
       <ion-checkbox
         justify="space-between"
         mode="ios"
