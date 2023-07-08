@@ -1,14 +1,16 @@
-import { Subject } from "rxjs"
+import { Subject } from 'rxjs';
+import {
+    IonViewDidEnter
+} from '../interfaces/ionic-lifecycle.interface';
 
-export abstract class AsyncComponent {
+export abstract class AsyncComponent implements IonViewDidEnter {
+  unsubscribe$!: Subject<null>;
 
-    unsubscribe$!: Subject<null>;
+  instantiateUnsubscribe() {
+    this.unsubscribe$ = new Subject<null>();
+  }
 
-    instantiateUnsubscribe() {
-        this.unsubscribe$ = new Subject<null>();
-    }
-
-    ionViewWillEnter() {
-        this.instantiateUnsubscribe();
-    }
+  ionViewDidEnter() {
+    this.instantiateUnsubscribe();
+  }
 }

@@ -17,6 +17,6 @@ import { AppCommonModule } from '../common/common.module';
     IonicModule,
     UserPageRoutingModule,
   ],
-  declarations: [UserPage],
+declarations: [UserPage],
 })
 export class UserPageModule {}

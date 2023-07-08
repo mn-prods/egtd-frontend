@@ -7,10 +7,12 @@ import { IonicModule } from '@ionic/angular';
 import { InboxPageRoutingModule } from './inbox-routing.module';
 
 import { InboxPage } from './inbox.page';
+import { AppCommonModule } from '../common/common.module';
 
 @NgModule({
   imports: [
     CommonModule,
+    AppCommonModule,
     FormsModule,
     IonicModule,
     InboxPageRoutingModule
