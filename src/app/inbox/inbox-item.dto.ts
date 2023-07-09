@@ -1,10 +1,12 @@
-import { User } from '../common/interfaces/user.interface';
+import { ObjectValues } from '../common/types/object-values.type';
 
-export enum InboxItemStatus {
-  open = 'OPEN',
-  closed = 'CLOSED',
-  deleted = 'DELETED',
-}
+export const inboxItemStatus = {
+  open: 'OPEN',
+  closed: 'CLOSED',
+  deleted: 'DELETED',
+} as const;
+
+export type InboxItemStatus = ObjectValues<typeof inboxItemStatus>;
 
 export interface InboxItem {
   id: string;

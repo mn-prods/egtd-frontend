@@ -4,7 +4,7 @@ import { firstValueFrom, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { headers } from '../common/constants';
 import { CreateInboxDto } from './create-inbox-item.dto';
-import { InboxItem, InboxItemStatus } from './inbox-item.dto';
+import { InboxItem, inboxItemStatus } from './inbox-item.dto';
 
 const endpoint = `${environment.api}/inbox`;
 

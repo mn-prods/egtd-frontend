@@ -1,12 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import {
-  CheckboxChangeEventDetail,
-  CheckboxCustomEvent,
-  IonModal,
-} from '@ionic/angular';
+import { FormControl, Validators } from '@angular/forms';
+import { CheckboxCustomEvent, IonModal } from '@ionic/angular';
 import { IonViewWillEnter } from '../common/interfaces/ionic-lifecycle.interface';
-import { InboxItem, InboxItemStatus } from './inbox-item.dto';
+import { InboxItem, InboxItemStatus, inboxItemStatus } from './inbox-item.dto';
 import { InboxService } from './inbox.service';
 
 // export type InboxItemForm = {
@@ -43,8 +39,8 @@ export class InboxPage implements IonViewWillEnter {
 
   async openCloseItem(itemId: string, { detail }: CheckboxCustomEvent) {
     const status: InboxItemStatus = detail.checked
-      ? InboxItemStatus.closed
-      : InboxItemStatus.open;
+      ? inboxItemStatus.closed
+      : inboxItemStatus.open;
 
     this.inbox.changeItemStatus(itemId, status);
   }
