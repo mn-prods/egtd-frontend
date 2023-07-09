@@ -4,8 +4,11 @@
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button fill="clear" (click)="showCompleted = !showCompleted">
-        <ion-icon slot="icon-only" name="filter-outline"></ion-icon>
+      <ion-button (click)="showCompleted = !showCompleted">
+        <ion-icon
+          slot="icon-only"
+          [name]="'filter-circle' + (showCompleted ? '-outline' : '')"
+        ></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-title>{{ 'inbox.title' | translate }}</ion-title>
@@ -19,26 +22,44 @@
     </ion-toolbar>
   </ion-header>
 
-  <div class="flex flex-col">
-    <ion-item
+  <ion-list class="flex flex-col">
+    <ion-item-sliding
       *ngFor="let item of items | filter : 'isClosed' : false : showCompleted"
       [class.order-last]="item.isClosed"
     >
-      <ion-checkbox
-        justify="space-between"
-        mode="ios"
-        [(ngModel)]="item.isClosed"
-        (ionChange)="openCloseItem(item.id,  $any($event))"
-      >
-        <span
-          [class.line-through]="item.isClosed"
-          [class.text-slate-600]="item.isClosed"
-          class="decoration-sky-600"
-          >{{item.label}}</span
+      <ion-item-options side="start">
+        <ion-item-option color="none" (click)="deleteItem(item.id)">
+          <ion-icon
+            color="danger"
+            slot="icon-only"
+            name="close-circle-outline"
+          ></ion-icon>
+        </ion-item-option>
+        <ion-item-option color="none" [disabled]="item.isClosed">
+          <ion-icon
+            color="primary"
+            slot="icon-only"
+            name="create-outline"
+          ></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+      <ion-item>
+        <ion-checkbox
+          justify="space-between"
+          mode="ios"
+          [(ngModel)]="item.isClosed"
+          (ionChange)="openCloseItem(item.id,  $any($event))"
         >
-      </ion-checkbox>
-    </ion-item>
-  </div>
+          <span
+            [class.line-through]="item.isClosed"
+            [class.text-slate-600]="item.isClosed"
+            class="decoration-sky-600"
+            >{{item.label}}</span
+          >
+        </ion-checkbox>
+      </ion-item>
+    </ion-item-sliding>
+  </ion-list>
 </ion-content>
 
 <ion-footer>

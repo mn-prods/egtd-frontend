@@ -53,6 +53,12 @@ export class InboxService {
     );
   }
 
+  async deleteItem(itemId: string) {
+    return firstValueFrom(
+      this.http.delete(`${endpoint}/${itemId}`, { headers })
+    );
+  }
+
   private castItem(item: InboxItem): InboxItem {
     return {
       ...item,

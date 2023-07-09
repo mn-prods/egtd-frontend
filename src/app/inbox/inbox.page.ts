@@ -44,4 +44,9 @@ export class InboxPage implements IonViewWillEnter {
 
     this.inbox.changeItemStatus(itemId, status);
   }
+
+  async deleteItem(itemId: string) {
+    await this.inbox.deleteItem(itemId);
+    this.items = this.items.filter((item) => item.id !== itemId);
+  }
 }
