@@ -4,7 +4,7 @@ import { firstValueFrom, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { headers } from '../common/constants';
 import { CreateInboxDto } from './create-inbox-item.dto';
-import { InboxItem, inboxItemStatus } from './inbox-item.dto';
+import { InboxItem, InboxItemStatus, inboxItemStatus } from './inbox-item.dto';
 
 const endpoint = `${environment.api}/inbox`;
 
@@ -56,7 +56,7 @@ export class InboxService {
   private castItem(item: InboxItem): InboxItem {
     return {
       ...item,
-      isClosed: item.status === InboxItemStatus.closed,
+      isClosed: item.status === inboxItemStatus.closed,
       created: new Date(item.created),
       modified: new Date(item.modified),
     };
