@@ -5,8 +5,8 @@ import { FilterPipe } from './filter.pipe';
 
 @NgModule({
     declarations: [AsStringPipe, FilterPipe],
-    imports: [ CommonModule ],
+    imports: [CommonModule],
     exports: [AsStringPipe, FilterPipe],
     providers: [],
 })
-export class PipesModule {}
+export class PipesModule { }

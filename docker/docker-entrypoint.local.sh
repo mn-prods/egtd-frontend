@@ -1,4 +1,4 @@
-npm install --no-optional
+npm install --include=optional
 
 firebase use default
 
@@ -30,4 +30,4 @@ fi
 
 
 
-ionic serve --host 0.0.0.0
+npm run start

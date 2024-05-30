@@ -25,6 +25,4 @@ export interface User {
 
   modified: Date;
 
-  // language?: Language;
-
 }

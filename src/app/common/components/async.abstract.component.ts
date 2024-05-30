@@ -1,16 +1,18 @@
 import { Subject } from 'rxjs';
-import {
-    IonViewDidEnter
-} from '../interfaces/ionic-lifecycle.interface';
+import { Component, OnInit } from '@angular/core';
 
-export abstract class AsyncComponent implements IonViewDidEnter {
+@Component({
+  selector: '',
+  template: '',
+})
+export abstract class AsyncComponent implements OnInit {
   unsubscribe$!: Subject<null>;
 
   instantiateUnsubscribe() {
     this.unsubscribe$ = new Subject<null>();
   }
 
-  ionViewDidEnter() {
+  ngOnInit() {
     this.instantiateUnsubscribe();
   }
 }

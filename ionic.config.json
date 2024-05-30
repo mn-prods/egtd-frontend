@@ -1,7 +1,7 @@
 {
-  "name": "Finance",
+  "name": "gtd",
   "integrations": {
     "capacitor": {}
   },
-  "type": "angular"
+  "type": "angular-standalone"
 }

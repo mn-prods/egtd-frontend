@@ -1,7 +1,5 @@
-import { Component } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { Component, OnInit } from '@angular/core';
 import { filter, first, firstValueFrom, Observable, Subject } from 'rxjs';
-import { ChoiceModalComponent } from './choice-modal/choice-modal.component';
 import { CrudService, SortOrder } from '../crud.service';
 import { BaseI } from '../interfaces/base.interface';
 import { AsyncComponent } from './async.abstract.component';
@@ -21,7 +19,7 @@ export class PaginationConfig<E> {
 export abstract class ListComponent<
   E extends BaseI,
   F = Partial<E>
-> extends AsyncComponent {
+> extends AsyncComponent implements OnInit {
   selectedEntities: E[] | undefined;
   entities: E[] | undefined;
   filter: F | undefined;
@@ -38,10 +36,11 @@ export abstract class ListComponent<
 
   constructor(
     protected entityService: CrudService<E, F>,
-    protected modal: ModalController
+    
   ) {
     super();
   }
+
 
   get paginationConfig(): PaginationConfig<E> {
     return {
@@ -52,7 +51,8 @@ export abstract class ListComponent<
     };
   }
 
-  override ionViewWillEnter() {
+
+  override ngOnInit(): void {
     this.unsubscribe$ = new Subject();
     this.lazyLoad();
   }
@@ -101,18 +101,6 @@ export abstract class ListComponent<
 
   async delete(entity: E, message: string) {
     if (!entity.id) {
-      return;
-    }
-
-    const modal = await this.modal.create({
-      component: ChoiceModalComponent,
-      componentProps: { message },
-    });
-
-    modal.present();
-    const { data } = await modal.onWillDismiss();
-
-    if (!data) {
       return;
     }
 
