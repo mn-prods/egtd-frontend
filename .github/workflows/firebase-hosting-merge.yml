@@ -7,6 +7,14 @@ name: Deploy to Firebase Hosting on merge
     branches:
       - main
 jobs:
+  bruteforce_cleanup:
+    runs-on: self-hosted
+    needs: [build_deploy]
+    steps:
+      - run: sudo rm -rf /home/ubuntu/actions-runner/_work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/*
+      - run: sudo rm -rf /home/ubuntu/actions-runner/_work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/.*
+
+
   checkout:
     runs-on: self-hosted
     steps:
