@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../auth.service';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +13,6 @@ import { AuthService } from '../auth.service';
 })
 export class LoginComponent implements OnInit {
   auth = inject(Auth);
-  private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
   authForm?: FormGroup;
@@ -26,16 +25,15 @@ export class LoginComponent implements OnInit {
   }
 
   async singIn() {
-    if (!this.authForm?.valid) {
-      return;
-    }
+    await signInWithPopup(
+      this.auth,
+      new GoogleAuthProvider()
+    );
 
-    const { email, password } = this.authForm.value;
-    await this.authService.signIn();
-    
+    await this.router.navigate(['.'])
   }
 
- 
+
 
 
 }
