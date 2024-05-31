@@ -8,16 +8,16 @@ name: Deploy to Firebase Hosting on merge
       - main
 jobs:
   checkout:
-    runs-on: self-hosted
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
   build_deploy:
-    runs-on: self-hosted
+    runs-on: ubuntu-22.04
     needs: [checkout]
     container:
       image: node:20
       env: 
-        GOOGLE_APPLICATION_CREDENTIALS: ./recipes-ac036-firebase-adminsdk-1mje6-a903c2c3df.json
+        GOOGLE_APPLICATION_CREDENTIALS: ./secret-firebase.json
     steps:
       - run: apt update && apt install -y git-crypt
       - run: git config --global --add safe.directory /__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}
@@ -33,7 +33,7 @@ jobs:
       - run: npm ci && npm run build
       - run: firebase deploy
   bruteforce_cleanup:
-    runs-on: self-hosted
+    runs-on: ubuntu-22.04
     needs: [build_deploy]
     steps:
       - run: sudo rm -rf ./*
