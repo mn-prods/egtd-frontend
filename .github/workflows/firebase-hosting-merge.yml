@@ -32,6 +32,7 @@ jobs:
       - run: npm i -g firebase-tools
       - run: npm ci && npm run build
       - run: firebase deploy
+      
   bruteforce_cleanup:
     runs-on: self-hosted
     needs: [checkout, build_deploy]
