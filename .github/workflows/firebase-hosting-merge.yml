@@ -34,7 +34,7 @@ jobs:
       - run: firebase deploy
   bruteforce_cleanup:
     runs-on: self-hosted
-    needs: [build_deploy]
+    if: always()  
     steps:
-      - run: sudo rm -rf ./*
-      - run: sudo rm -rf ./.*
+      - run: sudo rm -rf /home/ubuntu/actions-runner/_work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/*
+      - run: sudo rm -rf /home/ubuntu/actions-runner/_work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/.*
