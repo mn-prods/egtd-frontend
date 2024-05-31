@@ -15,7 +15,7 @@ jobs:
     runs-on: self-hosted
     needs: [checkout]
     container:
-      image: node:16
+      image: node:20
       env: 
         GOOGLE_APPLICATION_CREDENTIALS: ./recipes-ac036-firebase-adminsdk-1mje6-a903c2c3df.json
     steps:
