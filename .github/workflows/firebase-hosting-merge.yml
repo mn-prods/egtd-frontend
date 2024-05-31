@@ -7,12 +7,12 @@ name: Deploy to Firebase Hosting on merge
     branches:
       - main
 jobs:
-bruteforce_cleanup:
-    runs-on: self-hosted
-    needs: [build_deploy]
-    steps:
-      - run: sudo rm -rf ./*
-      - run: sudo rm -rf ./.*
+  bruteforce_cleanup:
+      runs-on: self-hosted
+      needs: [build_deploy]
+      steps:
+        - run: sudo rm -rf ./*
+        - run: sudo rm -rf ./.*
   checkout:
     runs-on: self-hosted
     steps:
