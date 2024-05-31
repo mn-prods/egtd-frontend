@@ -7,16 +7,10 @@ name: Deploy to Firebase Hosting on merge
     branches:
       - main
 jobs:
-  bruteforce_cleanup_pre:
-    runs-on: self-hosted
-    needs: [build_deploy]
-    steps:
-      - run: sudo rm -rf ./*
-      - run: sudo rm -rf ./.*
   checkout:
     runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3.5.3
   build_deploy:
     runs-on: self-hosted
     needs: [checkout]
@@ -38,7 +32,7 @@ jobs:
       - run: npm i -g firebase-tools
       - run: npm ci && npm run build
       - run: firebase deploy
-  bruteforce_cleanup_post:
+  bruteforce_cleanup:
     runs-on: self-hosted
     needs: [build_deploy]
     steps:
