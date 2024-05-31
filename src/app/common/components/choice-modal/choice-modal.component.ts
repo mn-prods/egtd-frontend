@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+// import { ModalController } from '@ionic/angular';
 
 export interface Choice {
   value: boolean | number | string;
@@ -19,10 +19,10 @@ export class ChoiceModalComponent {
     { value: true, role: 'confirm' },
   ];
 
-  constructor(private modal: ModalController) {}
+  // constructor(private modal: ModalController) {}
   
   close(i: number) {
     const { value, role } = this.choices[i];
-    this.modal.dismiss(value, role);
+    // this.modal.dismiss(value, role);
   }
 }

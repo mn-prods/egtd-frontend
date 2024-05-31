@@ -1,14 +1,18 @@
-import { Subject } from "rxjs"
+import { Subject } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 
-export abstract class AsyncComponent {
+@Component({
+  selector: '',
+  template: '',
+})
+export abstract class AsyncComponent implements OnInit {
+  unsubscribe$!: Subject<null>;
 
-    unsubscribe$!: Subject<null>;
+  instantiateUnsubscribe() {
+    this.unsubscribe$ = new Subject<null>();
+  }
 
-    instantiateUnsubscribe() {
-        this.unsubscribe$ = new Subject<null>();
-    }
-
-    ionViewWillEnter() {
-        this.instantiateUnsubscribe();
-    }
+  ngOnInit() {
+    this.instantiateUnsubscribe();
+  }
 }
