@@ -1,7 +1,7 @@
 {
   "projects": {
-    "default": "egtd-fef96",
-    "dev": "egtd-fef96"
+    "default": "egtd-dev",
+    "prod": "egtd-prod"
   },
   "targets": {},
   "etags": {}
