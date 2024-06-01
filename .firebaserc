@@ -1,8 +1,8 @@
 {
   "projects": {
-    "default": "egtd-fef96",
-    "dev": "egtd-fef96"
+    "default": "egtd-fef96"
   },
   "targets": {},
-  "etags": {}
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
 }

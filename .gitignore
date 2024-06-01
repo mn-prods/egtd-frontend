@@ -15,8 +15,8 @@ log.txt
 
 /.sourcemaps
 /.versions
+.firebase/
 /coverage
-
 
 # Compiled output
 /dist
