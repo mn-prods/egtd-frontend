@@ -1,1 +1,32 @@
-<router-outlet></router-outlet>
+<!-- Creates a layout with a left and right sidenav and implicit content. -->
+<mat-sidenav-container>
+  <mat-sidenav #sidenav>
+    <mat-toolbar color="primary" id="sidenav-toolbar">
+      <span>Menu</span>
+    </mat-toolbar>
+    <div class="flex flex-col gap-2" id="menu">
+      <div (click)="navigate('home')" class="flex items-center gap-1">
+        <mat-icon>home</mat-icon>home
+      </div>
+      <div (click)="navigate('user')" class="flex items-center gap-1">
+        <mat-icon>person</mat-icon>profile
+      </div>
+      <div (click)="navigate('inbox')" class="flex items-center gap-1">
+        <mat-icon>inbox</mat-icon>inbox
+      </div>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" id="page-toolbar">
+      <button
+        mat-icon-button
+        (click)="sidenav.toggle()"
+        aria-label="Open sidebar"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span>GTD</span>
+    </mat-toolbar>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

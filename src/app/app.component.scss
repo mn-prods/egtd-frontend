@@ -1,0 +1,43 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  margin: 0;
+
+  ::ng-deep {
+    mat-sidenav {
+      width: 50%;
+    }
+
+    mat-sidenav-container {
+      flex: 1;
+      display: flex;
+      height: 100%;
+    }
+
+    mat-sidenav-content {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    router-outlet + * {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      margin: 5px;
+    }
+
+    mat-toolbar#page-toolbar {
+      width: 100vw;
+      padding-inline: 5px;
+    }
+
+    #menu {
+      padding-left: 10px;  
+      mat-icon {
+        font-size: 1.2rem;
+      }
+    }
+  }
+}
