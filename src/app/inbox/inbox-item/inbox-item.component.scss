@@ -1,0 +1,27 @@
+mat-icon {
+  font-size: 1.2rem;
+}
+
+:host {
+  ::ng-deep {
+    div.mat-mdc-form-field-subscript-wrapper {
+      height: 0;
+    }
+
+    div.mat-mdc-text-field-wrapper {
+      background-color: transparent;
+      height: 24px;
+      padding-inline: 4px;
+    }
+
+    div.mat-mdc-form-field-infix {
+      padding-block: 0;
+    }
+
+    div.mdc-line-ripple:not(.mdc-line-ripple--active)::before {
+      border-bottom: 0px;
+      color: transparent;
+    }
+  }
+}
+

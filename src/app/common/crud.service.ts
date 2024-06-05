@@ -1,6 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { BaseI } from './interfaces/base.interface';
+import { BaseGtdDocument } from './interfaces/base.interface';
 import { PaginatedResult } from './interfaces/paginates-result.interface';
 
 export type NullablePartial<T> = {
@@ -34,7 +34,7 @@ export abstract class CrudService<E, F = NullablePartial<E>> {
 
   abstract save(
     id: string | null,
-    dto: Exclude<NullablePartial<E>, BaseI>
+    dto: Exclude<NullablePartial<E>, BaseGtdDocument>
   ): Observable<E>;
 
   abstract delete(id: string): Observable<void>;

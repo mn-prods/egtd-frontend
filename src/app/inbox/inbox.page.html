@@ -1,1 +1,5 @@
-<p>inbox works!</p>
+@for (item of inboxItems$ | async; track item.id) {
+<app-inbox-item [item]="item"></app-inbox-item>
+}
+
+<button mat-stroked-button [disabled]="anItemIsEmpty$ | async" (click)="addItem()">add</button>

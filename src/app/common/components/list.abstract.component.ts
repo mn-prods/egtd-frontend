@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { filter, first, firstValueFrom, Observable, Subject } from 'rxjs';
 import { CrudService, SortOrder } from '../crud.service';
-import { BaseI } from '../interfaces/base.interface';
+import { BaseGtdDocument } from '../interfaces/base.interface';
 import { AsyncComponent } from './async.abstract.component';
 import { PaginatedResult } from '../interfaces/paginates-result.interface';
 
@@ -17,7 +17,7 @@ export class PaginationConfig<E> {
   template: '',
 })
 export abstract class ListComponent<
-  E extends BaseI,
+  E extends BaseGtdDocument,
   F = Partial<E>
 > extends AsyncComponent implements OnInit {
   selectedEntities: E[] | undefined;

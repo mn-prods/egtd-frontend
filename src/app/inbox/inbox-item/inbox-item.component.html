@@ -1,0 +1,23 @@
+<div class="flex justify-between items-center my-1">
+  <mat-checkbox [formControl]="itemMarked"></mat-checkbox>
+  <mat-form-field class="w-full">
+    <input
+      #itemInput
+      type="text"
+      class="transition-opacity ease-in duration-700"
+      [class.!line-through]="itemMarked.value"
+      matInput
+      [value]="item().body"
+      [formControl]="itemBody"
+      [style.view-transition-name]="'inbox-' + item().id"
+      [style.view-transition-class]="'inbox'"
+    />
+  </mat-form-field>
+
+  <button mat-icon-button (click)="goToChoice()">
+    <mat-icon>send</mat-icon>
+  </button>
+  <button mat-icon-button (click)="deleteItem(item().id)">
+    <mat-icon>delete</mat-icon>
+  </button>
+</div>
