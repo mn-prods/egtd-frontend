@@ -1,5 +1,18 @@
-@for (item of inboxItems$ | async; track item.id) {
-<app-inbox-item [item]="item"></app-inbox-item>
-}
+<div class="flex flex-col justify-between h-full">
+  <div class="overflow-scroll px-2">
+    @for (item of inboxItems$ | async; track item.id) {
+    <app-inbox-item [item]="item"></app-inbox-item>
+    }
+  </div>
 
-<button mat-stroked-button [disabled]="anItemIsEmpty$ | async" (click)="addItem()">add</button>
+  <div class="px-2">
+    <button
+      class="my-2 w-full"
+      mat-stroked-button
+      [disabled]="anItemIsEmpty$ | async"
+      (click)="addItem()"
+    >
+      add
+    </button>
+  </div>
+</div>

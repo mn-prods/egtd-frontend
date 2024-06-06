@@ -4,10 +4,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, RouterModule } from '@angular/router';
-import { createRxDatabase } from 'rxdb';
-import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie';
-import 'zone.js/plugins/zone-patch-rxjs';
 import { RxdbProvider } from './common/services/db.provider';
+import 'zone.js/plugins/zone-patch-rxjs';
 
 @Component({
   selector: 'app-root',
