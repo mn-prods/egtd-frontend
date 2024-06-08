@@ -20,9 +20,11 @@ import { Router, RouterModule } from '@angular/router';
 import { Subject, debounceTime, distinctUntilChanged, filter, switchMap, takeUntil } from 'rxjs';
 import { InboxDocument } from 'src/app/db/entities/inbox.entity';
 import { InboxRepository } from '../../db/inbox.repository';
+import { ActionDocument } from 'src/app/db/entities/action.entity';
+import { ActionsRepository } from 'src/app/db/actions.repository';
 
 @Component({
-  selector: 'app-inbox-item',
+  selector: 'app-next-action-item',
   standalone: true,
   imports: [
     CommonModule,
@@ -34,15 +36,15 @@ import { InboxRepository } from '../../db/inbox.repository';
     ReactiveFormsModule,
     RouterModule
   ],
-  templateUrl: './inbox-item.component.html',
-  styleUrl: './inbox-item.component.scss'
+  templateUrl: './next-action-item.component.html',
+  styleUrl: './next-action-item.component.scss'
 })
-export class InboxItemComponent implements OnInit, AfterViewInit, OnDestroy {
-  item = input.required<InboxDocument>();
+export class NextActionItemComponent implements OnInit, AfterViewInit, OnDestroy {
+  item = input.required<ActionDocument>();
   itemElem = viewChild<ElementRef<HTMLInputElement>>('itemInput');
 
   dialog = inject(MatDialog);
-  inboxRepository = inject(InboxRepository);
+  actionsRepository = inject(ActionsRepository);
   router = inject(Router);
 
   unsub$!: Subject<null>;
@@ -51,7 +53,7 @@ export class InboxItemComponent implements OnInit, AfterViewInit, OnDestroy {
   itemMarked!: FormControl<boolean | null>;
 
   deleteItem(id: string) {
-    this.inboxRepository.delete(id);
+    this.actionsRepository.delete(id);
   }
 
   ngOnInit(): void {
@@ -64,7 +66,7 @@ export class InboxItemComponent implements OnInit, AfterViewInit, OnDestroy {
         filter(Boolean),
         distinctUntilChanged(),
         debounceTime(500),
-        switchMap((body) => this.inboxRepository.update(this.item().id, { body })),
+        switchMap((body) => this.actionsRepository.update(this.item().id, { body })),
         takeUntil(this.unsub$)
       )
       .subscribe();
@@ -75,7 +77,7 @@ export class InboxItemComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   goToChoice() {
-    this.router.navigate(['inbox', this.item().id]);
+    // this.router.navigate(['inbox', this.item().id]);
   }
 
   ngOnDestroy(): void {

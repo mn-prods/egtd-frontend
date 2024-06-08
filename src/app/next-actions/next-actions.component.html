@@ -1,0 +1,13 @@
+<div class="flex flex-col justify-between h-full">
+  <div class="overflow-scroll">
+    @for (item of nextActions$ | async; track item.id) {
+    <app-next-action-item [item]="item"></app-next-action-item>
+    }
+  </div>
+
+  <div>
+    <button class="my-2 w-full" mat-stroked-button (click)="addNextAction()">
+      {{ 'next-actions.btn.add' | translate }}
+    </button>
+  </div>
+</div>

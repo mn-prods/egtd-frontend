@@ -1,4 +1,4 @@
-import { enableProdMode } from '@angular/core';
+import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
@@ -9,26 +9,42 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
 import { environment } from './environments/environment';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpClient, provideHttpClient } from '@angular/common/http';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
 if (environment.production) {
-    enableProdMode();
+  enableProdMode();
 }
 
 bootstrapApplication(AppComponent, {
-    providers: [
-        provideFirebaseApp(() => initializeApp(environment.firebase)),
-        provideFirestore(() => {
+  providers: [
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideFirestore(() => {
+      const firestore = getFirestore();
 
-            const firestore = getFirestore()
+      // if (!environment.production)
+      //     connectFirestoreEmulator(firestore, 'localhost', 8080);
 
-            // if (!environment.production)
-            //     connectFirestoreEmulator(firestore, 'localhost', 8080);
-
-            return (firestore);
-
-        }),
-        provideAuth(() => getAuth()),
-        provideRouter(routes, withHashLocation(), withViewTransitions()), provideAnimationsAsync(), provideAnimationsAsync(), provideAnimationsAsync(),
-
-    ],
+      return firestore;
+    }),
+    provideAuth(() => getAuth()),
+    provideRouter(routes, withHashLocation(), withViewTransitions()),
+    provideHttpClient(),
+    provideAnimationsAsync(),
+    importProvidersFrom(
+      TranslateModule.forRoot({
+        defaultLanguage: 'en',
+        loader: {
+          provide: TranslateLoader,
+          useFactory: (HttpLoaderFactory),
+          deps: [HttpClient]
+        }
+      })
+    )
+  ]
 });

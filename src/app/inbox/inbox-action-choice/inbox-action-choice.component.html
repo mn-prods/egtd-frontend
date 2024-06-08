@@ -1,13 +1,38 @@
-<p
-  [style.view-transition-name]="'inbox-' + item?.id"
-  [style.view-transition-class]="'inbox'"
-  id="title"
->
-  {{ item?.body }}
-</p>
+<div class="flex flex-col h-full">
+  @if (item) {
 
+  <div class="p-2 flex flex-col flex-1">
+    <p
+      [style.view-transition-name]="'inbox-' + item.id"
+      [style.view-transition-class]="'inbox'"
+      class="text-2xl"
+    >
+      {{ item.body }}
+    </p>
 
-<mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-  <mat-button-toggle value="bold">Yes</mat-button-toggle>
-  <mat-button-toggle value="italic">No</mat-button-toggle>
-</mat-button-toggle-group>
+    <div class="flex flex-col flex-1 items-center">
+      <p>Is it actionable?</p>
+      <div>
+        <mat-button-toggle-group
+          (valueChange)="saveItemState($event)"
+          #actionable="matButtonToggleGroup"
+          [value]="true"
+          class="mb-20"
+        >
+          <mat-button-toggle [value]="true">Yes</mat-button-toggle>
+          <mat-button-toggle [value]="false">No</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+      @if (actionable.value === true) {
+      <app-next-actions class="h-full w-full" [inboxItem]="item"></app-next-actions>
+      } @if (actionable.value === false) {
+      <div class="w-full flex justify-around">
+        <button mat-icon-button><mat-icon>delete</mat-icon></button>
+        <button mat-icon-button><mat-icon>timer</mat-icon></button>
+        <button mat-icon-button><mat-icon>book</mat-icon></button>
+      </div>
+      }
+    </div>
+  </div>
+  }
+</div>

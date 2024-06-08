@@ -1,4 +1,4 @@
 export interface BaseGtdDocument {
     id: string;
-    _deleted: boolean;
+    _deleted?: boolean;
 }

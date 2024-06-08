@@ -1,8 +1,25 @@
 {
+    "sidenav": {
+        "toolbar": "Menu",
+        "menu": {
+            "home": "Home",
+            "profile": "Profile",
+            "inbox": "Inbox"
+        }
+    },
+    "home": {
+        "toolbar": "Home"
+    },
     "inbox": {
+        "toolbar": "Inbox",
         "title": "Inbox",
-        "item": {
-            "placeholder": "Capture a loose end..."
+        "btn": {
+            "add": "Capture"
+        }
+    },
+    "next-actions": {
+        "btn": {
+            "add": "Next action"
         }
     }
 }

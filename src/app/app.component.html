@@ -1,31 +1,40 @@
 <mat-sidenav-container>
   <mat-sidenav #sidenav>
     <mat-toolbar color="primary" id="sidenav-toolbar">
-      <span>Menu</span>
+      <span>{{ 'sidenav.toolbar' | translate }}</span>
     </mat-toolbar>
     <div class="flex flex-col gap-2" id="menu">
       <div (click)="navigate('home')" class="flex items-center gap-1">
-        <mat-icon>home</mat-icon>home
+        <mat-icon>home</mat-icon>
+        <div>{{ 'sidenav.menu.home' | translate }}</div>
       </div>
       <div (click)="navigate('user')" class="flex items-center gap-1">
-        <mat-icon>person</mat-icon>profile
+        <mat-icon>person</mat-icon>
+        <div>
+          {{ 'sidenav.menu.profile' | translate }}
+        </div>
       </div>
       <div (click)="navigate('inbox')" class="flex items-center gap-1">
-        <mat-icon>inbox</mat-icon>inbox
+        <mat-icon>inbox</mat-icon>
+        <div>{{ 'sidenav.menu.inbox' | translate }}</div>
       </div>
     </div>
   </mat-sidenav>
   <mat-sidenav-content>
-    <mat-toolbar id="page-toolbar">
-      <button
-        mat-icon-button
-        (click)="sidenav.toggle()"
-        aria-label="Open sidebar"
-      >
+    @if(settings?.toolbar) {
+    <mat-toolbar id="page-toolbar" color="primary">
+      @if (settings?.showSidenavBtn) {
+      <button mat-icon-button (click)="sidenav.toggle()" aria-label="Open sidebar">
         <mat-icon>menu</mat-icon>
       </button>
-      <span>GTD</span>
+      } @if (settings?.showBackBtn) {
+      <button mat-icon-button [routerLink]="settings?.backBtnRoute">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      }
+      <div>{{ settings?.toolbarHeader || '' | translate }}</div>
     </mat-toolbar>
+    }
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

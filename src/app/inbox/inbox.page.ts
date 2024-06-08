@@ -1,51 +1,61 @@
-import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, Signal, inject } from '@angular/core';
-import { RxDocument } from 'rxdb';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { TranslateModule } from '@ngx-translate/core';
 import { BehaviorSubject, Observable, Subject, map, takeUntil } from 'rxjs';
 import { InboxDocument } from '../db/entities/inbox.entity';
+import { InboxRepository } from '../db/inbox.repository';
+import { NavigationService } from '../navigation.service';
 import { InboxItemComponent } from './inbox-item/inbox-item.component';
-import { InboxRepository } from './inbox.repository';
-import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-inbox',
   standalone: true,
-  imports: [CommonModule, InboxItemComponent, MatButtonModule],
+  imports: [CommonModule, InboxItemComponent, MatButtonModule, TranslateModule],
   templateUrl: './inbox.page.html',
-  styleUrl: './inbox.page.scss'
+  styleUrl: './inbox.page.scss',
 })
 export class InboxPage implements OnInit, OnDestroy {
-  private readonly repository = inject(InboxRepository)
+  private readonly inboxRepository = inject(InboxRepository);
+  private readonly navigation = inject(NavigationService);
 
-  inboxItems$!: BehaviorSubject<RxDocument<InboxDocument, {}>[]>
+  inboxItems$!: BehaviorSubject<InboxDocument[]>;
 
-  anItemIsEmpty$!: Observable<boolean>
+  anItemIsEmpty$!: Observable<boolean>;
 
   unsub$!: Subject<null>;
 
+  constructor() {
+    this.unsub$ = new Subject();
+    this.navigation.settings.next({
+      toolbar: true,
+      toolbarHeader: 'inbox.toolbar',
+      showSidenavBtn: true
+    });
+  }
+
   ngOnInit(): void {
-    this.unsub$ = new Subject()
-    this.inboxItems$ = this.repository.observeAll();
-    this.anItemIsEmpty$ = this.inboxItems$.pipe(map(items => items.some(({ body }) => !body)), takeUntil(this.unsub$))
+    this.inboxItems$ = this.inboxRepository.observeAll();
+    this.anItemIsEmpty$ = this.inboxItems$.pipe(
+      map((items) => items.some(({ body }) => !body)),
+      takeUntil(this.unsub$)
+    );
   }
 
   addItem() {
-    this.repository.create({
+    this.inboxRepository.create({
       body: '',
-      marked: false,
-    })
+      marked: false
+    });
   }
 
   removeItem(id: string) {
-    this.repository.delete(id);
+    this.inboxRepository.delete(id);
   }
-
 
   ngOnDestroy(): void {
     this.unsub$.next(null);
     this.unsub$.complete();
     this.unsub$.unsubscribe();
   }
-
 }
