@@ -1,35 +1,54 @@
 import { inject } from '@angular/core';
-import { MangoQuerySortDirection, MangoQuerySortPart, RxCollection, RxDocument } from 'rxdb';
-import { GtdDatabaseCollections } from 'src/app/db/db.model';
-import { v4 as uuid } from 'uuid';
-import { RxdbProvider } from './db.provider';
+import { MangoQuerySortDirection, RxCollection, RxDocument } from 'rxdb';
 import { BehaviorSubject } from 'rxjs';
+import { v4 as uuid } from 'uuid';
 import { BaseGtdDocument } from '../interfaces/base.interface';
-
-type CollName = keyof GtdDatabaseCollections;
+import { RxdbProvider } from './db.provider';
 
 export class BaseRepository<D extends BaseGtdDocument> {
   protected readonly dbProvider = inject(RxdbProvider);
   protected collection!: RxCollection;
 
-  observeAll(sortBy?: keyof D, sortDir: MangoQuerySortDirection = 'asc'): BehaviorSubject<D[]> {
-    return this.collection.find({ selector: { _deleted: false } }).$;
+  observeAll(
+    sortBy: keyof D = 'createdAt',
+    sortDir: MangoQuerySortDirection = 'desc'
+  ): BehaviorSubject<D[]> {
+    return this.collection.find({ selector: { _deleted: false }, sort: [{ [sortBy]: sortDir }] }).$;
   }
 
-  observePaginated(limit: number, skip: number): BehaviorSubject<D[]> {
-    return this.collection.find({ selector: { _deleted: false }, limit, skip }).$;
+  observePaginated(
+    limit: number,
+    skip: number,
+    sortBy: keyof D = 'createdAt',
+    sortDir: MangoQuerySortDirection = 'desc'
+  ): BehaviorSubject<D[]> {
+    return this.collection.find({
+      selector: { _deleted: false },
+      limit,
+      skip,
+      sort: [{ [sortBy]: sortDir }]
+    }).$;
   }
 
   observeOneById(id: string): BehaviorSubject<D> {
     return this.collection.findOne({ selector: { id } }).$;
   }
 
-  getAll(sortBy?: MangoQuerySortPart<D>[], sortDir: MangoQuerySortDirection = 'asc'): Promise<D[]> {
-    return this.collection.find({ selector: { _deleted: false } }).exec();
+  getAll(sortBy: keyof D = 'createdAt', sortDir: MangoQuerySortDirection = 'desc'): Promise<D[]> {
+    return this.collection
+      .find({ selector: { _deleted: false }, sort: [{ [sortBy]: sortDir }] })
+      .exec();
   }
 
-  async getPaginated(limit: number, skip: number): Promise<D[]> {
-    return this.collection.find({ selector: { _deleted: false }, limit, skip }).exec();
+  async getPaginated(
+    limit: number,
+    skip: number,
+    sortBy: keyof D = 'createdAt',
+    sortDir: MangoQuerySortDirection = 'desc'
+  ): Promise<D[]> {
+    return this.collection
+      .find({ selector: { _deleted: false }, limit, skip, sort: [{ [sortBy]: sortDir }] })
+      .exec();
   }
 
   async getOneById(id: string): Promise<D> {
@@ -37,10 +56,11 @@ export class BaseRepository<D extends BaseGtdDocument> {
   }
 
   async create(data: Omit<D, keyof BaseGtdDocument>): Promise<D> {
+    let now = +new Date();
     return this.collection.insert({
       id: uuid(),
-      createdAt: +new Date(),
-      updatedAt: +new Date(),
+      createdAt: now,
+      updatedAt: now,
       ...data
     });
   }
@@ -70,7 +90,7 @@ export class BaseRepository<D extends BaseGtdDocument> {
       data.id = uuid();
     }
 
-    data.updatedAt = +new Date()
+    data.updatedAt = +new Date();
 
     return this.collection.upsert(data);
   }

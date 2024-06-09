@@ -12,6 +12,7 @@ import { environment } from './environments/environment';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import {
   HTTP_INTERCEPTORS,
+  HttpBackend,
   HttpClient,
   provideHttpClient,
   withInterceptorsFromDi
@@ -19,8 +20,9 @@ import {
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { AuthInterceptor } from './app/common/interceptors/auth.interceptor';
 
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+// https://stackoverflow.com/questions/67152273/angular-circular-dependency-when-inject-translateservice-to-interceptor
+export function HttpLoaderFactory(handler: HttpBackend) {
+  return new TranslateHttpLoader(new HttpClient(handler), './assets/i18n/', '.json');
 }
 
 if (environment.production) {
@@ -40,8 +42,6 @@ bootstrapApplication(AppComponent, {
     }),
     provideAuth(() => getAuth()),
     provideRouter(routes, withHashLocation(), withViewTransitions()),
-    provideHttpClient(withInterceptorsFromDi()),
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     provideAnimationsAsync(),
     importProvidersFrom(
       TranslateModule.forRoot({
@@ -49,9 +49,11 @@ bootstrapApplication(AppComponent, {
         loader: {
           provide: TranslateLoader,
           useFactory: HttpLoaderFactory,
-          deps: [HttpClient]
+          deps: [HttpBackend]
         }
       })
-    )
+    ),
+    provideHttpClient(withInterceptorsFromDi()),
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ]
 });
