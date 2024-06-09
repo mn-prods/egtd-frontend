@@ -93,10 +93,10 @@ export class ReplicationService {
         })
       )
       .subscribe((rawEvent) => {
-        let event: MessageEvent = JSON.parse(rawEvent);
+        let event = JSON.parse(rawEvent);
         this.pullStream$.next({
-          documents: event.data.documents,
-          checkpoint: event.data.checkpoint
+          documents: event.documents,
+          checkpoint: event.checkpoint
         });
       });
   }
