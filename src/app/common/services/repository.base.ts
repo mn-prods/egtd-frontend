@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { MangoQuerySortDirection, RxCollection } from 'rxdb';
+import { MangoQuerySortDirection, MangoQuerySortPart, RxCollection, RxDocument } from 'rxdb';
 import { GtdDatabaseCollections } from 'src/app/db/db.model';
 import { v4 as uuid } from 'uuid';
 import { RxdbProvider } from './db.provider';
@@ -24,10 +24,7 @@ export class BaseRepository<D extends BaseGtdDocument> {
     return this.collection.findOne({ selector: { id } }).$;
   }
 
-  getAll(
-    sortBy?: keyof GtdDatabaseCollections[CollName]['schema']['defaultValues'],
-    sortDir: MangoQuerySortDirection = 'asc'
-  ): Promise<D[]> {
+  getAll(sortBy?: MangoQuerySortPart<D>[], sortDir: MangoQuerySortDirection = 'asc'): Promise<D[]> {
     return this.collection.find({ selector: { _deleted: false } }).exec();
   }
 
@@ -39,9 +36,11 @@ export class BaseRepository<D extends BaseGtdDocument> {
     return this.collection.findOne({ selector: { id } }).exec();
   }
 
-  async create(data: Omit<D, 'id' | '_deleted'>): Promise<D> {
+  async create(data: Omit<D, keyof BaseGtdDocument>): Promise<D> {
     return this.collection.insert({
       id: uuid(),
+      createdAt: +new Date(),
+      updatedAt: +new Date(),
       ...data
     });
   }
@@ -61,7 +60,9 @@ export class BaseRepository<D extends BaseGtdDocument> {
       );
     }
 
-    return this.collection.incrementalUpsert({ ...data, id });
+    const document: RxDocument<D> = await this.collection.findOne(id).exec();
+
+    return document.incrementalPatch({ ...data, id, updatedAt: +new Date() });
   }
 
   async save(data: Omit<D, 'id'> & { id?: string }): Promise<D> {
@@ -69,10 +70,12 @@ export class BaseRepository<D extends BaseGtdDocument> {
       data.id = uuid();
     }
 
+    data.updatedAt = +new Date()
+
     return this.collection.upsert(data);
   }
 
   async delete(id: string): Promise<void> {
-    await this.collection.incrementalUpsert({ id, _deleted: true });
+    await this.collection.incrementalUpsert({ id, _deleted: true, updatedAt: +new Date() });
   }
 }

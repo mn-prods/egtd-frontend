@@ -1,6 +1,7 @@
 import { Injectable, inject, isDevMode } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { RxDatabase, addRxPlugin, createRxDatabase } from 'rxdb';
+import { replicateRxCollection } from 'rxdb/plugins/replication';
 import { RxDBCleanupPlugin } from 'rxdb/plugins/cleanup';
 import { RxDBDevModePlugin } from 'rxdb/plugins/dev-mode';
 import { RxDBLeaderElectionPlugin } from 'rxdb/plugins/leader-election';
@@ -9,11 +10,10 @@ import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie';
 import { BehaviorSubject } from 'rxjs';
 import { GtdDatabase, GtdDatabaseCollections } from 'src/app/db/db.model';
 import { actionsSchema } from 'src/app/db/entities/action.entity';
-import { inboxSchema } from 'src/app/db/entities/inbox.entity';
+import { InboxDocument, inboxSchema } from 'src/app/db/entities/inbox.entity';
+import { ReplicationService } from './replication.service';
 
 async function loadRxDBPlugins(): Promise<void> {
-  // addRxPlugin(RxDBAttachmentsPlugin);
-  // addRxPlugin(RxDBUpdatePlugin);
   addRxPlugin(RxDBMigrationPlugin);
   addRxPlugin(RxDBCleanupPlugin);
   addRxPlugin(RxDBLeaderElectionPlugin);
@@ -30,6 +30,7 @@ loadRxDBPlugins();
 })
 export class RxdbProvider {
   firestore = inject(Firestore);
+  replicationService = inject(ReplicationService);
 
   public rxDatabase!: RxDatabase<GtdDatabaseCollections>;
   private dataBaseReadySubj = new BehaviorSubject<boolean>(false);
@@ -81,6 +82,27 @@ export class RxdbProvider {
     //         projectId: environment.firebase.appId
     //     },
     // })
+
+    const replicationState = replicateRxCollection<InboxDocument, any>({
+      collection: collections.inbox,
+      replicationIdentifier: 'inbox-http',
+      push: {
+        handler: async (changeRows) => {
+          return this.replicationService.push('inbox', changeRows);
+        }
+      },
+      pull: {
+        handler: async (checkpoint, batchSize) => {
+          const updatedAt = checkpoint ? checkpoint.updatedAt : 0;
+          const id = checkpoint ? checkpoint.id : '';
+          const data = await this.replicationService.pull('inbox', { updatedAt, id, batchSize });
+          return {
+            documents: data.documents,
+            checkpoint: data.checkpoint
+          };
+        }
+      }
+    });
 
     // replicationState.active$.subscribe(console.log)
     // replicationState.sent$.subscribe(console.log)

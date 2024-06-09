@@ -1,28 +1,21 @@
-import { Injectable } from '@angular/core';
-import {
-  HttpInterceptor,
-  HttpHandler,
-  HttpRequest,
-  HttpHeaders,
-} from '@angular/common/http';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { filter, first, switchMap } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { HttpInterceptor, HttpHandler, HttpRequest, HttpHeaders } from '@angular/common/http';
+
+import { filter, first, from, of, switchMap } from 'rxjs';
+import { Auth } from '@angular/fire/auth';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private auth: AngularFireAuth) {}
+  private auth = inject(Auth);
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-    return this.auth.idToken.pipe(
+    return from(this.auth.currentUser?.getIdToken() || of(null)).pipe(
       filter(Boolean),
       first(),
       switchMap((token) => {
-        const headers = new HttpHeaders().set(
-          'Authorization',
-          `Bearer ${token}`
-        );
+        const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
         const authorizedRequest = req.clone({
-          headers,
+          headers
         });
 
         return next.handle(authorizedRequest);

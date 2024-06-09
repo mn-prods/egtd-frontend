@@ -6,7 +6,12 @@
   </div>
 
   <div>
-    <button class="my-2 w-full" mat-stroked-button (click)="addNextAction()">
+    <button
+      class="w-full"
+      mat-stroked-button
+      (click)="addNextAction()"
+      [disabled]="anItemIsEmpty$ | async"
+    >
       {{ 'next-actions.btn.add' | translate }}
     </button>
   </div>

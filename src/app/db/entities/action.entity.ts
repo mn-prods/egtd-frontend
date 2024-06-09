@@ -41,6 +41,12 @@ export const actionsSchema: RxJsonSchema<ActionDocument> = {
                 }
             }
         },
+        updatedAt: {
+            type: 'number'
+        },
+        createdAt: {
+            type: 'number'
+        },
         _deleted: {
             type: 'boolean'
         }
