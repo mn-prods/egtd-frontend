@@ -86,6 +86,7 @@ export class RxdbProvider {
     const replicationState = replicateRxCollection<InboxDocument, any>({
       collection: collections.inbox,
       replicationIdentifier: 'inbox-http',
+      live: true,
       push: {
         handler: async (changeRows) => {
           return this.replicationService.push('inbox', changeRows);
@@ -100,9 +101,11 @@ export class RxdbProvider {
             documents: data.documents,
             checkpoint: data.checkpoint
           };
-        }
+        },
+        stream$: this.replicationService.pullStream$.asObservable() as any
       }
     });
+    this.replicationService.pullStream('inbox');
 
     // replicationState.active$.subscribe(console.log)
     // replicationState.sent$.subscribe(console.log)
