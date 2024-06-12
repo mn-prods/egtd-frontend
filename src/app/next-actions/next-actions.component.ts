@@ -2,17 +2,24 @@ import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, OnInit, inject, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
-import { Observable, map, takeUntil } from 'rxjs';
+import { Observable, map, takeUntil, tap } from 'rxjs';
 import { ActionsRepository } from '../db/actions.repository';
 import { ActionDocument } from '../db/entities/action.entity';
 import { InboxDocument } from '../db/entities/inbox.entity';
 import { NextActionItemComponent } from './next-action-item/next-action-item.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-next-actions',
   standalone: true,
-  imports: [CommonModule, TranslateModule, MatButtonModule, NextActionItemComponent],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    MatButtonModule,
+    NextActionItemComponent,
+    DragDropModule
+  ],
   templateUrl: './next-actions.component.html',
   styleUrl: './next-actions.component.scss'
 })
@@ -22,12 +29,13 @@ export class NextActionsComponent implements OnInit {
   destroyRef = inject(DestroyRef);
 
   nextActions$!: Observable<ActionDocument[]>;
-  anItemIsEmpty$?: Observable<boolean>
+  anyItemIsInvalid$?: Observable<boolean>;
 
   ngOnInit(): void {
     this.nextActions$ = this.actionsRepository.observeManyByInboxItem(this.inboxItem().id);
-    this.anItemIsEmpty$ = this.nextActions$.pipe(
-      map((items) => items.some(({ body }) => !body)),
+
+    this.anyItemIsInvalid$ = this.nextActions$.pipe(
+      map((items: ActionDocument[]) => items.some(({ body, type }) => !body || !type)),
       takeUntilDestroyed(this.destroyRef)
     );
   }
@@ -39,5 +47,9 @@ export class NextActionsComponent implements OnInit {
       inboxItem: { body, id },
       marked: false
     });
+  }
+
+  reorder(event: any) {
+    console.log(event)
   }
 }

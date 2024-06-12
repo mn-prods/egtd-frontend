@@ -1,28 +1,30 @@
 mat-icon {
-    font-size: 1.2rem;
-  }
-  
-  :host {
-    ::ng-deep {
-      div.mat-mdc-form-field-subscript-wrapper {
-        height: 0;
-      }
-  
-      div.mat-mdc-text-field-wrapper {
-        background-color: transparent;
-        height: 24px;
-        padding-inline: 4px;
-      }
-  
-      div.mat-mdc-form-field-infix {
-        padding-block: 0;
-      }
-  
-      div.mdc-line-ripple:not(.mdc-line-ripple--active)::before {
-        border-bottom: 0px;
-        color: transparent;
-      }
+  font-size: 1.2rem;
+}
+
+:host {
+  ::ng-deep {
+    mat-form-field {
+      font-size: 0.9rem;
+    }
+
+    div.mat-mdc-form-field-subscript-wrapper {
+      height: 0;
+    }
+
+    div.mat-mdc-text-field-wrapper {
+      background-color: transparent;
+      padding-inline: 4px;
+    }
+
+    div.mat-mdc-form-field-infix {
+      min-height: 24px;
+      padding-block: 0;
+    }
+
+    div.mdc-line-ripple:not(.mdc-line-ripple--active)::before {
+      border-bottom: 0px;
+      color: transparent;
     }
   }
-  
-  
+}

@@ -1,4 +1,4 @@
-<div class="flex justify-between items-center my-1">
+<div class="flex justify-between items-center my-1 gap-1">
   <mat-checkbox [formControl]="itemMarked"></mat-checkbox>
   <mat-form-field class="w-full">
     <input
@@ -14,10 +14,14 @@
     />
   </mat-form-field>
 
-  <button mat-icon-button (click)="goToChoice()">
-    <mat-icon>search</mat-icon>
+  <button mat-stroked-button (click)="goToChoice()" >
+    <div class="flex justify-center items-center pt-1">
+      <mat-icon>search</mat-icon>
+    </div>
   </button>
-  <button mat-icon-button (click)="deleteItem(item().id)">
-    <mat-icon>delete</mat-icon>
+  <button mat-stroked-button (click)="deleteItem(item().id)" class="text-center">
+    <div class="flex justify-center items-center pt-1">
+      <mat-icon>delete</mat-icon>
+    </div>
   </button>
 </div>

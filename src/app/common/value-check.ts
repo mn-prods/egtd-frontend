@@ -1,0 +1,1 @@
+export const isNullOrUndefined = (value: unknown | null | undefined): unknown => value === null || value === undefined;

@@ -1,24 +1,31 @@
-<div class="flex justify-between items-center my-1">
-    <mat-checkbox [formControl]="itemMarked"></mat-checkbox>
-    <mat-form-field class="w-full">
-      <input
-        #itemInput
-        type="text"
-        class="transition-opacity ease-in duration-700"
-        [class.!line-through]="itemMarked.value"
-        matInput
-        [value]="item().body"
-        [formControl]="itemBody"
-        [style.view-transition-name]="'inbox-' + item().id"
-        [style.view-transition-class]="'inbox'"
-      />
-    </mat-form-field>
-  
-    <button mat-icon-button (click)="goToChoice()">
-      <mat-icon>search</mat-icon>
-    </button>
-    <button mat-icon-button (click)="deleteItem(item().id)">
-      <mat-icon>delete</mat-icon>
-    </button>
-  </div>
-  
+<div class="flex justify-between items-end gap-1 overflow-hidden">
+  <button mat-icon-button [matBadge]="item().order" matBadgePosition="below after" cdkDragHandle>
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <mat-form-field class="w-full">
+    <textarea
+      #itemInput
+      type="text"
+      class="transition-opacity ease-in duration-700"
+      [class.!line-through]="itemMarked.value"
+      matInput
+      cdkTextareaAutosize
+      cdkAutosizeMinRows="1"
+      cdkAutosizeMaxRows="5"
+      [value]="item().body"
+      [formControl]="itemBody"
+      [style.view-transition-name]="'inbox-' + item().id"
+      [style.view-transition-class]="'inbox'"
+    ></textarea>
+  </mat-form-field>
+
+  <button mat-flat-button (click)="setNextType()" longPress>
+    <div class="flex justify-between items-center w-20">
+      <div class="text-xs">{{ item().type }}</div>
+      <mat-icon class="material-symbols-outlined pt-1">
+        {{ item().type ? typeIcons[item().type!] : 'dangerous' }}
+      </mat-icon>
+    </div>
+  </button>
+</div>

@@ -1,54 +1,70 @@
-import { RxCollection, RxJsonSchema } from "rxdb";
-import { InboxDocument } from "./inbox.entity";
-import { BaseGtdDocument } from "src/app/common/interfaces/base.interface";
+import { RxCollection, RxJsonSchema } from 'rxdb';
+import { InboxDocument } from './inbox.entity';
+import { BaseGtdDocument } from 'src/app/common/interfaces/base.interface';
+import { ObjectValues } from 'src/app/common/types/object-values.type';
+
+export enum ActionType {
+  do = 'do',
+  wait = 'wait',
+  schedule = 'schedule'
+};
 
 export interface ActionDocument extends BaseGtdDocument {
-    id: string;
-    body: string;
-    marked: boolean;
-    inboxItem: Pick<InboxDocument, 'id' | 'body'>
-    _deleted?: boolean;
+  id: string;
+  body: string;
+  marked: boolean;
+  inboxItem: Pick<InboxDocument, 'id' | 'body'>;
+  order: number;
+  type: ObjectValues<typeof ActionType> | null;
+  _deleted?: boolean;
 }
 
-export type ActionCollection = RxCollection<ActionDocument>
+export type ActionCollection = RxCollection<ActionDocument>;
 
 export const actionsSchema: RxJsonSchema<ActionDocument> = {
-    title: 'action schema',
-    version: 0,
-    type: 'object',
-    primaryKey: 'id',
-    properties: {
+  title: 'action schema',
+  version: 0,
+  type: 'object',
+  primaryKey: 'id',
+  properties: {
+    id: {
+      type: 'string',
+      format: 'uuid',
+      maxLength: 100
+    },
+    body: {
+      type: 'string'
+    },
+    marked: {
+      type: 'boolean'
+    },
+    inboxItem: {
+      type: 'object',
+      properties: {
         id: {
-            type: 'string',
-            format: 'uuid',
-            maxLength: 100
+          type: 'string',
+          format: 'uuid'
         },
         body: {
-            type: 'string',
-        },
-        marked: {
-            type: 'boolean',
-        },
-        inboxItem: {
-            type: 'object',
-            properties: {
-                id: {
-                    type: 'string',
-                    format: 'uuid'
-                },
-                body: {
-                    type: 'string'
-                }
-            }
-        },
-        updatedAt: {
-            type: 'number'
-        },
-        createdAt: {
-            type: 'number'
-        },
-        _deleted: {
-            type: 'boolean'
+          type: 'string'
         }
+      }
     },
+    type: {
+      type: 'string',
+      enum: [...Object.values(ActionType), null]
+    },
+    order: {
+      type: 'number'
+    },
+    updatedAt: {
+      type: 'number'
+    },
+    createdAt: {
+      type: 'number'
+    },
+    _deleted: {
+      type: 'boolean'
+    }
+  }
 };
