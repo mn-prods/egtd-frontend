@@ -31,6 +31,7 @@ export interface ActionDocument extends BaseGtdDocument {
 export type ActionCollection = RxCollection<ActionDocument>;
 
 export const actionsSchema: RxJsonSchema<ActionDocument> = {
+  keyCompression: false,
   title: 'action schema',
   version: 0,
   type: 'object',

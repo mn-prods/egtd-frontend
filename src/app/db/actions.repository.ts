@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActionCollection, ActionDocument } from 'src/app/db/entities/action.entity';
 import { BaseRepository } from '../common/services/repository.base';
-import { BaseGtdDocument } from '../common/interfaces/base.interface';
-import { v4 } from 'uuid';
+import { firstValueFrom, map, tap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ActionsRepository extends BaseRepository<ActionDocument> {
@@ -20,28 +19,18 @@ export class ActionsRepository extends BaseRepository<ActionDocument> {
     }).$;
   }
 
-  // override async create<K extends string>(
-  //   data: Omit<ActionDocument, keyof BaseGtdDocument | 'order' | 'type' | 'at'>
-  // ): Promise<ActionDocument> {
-  //   let now = +new Date();
-
-  //   const lastAction = await this.collection
-  //     .findOne({
-  //       selector: { _deleted: false, 'inboxItem.id': data.inboxItem.id },
-  //       sort: [{ order: 'desc' }]
-  //     })
-  //     .exec();
-
-  //   return this.collection.insert({
-  //     id: v4(),
-  //     createdAt: now,
-  //     updatedAt: now,
-  //     order: (lastAction?.order || 0) + 1,
-  //     type: null,
-  //     at: null,
-  //     ...data
-  //   });
-  // }
+  getNextOrder(inboxItemId: string): Promise<number> {
+    return firstValueFrom(
+      this.collection
+        .findOne({
+          selector: { 'inboxItem.id': inboxItemId, _deleted: false },
+          sort: [{ order: 'desc' }]
+        })
+        .$.pipe(
+          map((action) => (action?.order || 0) + 1)
+        )
+    );
+  }
 
   async reorder(id: string, currentIndex: number, previousIndex: number): Promise<void> {
     let diff = Math.abs(currentIndex - previousIndex);

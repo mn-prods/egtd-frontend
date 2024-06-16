@@ -14,6 +14,7 @@ export interface InboxDocument extends BaseGtdDocument {
 export type InboxCollection = RxCollection<InboxDocument>;
 
 export const inboxSchema: RxJsonSchema<InboxDocument> = {
+  keyCompression: false,
   title: 'inbox schema',
   version: 0,
   type: 'object',

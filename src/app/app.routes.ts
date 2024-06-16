@@ -1,7 +1,5 @@
+import { AuthGuard, redirectLoggedInTo, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-import { AuthGuard, redirectLoggedInTo, redirectUnauthorizedTo } from '@angular/fire/auth-guard'
-import { model } from '@angular/core';
-
 
 const redirectToHome = (_: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
   return redirectLoggedInTo(['/home']);
@@ -14,7 +12,7 @@ const redirectToLogin = (_: ActivatedRouteSnapshot, state: RouterStateSnapshot) 
 export const routes: Routes = [
   {
     path: 'login',
-    loadComponent: () => import('./login/login.page').then(m => m.LoginComponent),
+    loadComponent: () => import('./login/login.page').then((m) => m.LoginComponent),
     data: { authGuardPipe: redirectToHome }
   },
   {
@@ -25,7 +23,7 @@ export const routes: Routes = [
   },
   {
     path: 'user',
-    loadComponent: () => import('./user/user.page').then(m => m.UserPage),
+    loadComponent: () => import('./user/user.page').then((m) => m.UserPage),
     canActivate: [AuthGuard],
     data: { authGuardPipe: redirectToLogin }
   },
@@ -36,8 +34,14 @@ export const routes: Routes = [
     data: { authGuardPipe: redirectToLogin }
   },
   {
+    path: 'actions',
+    loadChildren: () => import('./next-actions/action.routes').then((mod) => mod.actionRoutes),
+    canActivate: [AuthGuard],
+    data: { authGuardPipe: redirectToLogin }
+  },
+  {
     path: '',
     redirectTo: 'home',
-    pathMatch: 'full',
-  },
+    pathMatch: 'full'
+  }
 ];

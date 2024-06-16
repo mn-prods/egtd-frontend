@@ -40,13 +40,15 @@ export class NextActionsComponent implements OnInit {
     );
   }
 
-  addNextAction() {
+  async addNextAction() {
     let { body, id } = this.inboxItem();
 
-    this.actionsRepository.create<'type' | 'at' | 'order'>({
+    let order = await this.actionsRepository.getNextOrder(id);
+    this.actionsRepository.create<'type' | 'at'>({
       body: '',
       inboxItem: { body, id },
-      marked: false
+      marked: false,
+      order
     });
   }
 
