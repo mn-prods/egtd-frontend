@@ -16,7 +16,7 @@
         <mat-button-toggle-group
           (valueChange)="saveItemState($event)"
           #actionable="matButtonToggleGroup"
-          [value]="true"
+          [value]="item.actionable"
           class="mb-20"
         >
           <mat-button-toggle [value]="true">Yes</mat-button-toggle>

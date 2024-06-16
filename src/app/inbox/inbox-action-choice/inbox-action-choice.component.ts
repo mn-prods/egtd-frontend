@@ -4,7 +4,10 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIcon } from '@angular/material/icon';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { assert } from 'src/app/common/functions/assert';
+
 import { InboxDocument } from 'src/app/db/entities/inbox.entity';
+import { InboxRepository } from 'src/app/db/inbox.repository';
 import { NavigationService } from 'src/app/navigation.service';
 import { NextActionsComponent } from 'src/app/next-actions/next-actions.component';
 
@@ -18,11 +21,17 @@ import { NextActionsComponent } from 'src/app/next-actions/next-actions.componen
 export class InboxActionChoiceComponent implements OnInit {
   route = inject(ActivatedRoute);
   navigation = inject(NavigationService);
+  inboxRepository = inject(InboxRepository);
 
   item?: InboxDocument;
 
   constructor() {
-    this.navigation.settings.next({ toolbar: true, showBackBtn: true, backBtnRoute: 'inbox' });
+    this.navigation.settings.next({
+      toolbar: true,
+      showBackBtn: true,
+      backBtnRoute: 'inbox',
+      toolbarHeader: 'inbox-choice.toolbar'
+    });
   }
 
   ngOnInit(): void {
@@ -30,6 +39,8 @@ export class InboxActionChoiceComponent implements OnInit {
   }
 
   saveItemState(actionable: boolean) {
-    // save inbox item state
+    assert(this.item?.id !== undefined, 'Item should not be undefined, something went wrong');
+
+    this.inboxRepository.update(this.item!.id, { actionable });
   }
 }

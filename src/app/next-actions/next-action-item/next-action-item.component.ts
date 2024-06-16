@@ -1,3 +1,4 @@
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { CommonModule } from '@angular/common';
 import {
@@ -8,24 +9,30 @@ import {
   OnInit,
   inject,
   input,
+  signal,
   viewChild
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router, RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { Subject, debounceTime, distinctUntilChanged, filter, switchMap, takeUntil } from 'rxjs';
-import { LongPressDirective } from 'src/app/common/directives/long-press.directive';
-import { ObjectValues } from 'src/app/common/types/object-values.type';
+import {
+  LongPressDirective,
+  LongpressReleaseEvent
+} from 'src/app/common/directives/long-press.directive';
 import { isNullOrUndefined } from 'src/app/common/value-check';
 import { ActionsRepository } from 'src/app/db/actions.repository';
-import { ActionDocument, ActionType } from 'src/app/db/entities/action.entity';
-import { MatBadgeModule } from '@angular/material/badge';
-import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ActionDocument, ActionEnvironment, ActionType } from 'src/app/db/entities/action.entity';
 
 @Component({
   selector: 'app-next-action-item',
@@ -42,14 +49,17 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     TextFieldModule,
     LongPressDirective,
     MatBadgeModule,
-    DragDropModule
+    DragDropModule,
+    TranslateModule,
+    MatProgressSpinnerModule,
+    MatChipsModule,
+    MatMenuModule
   ],
   templateUrl: './next-action-item.component.html',
   styleUrl: './next-action-item.component.scss'
 })
 export class NextActionItemComponent implements OnInit, AfterViewInit, OnDestroy {
   item = input.required<ActionDocument>();
-  order = input.required<number>();
 
   itemElem = viewChild<ElementRef<HTMLInputElement>>('itemInput');
 
@@ -61,13 +71,16 @@ export class NextActionItemComponent implements OnInit, AfterViewInit, OnDestroy
 
   itemBody!: FormControl<string | null>;
   itemMarked!: FormControl<boolean | null>;
-  itemType!: FormControl<ObjectValues<typeof ActionType> | null>;
+  itemType!: FormControl<ActionType | null>;
+
+  itemSelected = signal(0);
 
   typeIcons = {
     [ActionType.wait]: 'hourglass_top',
     [ActionType.schedule]: 'event',
     [ActionType.do]: 'commit'
   };
+  environments = ActionEnvironment;
 
   deleteItem(id: string) {
     this.actionsRepository.delete(id);
@@ -77,7 +90,7 @@ export class NextActionItemComponent implements OnInit, AfterViewInit, OnDestroy
     this.unsub$ = new Subject();
     this.itemBody = new FormControl<string>(this.item().body);
     this.itemMarked = new FormControl<boolean>(this.item().marked);
-    this.itemType = new FormControl<ObjectValues<typeof ActionType> | null>(this.item().type);
+    this.itemType = new FormControl<ActionType | null>(this.item().type);
 
     this.itemBody.valueChanges
       .pipe(
@@ -112,5 +125,17 @@ export class NextActionItemComponent implements OnInit, AfterViewInit, OnDestroy
   ngOnDestroy(): void {
     this.unsub$.next(null);
     this.unsub$.unsubscribe();
+  }
+  onLongPressing(event: number) {
+    this.itemSelected.set(event);
+  }
+
+  selectEnvironment(at: ActionEnvironment) {
+    this.actionsRepository.update(this.item().id, { at });
+  }
+
+  goToNextActionDetail({ maxTimeReached }: LongpressReleaseEvent) {
+    console.log('navigate away:', maxTimeReached);
+    this.itemSelected.set(0);
   }
 }

@@ -55,7 +55,7 @@ export class BaseRepository<D extends BaseGtdDocument> {
     return this.collection.findOne({ selector: { id } }).exec();
   }
 
-  async create(data: Omit<D, keyof BaseGtdDocument>): Promise<D> {
+  async create<Ignore extends string = ''>(data: Omit<D, keyof BaseGtdDocument | Ignore>): Promise<D> {
     let now = +new Date();
     return this.collection.insert({
       id: uuid(),

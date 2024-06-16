@@ -17,9 +17,26 @@
             "add": "Capture"
         }
     },
+    "inbox-choice": {
+        "toolbar": "Focus on the loose end..."
+    },
     "next-actions": {
         "btn": {
-            "add": "Next action"
+            "add": "Next action",
+            "longpress": "Consolidating choice..."
+        },
+        "type": {
+            "do": "Act",
+            "wait": "Wait",
+            "schedule": "Plan",
+            "null": "Press"
+        },
+        "at": {
+            "home": "Home",
+            "phone": "Phone",
+            "computer": "Computer",
+            "car": "Car",
+            "around": "Around"
         }
     }
 }

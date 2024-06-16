@@ -1,7 +1,8 @@
+<div class="item-placeholder" *cdkDragPlaceholder></div>
 <div class="flex justify-between items-end gap-1 overflow-hidden">
-  <button mat-icon-button [matBadge]="item().order" matBadgePosition="below after" cdkDragHandle>
-    <mat-icon>menu</mat-icon>
-  </button>
+  <div cdkDragHandle class="flex-1 flex items-start">
+    <mat-icon>drag_indicator</mat-icon>
+  </div>
 
   <mat-form-field class="w-full">
     <textarea
@@ -20,12 +21,49 @@
     ></textarea>
   </mat-form-field>
 
-  <button mat-flat-button (click)="setNextType()" longPress>
-    <div class="flex justify-between items-center w-20">
-      <div class="text-xs">{{ item().type }}</div>
-      <mat-icon class="material-symbols-outlined pt-1">
-        {{ item().type ? typeIcons[item().type!] : 'dangerous' }}
-      </mat-icon>
+  <button
+    mat-flat-button
+    longPress
+    (click)="setNextType()"
+    [maxTime]="1000"
+    (onLongPressing)="onLongPressing($event)"
+    (onReleasePressing)="goToNextActionDetail($event)"
+  >
+    <div class="flex justify-between items-center w-5">
+      <div class="text-xs">{{ 'next-actions.type.' + item().type | translate }}</div>
     </div>
   </button>
+  <button mat-icon-button [matMenuTriggerFor]="menu">
+    <mat-icon>alternate_email</mat-icon>
+  </button>
 </div>
+<div class="flex flex-row gap-2 items-center pl-1 mt-1">
+  @if (item().at) {
+  <mat-chip class="!h-4 env-chip">
+    {{ 'next-actions.at.' + item().at | translate }}
+  </mat-chip>
+  } @if (itemSelected() !== 0) {
+  <div class="flex flex-row gap-2">
+    <div>
+      <mat-progress-spinner
+        mode="determinate"
+        [diameter]="15"
+        [value]="itemSelected() / 8"
+      ></mat-progress-spinner>
+    </div>
+    <div class="text-xs">{{ 'next-actions.btn.longpress' | translate }}</div>
+  </div>
+  }
+</div>
+
+<mat-menu #menu="matMenu">
+  @for (item of environments | keyvalue; track $index) {
+  <button
+    mat-menu-item
+    (click)="selectEnvironment(item.value)"
+    role="menuitemradio"
+  >
+    {{ 'next-actions.at.' + item.value | translate }}
+  </button>
+  }
+</mat-menu>

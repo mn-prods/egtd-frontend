@@ -12,11 +12,13 @@ import { GtdDatabase, GtdDatabaseCollections } from 'src/app/db/db.model';
 import { actionsSchema } from 'src/app/db/entities/action.entity';
 import { InboxDocument, inboxSchema } from 'src/app/db/entities/inbox.entity';
 import { ReplicationService } from './replication.service';
+import { RxDBUpdatePlugin } from 'rxdb/plugins/update';
 
 async function loadRxDBPlugins(): Promise<void> {
   addRxPlugin(RxDBMigrationPlugin);
   addRxPlugin(RxDBCleanupPlugin);
   addRxPlugin(RxDBLeaderElectionPlugin);
+  addRxPlugin(RxDBUpdatePlugin);
 
   if (isDevMode()) {
     addRxPlugin(RxDBDevModePlugin);

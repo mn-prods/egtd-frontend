@@ -7,7 +7,15 @@ export enum ActionType {
   do = 'do',
   wait = 'wait',
   schedule = 'schedule'
-};
+}
+
+export enum ActionEnvironment {
+  home = 'home',
+  phone = 'phone',
+  computer = 'computer',
+  car = 'car',
+  around = 'around'
+}
 
 export interface ActionDocument extends BaseGtdDocument {
   id: string;
@@ -15,7 +23,8 @@ export interface ActionDocument extends BaseGtdDocument {
   marked: boolean;
   inboxItem: Pick<InboxDocument, 'id' | 'body'>;
   order: number;
-  type: ObjectValues<typeof ActionType> | null;
+  type: ActionType | null;
+  at: ActionEnvironment | null;
   _deleted?: boolean;
 }
 
@@ -26,6 +35,7 @@ export const actionsSchema: RxJsonSchema<ActionDocument> = {
   version: 0,
   type: 'object',
   primaryKey: 'id',
+  indexes: ['order'],
   properties: {
     id: {
       type: 'string',
@@ -52,10 +62,19 @@ export const actionsSchema: RxJsonSchema<ActionDocument> = {
     },
     type: {
       type: 'string',
-      enum: [...Object.values(ActionType), null]
+      enum: [...Object.values(ActionType), null],
+      default: null
+    },
+    at: {
+      type: 'string',
+      enum: [...Object.values(ActionEnvironment), null],
+      default: null,
     },
     order: {
-      type: 'number'
+      type: 'number',
+      multipleOf: 1,
+      minimum: 1,
+      maximum: 100
     },
     updatedAt: {
       type: 'number'
