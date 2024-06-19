@@ -26,9 +26,7 @@ export class ActionsRepository extends BaseRepository<ActionDocument> {
           selector: { 'inboxItem.id': inboxItemId, _deleted: false },
           sort: [{ order: 'desc' }]
         })
-        .$.pipe(
-          map((action) => (action?.order || 0) + 1)
-        )
+        .$.pipe(map((action) => (action?.order || 0) + 1))
     );
   }
 
@@ -60,13 +58,14 @@ export class ActionsRepository extends BaseRepository<ActionDocument> {
       // compute current order value from indexes
       currentOrder = previousOrder - diff;
       this.collection
+        // find affected actions from order values
         .find({
           selector: {
             $and: [{ order: { $lt: previousOrder } }, { order: { $gte: currentOrder } }]
           }
         })
+        // increment order values of affected actions
         .update({ $inc: { order: 1 } });
-      // move between previousIndex and currentIndex up (which actually means position +1)
     }
     // set dragged action to new position
     await action.patch({ order: currentOrder! });
