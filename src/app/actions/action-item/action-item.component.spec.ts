@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NextActionItemComponent } from './next-action-item.component';
+import { NextActionItemComponent } from './action-item.component';
 
 describe('NextActionItemComponent', () => {
   let component: NextActionItemComponent;

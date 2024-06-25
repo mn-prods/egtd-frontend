@@ -1,0 +1,36 @@
+<div class="flex items-end gap-1 overflow-hidden">
+  <ng-content class="w-full"></ng-content>
+  <mat-form-field class="w-full">
+    <textarea
+      #itemInput
+      type="text"
+      class="transition-opacity ease-in duration-700"
+      matInput
+      cdkTextareaAutosize
+      cdkAutosizeMinRows="1"
+      cdkAutosizeMaxRows="5"
+      [value]="item().body"
+      [formControl]="itemBody"
+      [style.view-transition-name]="'action-' + item().id"
+      [style.view-transition-class]="'action'"
+    ></textarea>
+  </mat-form-field>
+
+  <button mat-icon-button [matMenuTriggerFor]="menu" class="mr-1">
+    <mat-icon>alternate_email</mat-icon>
+  </button>
+</div>
+<div class="flex flex-row items-start pl-1 mt-1 h-4 text-sm">
+  <div class="btn-offset"></div>
+  @if(item().at) {
+  <app-action-env-chip [environment]="item().at!"></app-action-env-chip>
+  }
+</div>
+
+<mat-menu #menu="matMenu">
+  @for (item of environments | keyvalue; track $index) {
+  <button mat-menu-item (click)="onSelectEnvironment.emit(item.value)" role="menuitemradio">
+    {{ 'next-actions.at.' + item.value | translate }}
+  </button>
+  }
+</mat-menu>

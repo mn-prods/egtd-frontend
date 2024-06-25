@@ -5,11 +5,28 @@ import { firstValueFrom, map, tap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ActionsRepository extends BaseRepository<ActionDocument> {
-  protected override collection: ActionCollection;
+  protected override collection!: ActionCollection;
 
   constructor() {
-    super();
-    this.collection = this.dbProvider.rxDatabase.actions;
+    super('actions');
+  }
+
+  override setMiddleware(): void {
+    const convertWaitByToTimestamp = (data: ActionDocument) => {
+      if (!data.wait?.by) return;
+      data.wait.by = +data.wait.by as unknown as Date;
+    };
+
+    this.collection.preInsert(convertWaitByToTimestamp, true);
+    this.collection.preSave(convertWaitByToTimestamp, true);
+    this.collection.postCreate((plainData, rxDoc) => {
+      Object.defineProperty(rxDoc, 'wait', {
+        get: () => {
+          if (!plainData.wait?.by) return plainData.wait;
+          return { ...plainData.wait, by: new Date(plainData.wait.by) };
+        }
+      });
+    });
   }
 
   observeManyByInboxItem(inboxItemId: string) {

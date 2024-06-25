@@ -19,6 +19,7 @@ import {
 } from '@angular/common/http';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { AuthInterceptor } from './app/common/interceptors/auth.interceptor';
+import { MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
 
 // https://stackoverflow.com/questions/67152273/angular-circular-dependency-when-inject-translateservice-to-interceptor
 export function HttpLoaderFactory(handler: HttpBackend) {
@@ -54,6 +55,8 @@ bootstrapApplication(AppComponent, {
       })
     ),
     provideHttpClient(withInterceptorsFromDi()),
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    provideNativeDateAdapter(),
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
   ]
 });

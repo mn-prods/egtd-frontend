@@ -95,5 +95,6 @@ export class LongPressDirective {
     this.longPressing = false;
     this.pressing = false;
     this.elapsedTime = 0;
+    this.onLongPressing.emit(0)
   }
 }

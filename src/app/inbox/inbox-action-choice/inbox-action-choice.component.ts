@@ -9,7 +9,7 @@ import { assert } from 'src/app/common/functions/assert';
 import { InboxDocument } from 'src/app/db/entities/inbox.entity';
 import { InboxRepository } from 'src/app/db/inbox.repository';
 import { NavigationService } from 'src/app/navigation.service';
-import { NextActionsComponent } from 'src/app/next-actions/next-actions.component';
+import { NextActionsComponent } from 'src/app/actions/next-actions.component';
 
 @Component({
   selector: 'app-inbox-action-choice',

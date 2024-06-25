@@ -59,7 +59,7 @@ export class RxdbProvider {
       },
       actions: {
         schema: actionsSchema,
-        autoMigrate: false
+        autoMigrate: false,
       }
     });
 

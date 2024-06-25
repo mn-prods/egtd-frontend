@@ -21,18 +21,18 @@
     </div>
   </mat-sidenav>
   <mat-sidenav-content>
-    @if(settings?.toolbar) {
+    @if(settings()?.toolbar) {
     <mat-toolbar id="page-toolbar" color="primary">
-      @if (settings?.showSidenavBtn) {
+      @if (settings()?.showSidenavBtn) {
       <button mat-icon-button (click)="sidenav.toggle()" aria-label="Open sidebar">
         <mat-icon>menu</mat-icon>
       </button>
-      } @if (settings?.showBackBtn) {
-      <button mat-icon-button [routerLink]="settings?.backBtnRoute">
+      } @if (settings()?.showBackBtn) {
+      <button mat-icon-button [routerLink]="settings()?.backBtnRoute">
         <mat-icon>arrow_back</mat-icon>
       </button>
       }
-      <div>{{ settings?.toolbarHeader || '' | translate }}</div>
+      <div>{{ settings()?.toolbarHeader || '' | translate }}</div>
     </mat-toolbar>
     }
     <router-outlet></router-outlet>

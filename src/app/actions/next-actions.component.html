@@ -5,11 +5,7 @@
     (cdkDropListDropped)="reorder($event)"
   >
     @for (item of nextActions$ | async; track item.id) {
-    <app-next-action-item
-      class="py-2 px-1 action-item bg-white"
-      [item]="item"
-      cdkDrag
-    ></app-next-action-item>
+    <app-action-item class="py-2 px-1 action-item bg-white" [item]="item" cdkDrag></app-action-item>
     }
   </div>
 

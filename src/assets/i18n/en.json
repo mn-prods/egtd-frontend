@@ -26,10 +26,15 @@
             "longpress": "Consolidating choice..."
         },
         "type": {
-            "do": "Act",
+            "do": "Do",
             "wait": "Wait",
             "schedule": "Plan",
-            "null": "Press"
+            "null": "..."
+        },
+        "prefix": {
+            "for": "for",
+            "to": "to",
+            "by": "by"
         },
         "at": {
             "home": "Home",

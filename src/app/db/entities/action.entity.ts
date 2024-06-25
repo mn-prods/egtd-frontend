@@ -1,7 +1,6 @@
 import { RxCollection, RxJsonSchema } from 'rxdb';
-import { InboxDocument } from './inbox.entity';
 import { BaseGtdDocument } from 'src/app/common/interfaces/base.interface';
-import { ObjectValues } from 'src/app/common/types/object-values.type';
+import { InboxDocument } from './inbox.entity';
 
 export enum ActionType {
   do = 'do',
@@ -17,6 +16,12 @@ export enum ActionEnvironment {
   around = 'around'
 }
 
+export type Waiting = {
+  for: string | null;
+  to: string | null;
+  by: Date | null;
+};
+
 export interface ActionDocument extends BaseGtdDocument {
   id: string;
   body: string;
@@ -25,6 +30,8 @@ export interface ActionDocument extends BaseGtdDocument {
   order: number;
   type: ActionType | null;
   at: ActionEnvironment | null;
+  wait: Partial<Waiting | null>;
+  typeIsFinal: boolean;
   _deleted?: boolean;
 }
 
@@ -45,6 +52,15 @@ export const actionsSchema: RxJsonSchema<ActionDocument> = {
     },
     body: {
       type: 'string'
+    },
+    wait: {
+      type: 'object',
+      default: null,
+      properties: {
+        for: { type: 'string' },
+        to: { type: 'string' },
+        by: { type: 'number' }
+      }
     },
     marked: {
       type: 'boolean'
@@ -69,13 +85,17 @@ export const actionsSchema: RxJsonSchema<ActionDocument> = {
     at: {
       type: 'string',
       enum: [...Object.values(ActionEnvironment), null],
-      default: null,
+      default: null
     },
     order: {
       type: 'number',
       multipleOf: 1,
       minimum: 1,
       maximum: 100
+    },
+    typeIsFinal: {
+      type: 'boolean',
+      default: false
     },
     updatedAt: {
       type: 'number'
@@ -86,5 +106,6 @@ export const actionsSchema: RxJsonSchema<ActionDocument> = {
     _deleted: {
       type: 'boolean'
     }
-  }
+  },
+  
 };

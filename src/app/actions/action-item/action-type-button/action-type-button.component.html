@@ -1,0 +1,18 @@
+<button
+  matRipple
+  class="action-type-btn"
+  [class.fill-up]="!action().typeIsFinal && pressedFor()"
+  [class.final]="action().typeIsFinal"
+  [disabled]="disabled()"
+  longPress
+  [longPressEnabled]="!!action().type && !action().typeIsFinal"
+  (click)="!action().typeIsFinal ? toggleType() : simulateSuccessfulLongPress()"
+  [minTime]="300"
+  [maxTime]="1000"
+  (onLongPressing)="onLongPressing.emit($event)"
+  (onReleasePressing)="onReleasePressing.emit($event)"
+>
+  <div class="flex items-center">
+    <div class="text-xs">{{ 'next-actions.type.' + action().type | translate }}</div>
+  </div>
+</button>

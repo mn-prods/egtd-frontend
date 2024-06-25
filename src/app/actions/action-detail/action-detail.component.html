@@ -1,0 +1,5 @@
+<div class="p-2">
+  @if (action()) { @if(action()?.type === actionTypes.wait) {
+  <app-wait-for-detail [action]="action()!"></app-wait-for-detail>
+  } }
+</div>

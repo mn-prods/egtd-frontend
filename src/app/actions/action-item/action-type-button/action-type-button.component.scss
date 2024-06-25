@@ -1,0 +1,23 @@
+@import 'src/theme/variables.scss';
+
+.action-type-btn {
+  border: unset;
+  @apply py-1 px-4 rounded;
+  width: $btn-width;
+  background: linear-gradient(to right, rgb(247, 246, 246) 50%, $final-bg-color 50%) left;
+  background-size: 200%;
+  
+  &:not(.final) {
+    transition-duration: 1300ms;
+  }
+}
+
+.fill-up {
+  background-position: right;
+  color: $final-text-color;
+}
+
+.final {
+  background: $final-bg-color;
+  color: $final-text-color;
+}

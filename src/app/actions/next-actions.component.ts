@@ -4,9 +4,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
 import { Observable, debounceTime, firstValueFrom, map, takeUntil, tap } from 'rxjs';
 import { ActionsRepository } from '../db/actions.repository';
-import { ActionDocument } from '../db/entities/action.entity';
+import { ActionDocument, ActionType } from '../db/entities/action.entity';
 import { InboxDocument } from '../db/entities/inbox.entity';
-import { NextActionItemComponent } from './next-action-item/next-action-item.component';
+import { NextActionItemComponent } from './action-item/action-item.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 
@@ -35,7 +35,23 @@ export class NextActionsComponent implements OnInit {
     this.nextActions$ = this.actionsRepository.observeManyByInboxItem(this.inboxItem().id);
 
     this.anyItemIsInvalid$ = this.nextActions$.pipe(
-      map((items: ActionDocument[]) => items.some(({ body, type }) => !body || !type)),
+      map((items: ActionDocument[]) =>
+        items.some((action) => {
+          if (!action.type) return true;
+
+          switch (action.type) {
+            case ActionType.do:
+              return !action.body;
+            case ActionType.wait:
+              return !action.wait?.by || !action.wait?.for || !action.wait?.to;
+            case ActionType.schedule:
+              return true;
+
+            default:
+              return false;
+          }
+        })
+      ),
       takeUntilDestroyed(this.destroyRef)
     );
   }
@@ -44,7 +60,7 @@ export class NextActionsComponent implements OnInit {
     let { body, id } = this.inboxItem();
 
     let order = await this.actionsRepository.getNextOrder(id);
-    this.actionsRepository.create<'type' | 'at'>({
+    this.actionsRepository.create<'type' | 'at' | 'typeIsFinal' | 'wait'>({
       body: '',
       inboxItem: { body, id },
       marked: false,

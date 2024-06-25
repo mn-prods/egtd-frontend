@@ -1,15 +1,15 @@
-import { Component, DestroyRef, OnInit, ViewChild, inject } from '@angular/core';
-import { MatButton, MatIconButton } from '@angular/material/button';
+import { Component, DestroyRef, OnInit, ViewChild, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbar } from '@angular/material/toolbar';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import 'zone.js/plugins/zone-patch-rxjs';
+import { NavigationSettings } from './common/interfaces/navigation-settings.interface';
 import { RxdbProvider } from './common/services/db.provider';
 import { NavigationService } from './navigation.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NavigationSettings } from './common/interfaces/navigation-settings.interface';
+import 'zone.js/plugins/zone-patch-rxjs';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +17,6 @@ import { NavigationSettings } from './common/interfaces/navigation-settings.inte
   styleUrl: 'app.component.scss',
   standalone: true,
   imports: [RouterModule, TranslateModule, MatSidenavModule, MatToolbar, MatIcon, MatIconButton]
-  
 })
 export class AppComponent implements OnInit {
   @ViewChild('sidenav') sidenav!: MatSidenav;
@@ -27,7 +26,7 @@ export class AppComponent implements OnInit {
   private readonly navigation = inject(NavigationService);
   private readonly destroyRef = inject(DestroyRef);
 
-  settings?: NavigationSettings;
+  settings = signal<NavigationSettings | null>(null);
 
   navigate(route: string) {
     this.router.navigate(['/' + route]);
@@ -37,8 +36,6 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.rxdbProvider.initDB('gtd');
 
-    this.navigation.settings
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((settings) => (this.settings = settings));
+    this.navigation.settings.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(this.settings.set);
   }
 }

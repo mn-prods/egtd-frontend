@@ -1,19 +1,22 @@
-@use "@angular/material" as mat;
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
-
+@use '@angular/material' as mat;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
 @include mat.core();
 
 $theme: mat.define-theme(
   (
     density: (
-      scale: -5,
-    ),
+      scale: -5
+    )
   )
 );
 
 html {
-    @include mat.all-component-themes($theme);
-  }
+  @include mat.all-component-themes($theme);
+}
+
+$btn-width: 4.5em;
+$final-bg-color: #e20b76;
+$final-text-color: white;

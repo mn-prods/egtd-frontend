@@ -1,0 +1,41 @@
+<div class="item-placeholder" *cdkDragPlaceholder></div>
+
+@switch (item().type) { @case (null) {
+<app-action-type-button
+  [action]="item()"
+  (onTypeChange)="setNextType($event)"
+  (onLongPressing)="updatePressionProgressive($event)"
+  (onReleasePressing)="goToNextActionDetail($event)"
+></app-action-type-button>
+} @case (actionType.do) {
+<app-action-item-next-action
+  [item]="item()"
+  (onBodyChanged)="updateActionBody($event)"
+  (onSelectEnvironment)="updateActionEnvironment($event)"
+>
+  <app-action-type-button
+    [action]="item()"
+    (onTypeChange)="setNextType($event)"
+    (onLongPressing)="updatePressionProgressive($event)"
+    (onReleasePressing)="goToNextActionDetail($event)"
+  ></app-action-type-button>
+</app-action-item-next-action>
+} @case(actionType.wait) {
+<app-action-item-wait-for [action]="item()" (onWaitChanged)="updateActionWait($event)">
+  <app-action-type-button
+    [action]="item()"
+    (onTypeChange)="setNextType($event)"
+    (onLongPressing)="updatePressionProgressive($event)"
+    (onReleasePressing)="goToNextActionDetail($event)"
+  ></app-action-type-button>
+</app-action-item-wait-for>
+} @case (actionType.schedule) {
+<app-action-item-schedule>
+  <app-action-type-button
+    [action]="item()"
+    (onTypeChange)="setNextType($event)"
+    (onLongPressing)="updatePressionProgressive($event)"
+    (onReleasePressing)="goToNextActionDetail($event)"
+  ></app-action-type-button>
+</app-action-item-schedule>
+}}

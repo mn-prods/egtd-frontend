@@ -11,6 +11,10 @@ export class NavigationService {
     toolbarHeader: '',
     showSidenavBtn: false,
     showBackBtn: false,
-    backBtnRoute: '..',
+    backBtnRoute: '..'
   });
+
+  updateSetting(settings: Partial<NavigationSettings>) {
+    this.settings.next({ ...this.settings.value, ...settings });
+  }
 }
