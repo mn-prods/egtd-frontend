@@ -30,7 +30,7 @@
   ></app-action-type-button>
 </app-action-item-wait-for>
 } @case (actionType.schedule) {
-<app-action-item-schedule>
+<app-action-item-schedule [action]="item()" (onScheduleChange)="updateSchedule($event)">
   <app-action-type-button
     [action]="item()"
     (onTypeChange)="setNextType($event)"

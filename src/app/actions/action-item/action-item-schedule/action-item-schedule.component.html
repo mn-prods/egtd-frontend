@@ -1,3 +1,26 @@
-<div class="flex items-end gap-1 overflow-hidden">
+<ng-container [formGroup]="schedule">
+  <div class="flex items-end gap-1 overflow-hidden">
     <ng-content></ng-content>
-</div>
+    <mat-form-field class="flex-1">
+      <mat-icon matIconPrefix class="material-symbols-outlined prefix"> exercise </mat-icon>
+      <textarea
+        #waitSubj
+        matInput
+        type="text"
+        class="transition-opacity ease-in duration-700"
+        cdkTextareaAutosize
+        cdkAutosizeMinRows="1"
+        cdkAutosizeMaxRows="5"
+        formControlName="to"
+      ></textarea>
+    </mat-form-field>
+  </div>
+  <div class="flex flex-row items-end mt-1 text-sm">
+    <div class="btn-offset"></div>
+    <mat-form-field class="flex-1">
+      <input matInput [matDatepicker]="picker" formControlName="on" readonly />
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
+</ng-container>

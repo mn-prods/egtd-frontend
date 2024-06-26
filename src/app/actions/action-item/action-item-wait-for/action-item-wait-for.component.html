@@ -1,18 +1,8 @@
 <ng-container [formGroup]="waitingFor">
   <div class="flex items-end gap-1 overflow-hidden">
     <ng-content></ng-content>
-    <mat-form-field class="w-full">
-      <mat-icon matIconPrefix class="material-symbols-outlined prefix"> exercise </mat-icon>
-      <input type="text" matInput formControlName="for" />
-    </mat-form-field>
-    <button mat-icon-button class="mr-1" (click)="focusOnWaitSubj()">
-      <mat-icon>arrow_forward</mat-icon>
-    </button>
-  </div>
-  <div class="flex flex-row items-end mt-1 text-sm">
-    <div class="btn-offset"></div>
     <mat-form-field class="flex-1">
-      <mat-icon matIconPrefix class="prefix">person</mat-icon>
+      <mat-icon matIconPrefix class="material-symbols-outlined prefix"> exercise </mat-icon>
       <textarea
         #waitSubj
         matInput
@@ -23,6 +13,13 @@
         cdkAutosizeMaxRows="5"
         formControlName="to"
       ></textarea>
+    </mat-form-field>
+  </div>
+  <div class="flex flex-row items-end mt-1 text-sm">
+    <div class="btn-offset"></div>
+    <mat-form-field class="flex-1">
+      <mat-icon matIconPrefix class="prefix">person</mat-icon>
+      <input type="text" matInput formControlName="for" />
     </mat-form-field>
     <mat-form-field class="flex-1">
       <input matInput [matDatepicker]="picker" formControlName="by" readonly />

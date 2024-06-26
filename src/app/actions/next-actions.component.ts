@@ -45,7 +45,7 @@ export class NextActionsComponent implements OnInit {
             case ActionType.wait:
               return !action.wait?.by || !action.wait?.for || !action.wait?.to;
             case ActionType.schedule:
-              return true;
+              return !action.schedule?.on || !action.schedule?.to;
 
             default:
               return false;
@@ -60,7 +60,7 @@ export class NextActionsComponent implements OnInit {
     let { body, id } = this.inboxItem();
 
     let order = await this.actionsRepository.getNextOrder(id);
-    this.actionsRepository.create<'type' | 'at' | 'typeIsFinal' | 'wait'>({
+    this.actionsRepository.create<'type' | 'at' | 'typeIsFinal' | 'wait' | 'schedule'>({
       body: '',
       inboxItem: { body, id },
       marked: false,

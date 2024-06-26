@@ -22,6 +22,11 @@ export type Waiting = {
   by: Date | null;
 };
 
+export type Schedule = {
+  to: string | null;
+  on: Date | null;
+};
+
 export interface ActionDocument extends BaseGtdDocument {
   id: string;
   body: string;
@@ -30,7 +35,8 @@ export interface ActionDocument extends BaseGtdDocument {
   order: number;
   type: ActionType | null;
   at: ActionEnvironment | null;
-  wait: Partial<Waiting | null>;
+  wait: Partial<Waiting> | null;
+  schedule: Partial<Schedule> | null;
   typeIsFinal: boolean;
   _deleted?: boolean;
 }
@@ -60,6 +66,14 @@ export const actionsSchema: RxJsonSchema<ActionDocument> = {
         for: { type: 'string' },
         to: { type: 'string' },
         by: { type: 'number' }
+      }
+    },
+    schedule: {
+      type: 'object',
+      default: null,
+      properties: {
+        to: { type: 'string' },
+        on: { type: 'number' }
       }
     },
     marked: {
@@ -106,6 +120,5 @@ export const actionsSchema: RxJsonSchema<ActionDocument> = {
     _deleted: {
       type: 'boolean'
     }
-  },
-  
+  }
 };

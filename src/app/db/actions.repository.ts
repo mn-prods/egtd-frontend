@@ -12,18 +12,30 @@ export class ActionsRepository extends BaseRepository<ActionDocument> {
   }
 
   override setMiddleware(): void {
-    const convertWaitByToTimestamp = (data: ActionDocument) => {
-      if (!data.wait?.by) return;
-      data.wait.by = +data.wait.by as unknown as Date;
+    const convertDatesToTimestamp = (data: ActionDocument) => {
+      if (data.wait?.by) {
+        data.wait.by = +data.wait.by as unknown as Date;
+      }
+
+      if (data.schedule?.on) {
+        data.schedule.on = +data.schedule.on as unknown as Date;
+      }
     };
 
-    this.collection.preInsert(convertWaitByToTimestamp, true);
-    this.collection.preSave(convertWaitByToTimestamp, true);
+    this.collection.preInsert(convertDatesToTimestamp, true);
+    this.collection.preSave(convertDatesToTimestamp, true);
+
     this.collection.postCreate((plainData, rxDoc) => {
       Object.defineProperty(rxDoc, 'wait', {
         get: () => {
           if (!plainData.wait?.by) return plainData.wait;
           return { ...plainData.wait, by: new Date(plainData.wait.by) };
+        }
+      });
+      Object.defineProperty(rxDoc, 'schedule', {
+        get: () => {
+          if (!plainData.schedule?.on) return plainData.schedule;
+          return { ...plainData.schedule, on: new Date(plainData.schedule.on) };
         }
       });
     });

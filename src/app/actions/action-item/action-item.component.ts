@@ -23,6 +23,7 @@ import {
   ActionDocument,
   ActionEnvironment,
   ActionType,
+  Schedule,
   Waiting
 } from 'src/app/db/entities/action.entity';
 import { ActionEnvChipComponent } from './action-env-chip/action-env-chip.component';
@@ -105,6 +106,10 @@ export class NextActionItemComponent implements OnInit, AfterViewInit, OnDestroy
   }
   updateActionWait(wait: Partial<Waiting>) {
     this.actionsRepository.update(this.item().id, { wait });
+  }
+
+  updateSchedule(schedule: Partial<Schedule>) {
+    this.actionsRepository.update(this.item().id, { schedule });
   }
 
   goToNextActionDetail({ maxTimeReached }: LongpressReleaseEvent) {

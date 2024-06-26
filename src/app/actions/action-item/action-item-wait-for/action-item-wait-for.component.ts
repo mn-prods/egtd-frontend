@@ -1,12 +1,10 @@
 import {
   Component,
   DestroyRef,
-  ElementRef,
   OnInit,
   inject,
   input,
-  output,
-  viewChild
+  output
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -37,7 +35,6 @@ import { ActionDocument, Waiting } from 'src/app/db/entities/action.entity';
   ]
 })
 export class ActionItemWaitForComponent implements OnInit {
-  waitSubj = viewChild<ElementRef<HTMLInputElement>>('waitSubj');
 
   action = input.required<ActionDocument>();
   onWaitChanged = output<Partial<Waiting>>();
@@ -59,7 +56,4 @@ export class ActionItemWaitForComponent implements OnInit {
       .subscribe((wait) => this.onWaitChanged.emit(wait));
   }
 
-  focusOnWaitSubj() {
-    this.waitSubj()?.nativeElement.focus();
-  }
 }
