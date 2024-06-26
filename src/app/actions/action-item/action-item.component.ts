@@ -31,6 +31,7 @@ import { ActionItemNextActionComponent } from './action-item-next-action/action-
 import { ActionTypeButtonComponent } from './action-type-button/action-type-button.component';
 import { ActionItemWaitForComponent } from './action-item-wait-for/action-item-wait-for.component';
 import { ActionItemScheduleComponent } from './action-item-schedule/action-item-schedule.component';
+import { RxDoc } from 'src/app/db/db.model';
 
 @Component({
   selector: 'app-action-item',
@@ -51,13 +52,12 @@ import { ActionItemScheduleComponent } from './action-item-schedule/action-item-
   styleUrl: './action-item.component.scss'
 })
 export class NextActionItemComponent implements OnInit, AfterViewInit, OnDestroy {
-  item = input.required<ActionDocument>();
-
+  item = input.required<RxDoc<ActionDocument>>();
   itemElem = viewChild<ElementRef<HTMLInputElement>>('itemInput');
 
+  router = inject(Router);
   dialog = inject(MatDialog);
   actionsRepository = inject(ActionsRepository);
-  router = inject(Router);
 
   unsub$!: Subject<null>;
 
@@ -73,23 +73,16 @@ export class NextActionItemComponent implements OnInit, AfterViewInit, OnDestroy
     [ActionType.do]: 'commit'
   };
 
-  deleteItem(id: string) {
-    this.actionsRepository.delete(id);
-  }
-
-  ngOnInit(): void {
+  async ngOnInit() {
     this.unsub$ = new Subject();
     this.itemMarked = new FormControl<boolean>(this.item().marked);
     this.itemType = new FormControl<ActionType | null>(this.item().type);
   }
-
   ngAfterViewInit(): void {
     if (!this.item().body) this.itemElem()?.nativeElement.focus();
   }
-
   setNextType(type: ActionType): void {
     if (this.item().typeIsFinal) return;
-
     this.actionsRepository.update(this.item().id, { type });
   }
 

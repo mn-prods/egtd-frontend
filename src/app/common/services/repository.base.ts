@@ -4,7 +4,7 @@ import { BehaviorSubject, tap } from 'rxjs';
 import { v4 as uuid } from 'uuid';
 import { BaseGtdDocument } from '../interfaces/base.interface';
 import { RxdbProvider } from './db.provider';
-import { GtdDatabaseCollections } from 'src/app/db/db.model';
+import { GtdDatabaseCollections, RxDoc } from 'src/app/db/db.model';
 
 export abstract class BaseRepository<D extends BaseGtdDocument> {
   protected readonly dbProvider = inject(RxdbProvider);
@@ -15,16 +15,12 @@ export abstract class BaseRepository<D extends BaseGtdDocument> {
     this.setMiddleware();
   }
   abstract setMiddleware(): void;
-
-  protected preFetch(doc: D): void {}
-
+  
   observeAll(
     sortBy: keyof D = 'createdAt',
     sortDir: MangoQuerySortDirection = 'desc'
-  ): BehaviorSubject<D[]> {
-    return this.collection
-      .find({ selector: { _deleted: false }, sort: [{ [sortBy]: sortDir }] })
-      .$.pipe(tap((docs) => docs.map((d) => this.preFetch(d)))) as BehaviorSubject<D[]>;
+  ): BehaviorSubject<RxDoc<D>[]> {
+    return this.collection.find({ selector: { _deleted: false }, sort: [{ [sortBy]: sortDir }] }).$;
   }
 
   observePaginated(
@@ -32,31 +28,26 @@ export abstract class BaseRepository<D extends BaseGtdDocument> {
     skip: number,
     sortBy: keyof D = 'createdAt',
     sortDir: MangoQuerySortDirection = 'desc'
-  ): BehaviorSubject<D[]> {
-    return this.collection
-      .find({
-        selector: { _deleted: false },
-        limit,
-        skip,
-        sort: [{ [sortBy]: sortDir }]
-      })
-      .$.pipe(tap((docs) => docs.map((d) => this.preFetch(d)))) as BehaviorSubject<D[]>;
+  ): BehaviorSubject<RxDoc<D>[]> {
+    return this.collection.find({
+      selector: { _deleted: false },
+      limit,
+      skip,
+      sort: [{ [sortBy]: sortDir }]
+    }).$;
   }
 
-  observeOneById(id: string): BehaviorSubject<D> {
-    return this.collection
-      .findOne({ selector: { id } })
-      .$.pipe(tap((doc) => this.preFetch(doc))) as BehaviorSubject<D>;
+  observeOneById(id: string): BehaviorSubject<RxDoc<D>> {
+    return this.collection.findOne({ selector: { id } }).$;
   }
 
-  getAll(sortBy: keyof D = 'createdAt', sortDir: MangoQuerySortDirection = 'desc'): Promise<D[]> {
+  getAll(
+    sortBy: keyof D = 'createdAt',
+    sortDir: MangoQuerySortDirection = 'desc'
+  ): Promise<RxDoc<D>[]> {
     return this.collection
       .find({ selector: { _deleted: false }, sort: [{ [sortBy]: sortDir }] })
-      .exec()
-      .then((docs) => {
-        docs.forEach((doc) => this.preFetch(doc));
-        return docs;
-      });
+      .exec();
   }
 
   async getPaginated(
@@ -64,41 +55,26 @@ export abstract class BaseRepository<D extends BaseGtdDocument> {
     skip: number,
     sortBy: keyof D = 'createdAt',
     sortDir: MangoQuerySortDirection = 'desc'
-  ): Promise<D[]> {
+  ): Promise<RxDoc<D>[]> {
     return this.collection
       .find({ selector: { _deleted: false }, limit, skip, sort: [{ [sortBy]: sortDir }] })
-      .exec()
-      .then((docs) => {
-        docs.forEach((doc) => this.preFetch(doc));
-        return docs;
-      });
+      .exec();
   }
 
-  async getOneById(id: string): Promise<D> {
-    return this.collection
-      .findOne({ selector: { id } })
-      .exec()
-      .then((doc) => {
-        this.preFetch(doc);
-        return doc;
-      });
+  async getOneById(id: string): Promise<RxDoc<D>> {
+    return this.collection.findOne({ selector: { id } }).exec();
   }
 
   async create<Ignore extends string = ''>(
     data: Omit<D, keyof BaseGtdDocument | Ignore>
-  ): Promise<D> {
+  ): Promise<RxDoc<D>> {
     let now = +new Date();
-    return this.collection
-      .insert({
-        id: uuid(),
-        createdAt: now,
-        updatedAt: now,
-        ...data
-      })
-      .then((doc) => {
-        this.preFetch(doc);
-        return doc;
-      });
+    return this.collection.insert({
+      id: uuid(),
+      createdAt: now,
+      updatedAt: now,
+      ...data
+    });
   }
 
   async update(id: string, data: Partial<D>) {
@@ -118,23 +94,17 @@ export abstract class BaseRepository<D extends BaseGtdDocument> {
 
     const document: RxDocument<D> = await this.collection.findOne(id).exec();
 
-    return document.incrementalPatch({ ...data, id, updatedAt: +new Date() }).then((doc) => {
-      this.preFetch(doc);
-      return doc;
-    });
+    return document.incrementalPatch({ ...data, id, updatedAt: +new Date() });
   }
 
-  async save(data: Omit<D, 'id'> & { id?: string }): Promise<D> {
+  async save(data: Omit<D, 'id'> & { id?: string }): Promise<RxDoc<D>> {
     if (!data.id) {
       data.id = uuid();
     }
 
     data.updatedAt = +new Date();
 
-    return this.collection.upsert(data).then((doc) => {
-      this.preFetch(doc);
-      return doc;
-    });
+    return this.collection.upsert(data);
   }
 
   async delete(id: string): Promise<void> {

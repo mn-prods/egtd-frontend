@@ -17,6 +17,6 @@ export class InboxRepository extends BaseRepository<InboxDocument> {
     return this.collection.find({
       selector: { _deleted: false },
       sort: [{ marked: 'asc' }, { createdAt: 'desc' }]
-    }).$ as unknown as BehaviorSubject<InboxDocument[]>;
+    }).$;
   }
 }

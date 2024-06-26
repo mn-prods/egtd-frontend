@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ActionDocument, ActionType } from 'src/app/db/entities/action.entity';
 import { NavigationService } from 'src/app/navigation.service';
 import { WaitForDetailComponent } from './wait-for-detail/wait-for-detail.component';
+import { RxDoc } from 'src/app/db/db.model';
 
 @Component({
   selector: 'app-action-detail',
@@ -16,10 +17,10 @@ export class ActionDetailComponent implements OnInit {
   navigation = inject(NavigationService);
   route = inject(ActivatedRoute);
 
-  action = signal<ActionDocument | null>(null);
-  
+  action = signal<RxDoc<ActionDocument> | null>(null);
+
   actionBody!: FormControl<string | null>;
-  actionTypes = ActionType
+  actionTypes = ActionType;
 
   constructor() {
     this.navigation.settings.next({
@@ -34,6 +35,6 @@ export class ActionDetailComponent implements OnInit {
 
     this.actionBody = new FormControl<string>(this.action()!.body);
 
-    this.navigation.updateSetting({ backBtnRoute: `inbox/${this.action()?.inboxItem.id}` });
+    this.navigation.updateSetting({ backBtnRoute: `inbox/${this.action()?.inboxItem}` });
   }
 }

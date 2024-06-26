@@ -1,4 +1,4 @@
-import { RxDatabase } from "rxdb";
+import { RxDatabase, RxDocument } from "rxdb";
 import { InboxCollection } from "./entities/inbox.entity"
 import { ActionCollection } from "./entities/action.entity";
 
@@ -8,3 +8,5 @@ export type GtdDatabaseCollections = {
 };
 
 export type GtdDatabase = RxDatabase<GtdDatabaseCollections>;
+
+export type RxDoc<T> = RxDocument<T, {}>

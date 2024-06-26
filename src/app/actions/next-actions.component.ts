@@ -9,6 +9,7 @@ import { InboxDocument } from '../db/entities/inbox.entity';
 import { NextActionItemComponent } from './action-item/action-item.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import { RxDoc } from '../db/db.model';
 
 @Component({
   selector: 'app-next-actions',
@@ -28,7 +29,7 @@ export class NextActionsComponent implements OnInit {
   actionsRepository = inject(ActionsRepository);
   destroyRef = inject(DestroyRef);
 
-  nextActions$!: Observable<ActionDocument[]>;
+  nextActions$!: Observable<RxDoc<ActionDocument>[]>;
   anyItemIsInvalid$?: Observable<boolean>;
 
   ngOnInit(): void {
@@ -57,12 +58,12 @@ export class NextActionsComponent implements OnInit {
   }
 
   async addNextAction() {
-    let { body, id } = this.inboxItem();
+    let { id } = this.inboxItem();
 
     let order = await this.actionsRepository.getNextOrder(id);
     this.actionsRepository.create<'type' | 'at' | 'typeIsFinal' | 'wait' | 'schedule'>({
       body: '',
-      inboxItem: { body, id },
+      inboxItem: id,
       marked: false,
       order
     });

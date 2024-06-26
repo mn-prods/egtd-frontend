@@ -31,7 +31,7 @@ export interface ActionDocument extends BaseGtdDocument {
   id: string;
   body: string;
   marked: boolean;
-  inboxItem: Pick<InboxDocument, 'id' | 'body'>;
+  inboxItem: string;
   order: number;
   type: ActionType | null;
   at: ActionEnvironment | null;
@@ -80,16 +80,9 @@ export const actionsSchema: RxJsonSchema<ActionDocument> = {
       type: 'boolean'
     },
     inboxItem: {
-      type: 'object',
-      properties: {
-        id: {
-          type: 'string',
-          format: 'uuid'
-        },
-        body: {
-          type: 'string'
-        }
-      }
+      type: 'string',
+      format: 'uuid',
+      ref: 'inbox'
     },
     type: {
       type: 'string',

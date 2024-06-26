@@ -43,7 +43,7 @@ export class ActionsRepository extends BaseRepository<ActionDocument> {
 
   observeManyByInboxItem(inboxItemId: string) {
     return this.collection.find({
-      selector: { 'inboxItem.id': inboxItemId, _deleted: false },
+      selector: { 'inboxItem': inboxItemId, _deleted: false },
       sort: [{ order: 'desc' }]
     }).$;
   }
@@ -52,7 +52,7 @@ export class ActionsRepository extends BaseRepository<ActionDocument> {
     return firstValueFrom(
       this.collection
         .findOne({
-          selector: { 'inboxItem.id': inboxItemId, _deleted: false },
+          selector: { 'inboxItem': inboxItemId, _deleted: false },
           sort: [{ order: 'desc' }]
         })
         .$.pipe(map((action) => (action?.order || 0) + 1))

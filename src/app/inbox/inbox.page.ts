@@ -7,19 +7,20 @@ import { InboxDocument } from '../db/entities/inbox.entity';
 import { InboxRepository } from '../db/inbox.repository';
 import { NavigationService } from '../navigation.service';
 import { InboxItemComponent } from './inbox-item/inbox-item.component';
+import { RxDoc } from '../db/db.model';
 
 @Component({
   selector: 'app-inbox',
   standalone: true,
   imports: [CommonModule, InboxItemComponent, MatButtonModule, TranslateModule],
   templateUrl: './inbox.page.html',
-  styleUrl: './inbox.page.scss',
+  styleUrl: './inbox.page.scss'
 })
 export class InboxPage implements OnInit, OnDestroy {
   private readonly inboxRepository = inject(InboxRepository);
   private readonly navigation = inject(NavigationService);
 
-  inboxItems$!: BehaviorSubject<InboxDocument[]>;
+  inboxItems$!: BehaviorSubject<RxDoc<InboxDocument>[]>;
 
   anItemIsEmpty$!: Observable<boolean>;
 
