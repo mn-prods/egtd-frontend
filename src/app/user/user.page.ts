@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { NavigationService } from '../navigation.service';
 
 @Component({
   selector: 'app-user',
@@ -12,8 +13,15 @@ import { Router } from '@angular/router';
 export class UserPage {
   auth = inject(Auth);
   router = inject(Router);
+  navigation = inject(NavigationService);
 
-  constructor() { }
+  constructor() {
+    this.navigation.settings.next({
+      toolbar: true, 
+      showSidenavBtn: true
+    });
+
+   }
 
   async logout() {
     await this.auth.signOut();

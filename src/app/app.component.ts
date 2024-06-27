@@ -1,5 +1,5 @@
 import { Component, DestroyRef, OnInit, ViewChild, inject, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
@@ -10,6 +10,8 @@ import { NavigationSettings } from './common/interfaces/navigation-settings.inte
 import { RxdbProvider } from './common/services/db.provider';
 import { NavigationService } from './navigation.service';
 import 'zone.js/plugins/zone-patch-rxjs';
+import { Auth } from '@angular/fire/auth';
+import { FirebaseUser } from './common/interfaces/user.interface';
 
 @Component({
   selector: 'app-root',
@@ -25,8 +27,11 @@ export class AppComponent implements OnInit {
   private readonly rxdbProvider = inject(RxdbProvider);
   private readonly navigation = inject(NavigationService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly auth = inject(Auth);
 
   settings = signal<NavigationSettings | null>(null);
+
+  user = signal<FirebaseUser | null>(null);
 
   navigate(route: string) {
     this.router.navigate(['/' + route]);
@@ -37,5 +42,7 @@ export class AppComponent implements OnInit {
     this.rxdbProvider.initDB('gtd');
 
     this.navigation.settings.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(this.settings.set);
+
+    this.auth.onAuthStateChanged((user) => this.user.set(user));
   }
 }

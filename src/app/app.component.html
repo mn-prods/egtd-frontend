@@ -8,12 +8,6 @@
         <mat-icon>home</mat-icon>
         <div>{{ 'sidenav.menu.home' | translate }}</div>
       </div>
-      <div (click)="navigate('user')" class="flex items-center gap-1">
-        <mat-icon>person</mat-icon>
-        <div>
-          {{ 'sidenav.menu.profile' | translate }}
-        </div>
-      </div>
       <div (click)="navigate('inbox')" class="flex items-center gap-1">
         <mat-icon>inbox</mat-icon>
         <div>{{ 'sidenav.menu.inbox' | translate }}</div>
@@ -22,7 +16,7 @@
   </mat-sidenav>
   <mat-sidenav-content>
     @if(settings()?.toolbar) {
-    <mat-toolbar id="page-toolbar" color="primary">
+    <mat-toolbar id="page-toolbar" color="primary" class="flex justify-between flex-1">
       @if (settings()?.showSidenavBtn) {
       <button mat-icon-button (click)="sidenav.toggle()" aria-label="Open sidebar">
         <mat-icon>menu</mat-icon>
@@ -33,6 +27,7 @@
       </button>
       }
       <div>{{ settings()?.toolbarHeader || '' | translate }}</div>
+      <img class="rounded-full h-full" [src]="user()?.photoURL" alt="User profile img" [routerLink]="['user']"/>
     </mat-toolbar>
     }
     <router-outlet></router-outlet>
