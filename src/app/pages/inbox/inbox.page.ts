@@ -3,11 +3,11 @@ import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
 import { BehaviorSubject, Observable, Subject, map, takeUntil } from 'rxjs';
-import { InboxDocument } from '../db/entities/inbox.entity';
-import { InboxRepository } from '../db/inbox.repository';
-import { NavigationService } from '../navigation.service';
 import { InboxItemComponent } from './inbox-item/inbox-item.component';
-import { RxDoc } from '../db/db.model';
+import { InboxDocument } from 'src/app/db/entities/inbox.entity';
+import { InboxRepository } from 'src/app/db/inbox.repository';
+import { RxDoc } from 'src/app/db/db.model';
+import { NavigationService } from 'src/app/navigation.service';
 
 @Component({
   selector: 'app-inbox',

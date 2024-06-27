@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { NavigationService } from '../navigation.service';
+import { NavigationService } from 'src/app/navigation.service';
+
 
 @Component({
   selector: 'app-home',

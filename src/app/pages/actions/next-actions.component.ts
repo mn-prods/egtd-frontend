@@ -3,13 +3,13 @@ import { Component, DestroyRef, OnInit, inject, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
 import { Observable, debounceTime, firstValueFrom, map, takeUntil, tap } from 'rxjs';
-import { ActionsRepository } from '../db/actions.repository';
-import { ActionDocument, ActionType } from '../db/entities/action.entity';
-import { InboxDocument } from '../db/entities/inbox.entity';
 import { NextActionItemComponent } from './action-item/action-item.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
-import { RxDoc } from '../db/db.model';
+import { ActionsRepository } from 'src/app/db/actions.repository';
+import { ActionDocument, ActionType } from 'src/app/db/entities/action.entity';
+import { InboxDocument } from 'src/app/db/entities/inbox.entity';
+import { RxDoc } from 'src/app/db/db.model';
 
 @Component({
   selector: 'app-next-actions',

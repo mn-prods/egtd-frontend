@@ -12,8 +12,7 @@ import {
   firstValueFrom,
   from,
   of,
-  switchMap,
-  tap
+  switchMap
 } from 'rxjs';
 
 let headers = new HttpHeaders()

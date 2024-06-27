@@ -4,6 +4,7 @@
 import { firebase } from 'src/firebase.config';
 
 export const environment = {
+  appName: 'gtd',
   firebase,
   production: false,
   api: 'http://localhost:3000'

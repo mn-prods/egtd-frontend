@@ -1,4 +1,4 @@
-import { enableProdMode, importProvidersFrom } from '@angular/core';
+import { APP_INITIALIZER, enableProdMode, importProvidersFrom } from '@angular/core';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
@@ -20,10 +20,15 @@ import {
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { AuthInterceptor } from './app/common/interceptors/auth.interceptor';
 import { MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
+import { RxdbProvider } from './app/common/services/db.provider';
 
 // https://stackoverflow.com/questions/67152273/angular-circular-dependency-when-inject-translateservice-to-interceptor
 export function HttpLoaderFactory(handler: HttpBackend) {
   return new TranslateHttpLoader(new HttpClient(handler), './assets/i18n/', '.json');
+}
+
+export function initializeApplication(dbProvider: RxdbProvider) {
+  return () => dbProvider.initDB(environment.appName);
 }
 
 if (environment.production) {
@@ -57,6 +62,12 @@ bootstrapApplication(AppComponent, {
     provideHttpClient(withInterceptorsFromDi()),
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     provideNativeDateAdapter(),
-    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeApplication,
+      multi: true,
+      deps: [RxdbProvider]
+    }
   ]
 });

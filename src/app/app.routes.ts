@@ -12,30 +12,30 @@ const redirectToLogin = (_: ActivatedRouteSnapshot, state: RouterStateSnapshot) 
 export const routes: Routes = [
   {
     path: 'login',
-    loadComponent: () => import('./login/login.page').then((m) => m.LoginComponent),
+    loadComponent: () => import('./pages/login/login.page').then((m) => m.LoginComponent),
     data: { authGuardPipe: redirectToHome }
   },
   {
     path: 'home',
-    loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
+    loadComponent: () => import('./pages/home/home.page').then((m) => m.HomePage),
     canActivate: [AuthGuard],
     data: { authGuardPipe: redirectToLogin }
   },
   {
     path: 'user',
-    loadComponent: () => import('./user/user.page').then((m) => m.UserPage),
+    loadComponent: () => import('./pages/user/user.page').then((m) => m.UserPage),
     canActivate: [AuthGuard],
     data: { authGuardPipe: redirectToLogin }
   },
   {
     path: 'inbox',
-    loadChildren: () => import('./inbox/inbox.routes').then((mod) => mod.inboxRoutes),
+    loadChildren: () => import('./pages/inbox/inbox.routes').then((mod) => mod.inboxRoutes),
     canActivate: [AuthGuard],
     data: { authGuardPipe: redirectToLogin }
   },
   {
     path: 'actions',
-    loadChildren: () => import('./actions/action.routes').then((mod) => mod.actionRoutes),
+    loadChildren: () => import('./pages/actions/action.routes').then((mod) => mod.actionRoutes),
     canActivate: [AuthGuard],
     data: { authGuardPipe: redirectToLogin }
   },

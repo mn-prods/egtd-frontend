@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
-import { NavigationService } from '../navigation.service';
+import { NavigationService } from '../../navigation.service';
 
 @Component({
   selector: 'app-user',

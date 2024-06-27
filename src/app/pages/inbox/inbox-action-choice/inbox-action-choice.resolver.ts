@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { ResolveFn } from '@angular/router';
 import { InboxDocument } from 'src/app/db/entities/inbox.entity';
-import { InboxRepository } from '../../db/inbox.repository';
+import { InboxRepository } from 'src/app/db/inbox.repository';
 
 export const inboxActionChoiceResolver: ResolveFn<InboxDocument> = (route, state) => {
   const inboxRepository = inject(InboxRepository)

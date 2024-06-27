@@ -19,7 +19,7 @@ import { MatInputModule } from '@angular/material/input';
 import { Router, RouterModule } from '@angular/router';
 import { Subject, debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil } from 'rxjs';
 import { InboxDocument } from 'src/app/db/entities/inbox.entity';
-import { InboxRepository } from '../../db/inbox.repository';
+import { InboxRepository } from 'src/app/db/inbox.repository';
 
 @Component({
   selector: 'app-inbox-item',

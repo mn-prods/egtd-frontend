@@ -1,0 +1,35 @@
+:host {
+  height: 100vh;
+
+  ::ng-deep {
+    mat-sidenav {
+      width: 50%;
+    }
+
+    mat-sidenav-container {
+      display: flex;
+      height: 100vh;
+    }
+
+    mat-sidenav-content {
+      height: 100vh;
+    }
+
+    router-outlet + * {
+      display: block;
+      height: calc(100vh - 44px);
+    }
+
+    mat-toolbar#page-toolbar {
+      width: 100vw;
+      padding-inline: 5px;
+    }
+
+    #menu {
+      padding-left: 10px;  
+      mat-icon {
+        font-size: 1.2rem;
+      }
+    }
+  }
+}
