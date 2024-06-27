@@ -7,7 +7,7 @@ export class ProjectsRepository extends BaseRepository<ProjectDocument> {
   protected override collection!: ProjectCollection;
 
   constructor() {
-    super('actions');
+    super('projects');
   }
 
   override setMiddleware(): void {}

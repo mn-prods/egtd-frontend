@@ -1,4 +1,8 @@
 {
+    "general": {
+        "yes": "Yes",
+        "no": "No"
+    },
     "sidenav": {
         "toolbar": "Menu",
         "menu": {
@@ -18,7 +22,10 @@
         }
     },
     "inbox-choice": {
-        "toolbar": "Focus on the loose end..."
+        "toolbar": "Focus on the loose end...",
+        "project?": "Is It part of a project?",
+        "actionable?": "Is it actionable?",
+        "complete": "Complete"
     },
     "next-actions": {
         "btn": {

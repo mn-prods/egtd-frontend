@@ -3,6 +3,9 @@ mat-icon {
 }
 
 :host {
+  background-color: #f7e9f7;
+  border-radius: 5px;
+
   ::ng-deep {
     mat-form-field {
       font-size: 0.9rem;

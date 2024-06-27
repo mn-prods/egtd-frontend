@@ -55,7 +55,7 @@ export class InboxActionChoiceComponent implements OnInit {
 
   ngOnInit(): void {
     this.item = this.route.snapshot.data['item'];
-    this.projects$ = this.projectsRepository.observeAll();
+    this.projects$ = this.projectsRepository.observeAll( 'name', 'asc' );
   }
 
   saveItemState(actionable: boolean) {

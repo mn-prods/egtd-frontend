@@ -10,15 +10,17 @@
       >
         {{ item.body }}
       </div>
-      <button mat-stroked-button (click)="markAsComplete()">Complete</button>
+      <button mat-stroked-button (click)="markAsComplete()">
+        {{ 'inbox-choice.complete' | translate }}
+      </button>
     </div>
 
     <div class="flex flex-col flex-1">
       <div class="flex items-start justify-between">
-        <div>Is It part of a project?</div>
+        <div>{{ 'inbox-choice.project?' | translate }}</div>
         <mat-form-field appearance="outline" class="mt-1">
           <mat-select [(value)]="item.project">
-            <mat-option [value]="null">No</mat-option>
+            <mat-option [value]="null">{{ 'general.no' | translate }}</mat-option>
             @for (project of projects$ | async; track $index) {
             <mat-option [value]="project.id">{{ project.name }}</mat-option>
             }
@@ -26,15 +28,15 @@
         </mat-form-field>
       </div>
       <div class="flex items-center justify-between">
-        <div>Is it actionable?</div>
+        <div>{{ 'inbox-choice.actionable?' | translate }}</div>
         <div>
           <mat-button-toggle-group
             (valueChange)="saveItemState($event)"
             #actionable="matButtonToggleGroup"
             [value]="item.actionable"
           >
-            <mat-button-toggle [value]="true">Yes</mat-button-toggle>
-            <mat-button-toggle [value]="false">No</mat-button-toggle>
+            <mat-button-toggle [value]="true">{{ 'general.yes' | translate }}</mat-button-toggle>
+            <mat-button-toggle [value]="false">{{ 'general.no' | translate }}</mat-button-toggle>
           </mat-button-toggle-group>
         </div>
       </div>

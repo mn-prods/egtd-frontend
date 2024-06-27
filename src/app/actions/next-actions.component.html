@@ -1,11 +1,11 @@
 <div class="flex flex-col justify-between h-full">
   <div
-    class="overflow-scroll flex flex-col flex-1 action-list"
+    class="overflow-scroll flex flex-col flex-1 action-list gap-2 mt-2"
     cdkDropList
     (cdkDropListDropped)="reorder($event)"
   >
     @for (item of nextActions$ | async; track item.id) {
-    <app-action-item class="py-2 px-1 action-item bg-white" [item]="item" cdkDrag></app-action-item>
+    <app-action-item class="py-2 px-1 action-item" [item]="item" cdkDrag></app-action-item>
     }
   </div>
 
