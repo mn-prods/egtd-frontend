@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { BaseRepository } from '../common/services/repository.base';
+import { BaseRepository } from '../common/services/base.repository';
 import { InboxCollection, InboxDocument } from './entities/inbox.entity';
 
 @Injectable({ providedIn: 'root' })

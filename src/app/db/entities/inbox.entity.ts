@@ -6,6 +6,7 @@ export interface InboxDocument extends BaseGtdDocument {
   body: string;
   marked: boolean;
   actionable: boolean;
+  project: string;
   updatedAt: number;
   createdAt: number;
   _deleted?: boolean;
@@ -34,6 +35,11 @@ export const inboxSchema: RxJsonSchema<InboxDocument> = {
     actionable: {
       type: 'boolean',
       default: null
+    },
+    project: {
+      type: 'string',
+      format: 'uuid',
+      ref: 'projects'
     },
     updatedAt: {
       type: 'number'

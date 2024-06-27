@@ -13,6 +13,7 @@ import { actionsSchema } from 'src/app/db/entities/action.entity';
 import { InboxDocument, inboxSchema } from 'src/app/db/entities/inbox.entity';
 import { ReplicationService } from './replication.service';
 import { RxDBUpdatePlugin } from 'rxdb/plugins/update';
+import { projectsSchema } from 'src/app/db/entities/project.entity';
 
 async function loadRxDBPlugins(): Promise<void> {
   addRxPlugin(RxDBMigrationPlugin);
@@ -60,6 +61,10 @@ export class RxdbProvider {
       actions: {
         schema: actionsSchema,
         autoMigrate: false,
+      },
+      projects: {
+        schema: projectsSchema,
+        autoMigrate: false
       }
     });
 

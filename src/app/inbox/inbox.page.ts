@@ -44,7 +44,7 @@ export class InboxPage implements OnInit, OnDestroy {
   }
 
   addItem() {
-    this.inboxRepository.create<'actionable'>({
+    this.inboxRepository.create<'actionable' | 'project'>({
       body: '',
       marked: false
     });

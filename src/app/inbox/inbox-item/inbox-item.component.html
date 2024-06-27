@@ -14,7 +14,7 @@
     />
   </mat-form-field>
 
-  <button mat-stroked-button (click)="goToChoice()" >
+  <button mat-stroked-button (click)="goToChoice()" [disabled]="item().marked">
     <div class="flex justify-center items-center pt-1">
       <mat-icon>search</mat-icon>
     </div>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
+import { firstValueFrom, map } from 'rxjs';
 import { ActionCollection, ActionDocument } from 'src/app/db/entities/action.entity';
-import { BaseRepository } from '../common/services/repository.base';
-import { firstValueFrom, map, tap } from 'rxjs';
+import { BaseRepository } from '../common/services/base.repository';
 
 @Injectable({ providedIn: 'root' })
 export class ActionsRepository extends BaseRepository<ActionDocument> {

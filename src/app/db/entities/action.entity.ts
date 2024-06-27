@@ -1,6 +1,5 @@
 import { RxCollection, RxJsonSchema } from 'rxdb';
 import { BaseGtdDocument } from 'src/app/common/interfaces/base.interface';
-import { InboxDocument } from './inbox.entity';
 
 export enum ActionType {
   do = 'do',

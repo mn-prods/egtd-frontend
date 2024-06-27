@@ -1,27 +1,42 @@
 <div class="flex flex-col h-full">
   @if (item) {
 
-  <div class="p-2 flex flex-col flex-1">
-    <p
-      [style.view-transition-name]="'inbox-' + item.id"
-      [style.view-transition-class]="'inbox'"
-      class="text-2xl"
-    >
-      {{ item.body }}
-    </p>
+  <div class="p-2 flex flex-col flex-1 gap-5">
+    <div class="flex justify-between items-center mb-4">
+      <div
+        [style.view-transition-name]="'inbox-' + item.id"
+        [style.view-transition-class]="'inbox'"
+        class="text-2xl"
+      >
+        {{ item.body }}
+      </div>
+      <button mat-stroked-button (click)="markAsComplete()">Complete</button>
+    </div>
 
-    <div class="flex flex-col flex-1 items-center">
-      <p>Is it actionable?</p>
-      <div>
-        <mat-button-toggle-group
-          (valueChange)="saveItemState($event)"
-          #actionable="matButtonToggleGroup"
-          [value]="item.actionable"
-          class="mb-20"
-        >
-          <mat-button-toggle [value]="true">Yes</mat-button-toggle>
-          <mat-button-toggle [value]="false">No</mat-button-toggle>
-        </mat-button-toggle-group>
+    <div class="flex flex-col flex-1">
+      <div class="flex items-start justify-between">
+        <div>Is It part of a project?</div>
+        <mat-form-field appearance="outline" class="mt-1">
+          <mat-select [(value)]="item.project">
+            <mat-option [value]="null">No</mat-option>
+            @for (project of projects$ | async; track $index) {
+            <mat-option [value]="project.id">{{ project.name }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="flex items-center justify-between">
+        <div>Is it actionable?</div>
+        <div>
+          <mat-button-toggle-group
+            (valueChange)="saveItemState($event)"
+            #actionable="matButtonToggleGroup"
+            [value]="item.actionable"
+          >
+            <mat-button-toggle [value]="true">Yes</mat-button-toggle>
+            <mat-button-toggle [value]="false">No</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
       </div>
       @if (actionable.value === true) {
       <app-next-actions class="h-full w-full" [inboxItem]="item"></app-next-actions>
