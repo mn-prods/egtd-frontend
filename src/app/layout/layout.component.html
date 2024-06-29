@@ -1,6 +1,26 @@
-<mat-sidenav-container>
-  <mat-sidenav #sidenav>
-    <mat-toolbar color="primary" id="sidenav-toolbar">
+@if(settings()?.toolbar) {
+<mat-toolbar id="page-toolbar" color="primary" class="flex justify-between flex-grow-0">
+  @if (settings()?.showSidenavBtn) {
+  <button mat-icon-button (click)="sidenav.toggle()" aria-label="Open sidebar">
+    <mat-icon>menu</mat-icon>
+  </button>
+  } @if (settings()?.showBackBtn) {
+  <button mat-icon-button [routerLink]="settings()?.backBtnRoute">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  }
+  <div>{{ settings()?.toolbarHeader || '' | translate }}</div>
+  <img
+    class="rounded-full h-5/6"
+    [src]="user()?.photoURL"
+    alt="User profile img"
+    [routerLink]="['user']"
+  />
+</mat-toolbar>
+}
+<mat-sidenav-container class="flex-1">
+  <mat-sidenav #sidenav [fixedInViewport]="true">
+    <mat-toolbar color="primary">
       <span>{{ 'sidenav.toolbar' | translate }}</span>
     </mat-toolbar>
     <div class="flex flex-col gap-2" id="menu">
@@ -19,26 +39,6 @@
     </div>
   </mat-sidenav>
   <mat-sidenav-content>
-    @if(settings()?.toolbar) {
-    <mat-toolbar id="page-toolbar" color="primary" class="flex justify-between flex-1">
-      @if (settings()?.showSidenavBtn) {
-      <button mat-icon-button (click)="sidenav.toggle()" aria-label="Open sidebar">
-        <mat-icon>menu</mat-icon>
-      </button>
-      } @if (settings()?.showBackBtn) {
-      <button mat-icon-button [routerLink]="settings()?.backBtnRoute">
-        <mat-icon>arrow_back</mat-icon>
-      </button>
-      }
-      <div>{{ settings()?.toolbarHeader || '' | translate }}</div>
-      <img
-        class="rounded-full h-5/6"
-        [src]="user()?.photoURL"
-        alt="User profile img"
-        [routerLink]="['user']"
-      />
-    </mat-toolbar>
-    }
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>
