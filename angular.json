@@ -110,7 +110,6 @@
               "src/manifest.webmanifest"
             ],
             "styles": [
-              "@angular/material/prebuilt-themes/azure-blue.css",
               "src/global.scss",
               "src/theme/variables.scss"
             ],

@@ -40,6 +40,12 @@ export const routes: Routes = [
     data: { authGuardPipe: redirectToLogin }
   },
   {
+    path: 'projects',
+    loadChildren: () => import('./pages/projects/projects.routes').then((mod) => mod.projectsRoutes),
+    canActivate: [AuthGuard],
+    data: { authGuardPipe: redirectToLogin }
+  },
+  {
     path: '',
     redirectTo: 'home',
     pathMatch: 'full'

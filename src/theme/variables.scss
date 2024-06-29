@@ -1,3 +1,4 @@
+@use 'sass:map';
 @use '@angular/material' as mat;
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
@@ -7,6 +8,10 @@
 
 $theme: mat.define-theme(
   (
+    color: (
+      theme-type: light,
+      primary: mat.$azure-palette
+    ),
     density: (
       scale: -5
     )
@@ -15,7 +20,15 @@ $theme: mat.define-theme(
 
 html {
   @include mat.all-component-themes($theme);
+  @include mat.toolbar-density(-2);
 }
+
+$primary-50: mat.get-theme-color($theme, primary, 50);
+$secondary-50: mat.get-theme-color($theme, secondary, 50);
+$primary-20: mat.get-theme-color($theme, primary, 20);
+$secondary-20: mat.get-theme-color($theme, secondary, 20);
+$primary-80: mat.get-theme-color($theme, primary, 80);
+$secondary-80: mat.get-theme-color($theme, secondary, 80);
 
 $btn-width: 4.5em;
 $final-bg-color: #e20b76;

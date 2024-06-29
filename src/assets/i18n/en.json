@@ -7,8 +7,8 @@
         "toolbar": "Menu",
         "menu": {
             "home": "Home",
-            "profile": "Profile",
-            "inbox": "Inbox"
+            "inbox": "Inbox",
+            "projects": "Projects"
         }
     },
     "home": {
@@ -26,6 +26,9 @@
         "project?": "Is It part of a project?",
         "actionable?": "Is it actionable?",
         "complete": "Complete"
+    },
+    "projects": {
+        "toolbar": "Projects"
     },
     "next-actions": {
         "btn": {

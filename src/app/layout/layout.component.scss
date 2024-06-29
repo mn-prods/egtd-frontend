@@ -1,3 +1,5 @@
+@import 'src/theme/variables.scss';
+
 :host {
   height: 100vh;
 
@@ -17,12 +19,14 @@
 
     router-outlet + * {
       display: block;
-      height: calc(100vh - 44px);
+      height: calc(100vh - 48px);
     }
 
     mat-toolbar#page-toolbar {
       width: 100vw;
       padding-inline: 5px;
+      background-color: $primary-80;
+
     }
 
     #menu {
