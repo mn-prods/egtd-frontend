@@ -1,0 +1,8 @@
+<div class="p-2" [formGroup]="actionsFilter">
+  <mat-button-toggle-group formControlName="type">
+    <mat-button-toggle [value]="types.do">{{ 'next-actions.type.'+  types.do | translate }}</mat-button-toggle>
+    <mat-button-toggle [value]="types.wait">{{ 'next-actions.type.'+  types.wait | translate }}</mat-button-toggle>
+    <mat-button-toggle [value]="types.schedule">{{ 'next-actions.type.'+  types.schedule | translate }}</mat-button-toggle>
+  </mat-button-toggle-group>
+  <app-actions-list [actions$]="actions$"></app-actions-list>
+</div>

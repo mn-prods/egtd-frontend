@@ -9,14 +9,14 @@ import { assert } from 'src/app/common/functions/assert';
 import { InboxDocument } from 'src/app/db/entities/inbox.entity';
 import { InboxRepository } from 'src/app/db/inbox.repository';
 import { NavigationService } from 'src/app/navigation.service';
-import { NextActionsComponent } from 'src/app/pages/actions/next-actions.component';
 import { MatFormField } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
 import { RxDoc } from 'src/app/db/db.model';
 import { ProjectDocument } from 'src/app/db/entities/project.entity';
 import { ProjectsRepository } from 'src/app/db/project.repository';
+import { InboxActionsListComponent } from '../../actions/actions-list-inbox/actions-list-inbox.component';
 
 @Component({
   selector: 'app-inbox-action-choice',
@@ -27,7 +27,7 @@ import { ProjectsRepository } from 'src/app/db/project.repository';
     MatButtonModule,
     MatIcon,
     TranslateModule,
-    NextActionsComponent,
+    InboxActionsListComponent,
     MatFormField,
     MatSelectModule
   ],
@@ -55,13 +55,17 @@ export class InboxActionChoiceComponent implements OnInit {
 
   ngOnInit(): void {
     this.item = this.route.snapshot.data['item'];
-    this.projects$ = this.projectsRepository.observeAll( 'name', 'asc' );
+    this.projects$ = this.projectsRepository.observeAll('name', 'asc');
   }
 
   saveItemState(actionable: boolean) {
     assert(this.item?.id !== undefined, 'Item should not be undefined, something went wrong');
 
     this.inboxRepository.update(this.item!.id, { actionable });
+  }
+
+  saveItemToProject({ value: project }: MatSelectChange) {
+    this.inboxRepository.update(this.item!.id, { project });
   }
 
   markAsComplete() {

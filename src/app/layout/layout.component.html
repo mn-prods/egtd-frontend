@@ -38,6 +38,10 @@
         <mat-icon class="material-symbols-outlined">tactic</mat-icon>
         <div>{{ 'sidenav.menu.projects' | translate }}</div>
       </div>
+      <div (click)="navigate('actions')" class="flex items-center gap-1">
+        <mat-icon class="material-symbols-outlined">exercise</mat-icon>
+        <div>{{ 'sidenav.menu.actions' | translate }}</div>
+      </div>
     </div>
   </mat-sidenav>
   <mat-sidenav-content>

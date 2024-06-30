@@ -8,7 +8,8 @@
         "menu": {
             "home": "Home",
             "inbox": "Inbox",
-            "projects": "Projects"
+            "projects": "Projects",
+            "actions": "Actions"
         }
     },
     "home": {
@@ -38,6 +39,7 @@
         }
     },
     "next-actions": {
+        "toolbar": "Actions",
         "btn": {
             "add": "Next action",
             "longpress": "Consolidating choice..."

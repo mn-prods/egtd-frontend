@@ -35,7 +35,7 @@ export const routes: Routes = [
   },
   {
     path: 'actions',
-    loadChildren: () => import('./pages/actions/action.routes').then((mod) => mod.actionRoutes),
+    loadChildren: () => import('./pages/actions/action.routes').then((mod) => mod.actionItemRoutes),
     canActivate: [AuthGuard],
     data: { authGuardPipe: redirectToLogin }
   },

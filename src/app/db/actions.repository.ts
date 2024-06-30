@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { firstValueFrom, map } from 'rxjs';
-import { ActionCollection, ActionDocument } from 'src/app/db/entities/action.entity';
+import { ActionCollection, ActionDocument, ActionType } from 'src/app/db/entities/action.entity';
 import { BaseRepository } from '../common/services/base.repository';
+import { MangoQuerySelector } from 'rxdb';
 
 @Injectable({ providedIn: 'root' })
 export class ActionsRepository extends BaseRepository<ActionDocument> {
@@ -43,7 +44,18 @@ export class ActionsRepository extends BaseRepository<ActionDocument> {
 
   observeManyByInboxItem(inboxItemId: string) {
     return this.collection.find({
-      selector: { 'inboxItem': inboxItemId, _deleted: false },
+      selector: { inboxItem: inboxItemId, _deleted: false },
+      sort: [{ order: 'desc' }]
+    }).$;
+  }
+
+  observeManyByTypeAndProject(type?: ActionType | null, project?: string | null) {
+    let selector: MangoQuerySelector<ActionDocument> = {};
+    if (type) selector.type = type;
+    // if (project) selector.project = project;
+
+    return this.collection.find({
+      selector,
       sort: [{ order: 'desc' }]
     }).$;
   }
@@ -52,7 +64,7 @@ export class ActionsRepository extends BaseRepository<ActionDocument> {
     return firstValueFrom(
       this.collection
         .findOne({
-          selector: { 'inboxItem': inboxItemId, _deleted: false },
+          selector: { inboxItem: inboxItemId, _deleted: false },
           sort: [{ order: 'desc' }]
         })
         .$.pipe(map((action) => (action?.order || 0) + 1))

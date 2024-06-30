@@ -1,0 +1,17 @@
+<div class="flex flex-col justify-between h-full">
+  <app-actions-list
+    [actions$]="inboxItemActions$"
+    (anyItemIsInvalid)="anyItemIsInvalid$.next($event)"
+  ></app-actions-list>
+
+  <div>
+    <button
+      class="w-full"
+      mat-stroked-button
+      (click)="addNextAction()"
+      [disabled]="anyItemIsInvalid$ | async"
+    >
+      {{ 'next-actions.btn.add' | translate }}
+    </button>
+  </div>
+</div>
