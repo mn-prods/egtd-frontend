@@ -15,6 +15,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { TranslateModule } from '@ngx-translate/core';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { DEFAULT_DEBOUNCE } from 'src/app/common/constants';
 import { FormGroupValue } from 'src/app/common/types/form-group-value.type';
 import { ActionsRepository } from 'src/app/db/actions.repository';
 import { ActionDocument, Waiting } from 'src/app/db/entities/action.entity';
@@ -52,7 +53,7 @@ export class ActionItemWaitForComponent implements OnInit {
     });
 
     this.waitingFor.valueChanges
-      .pipe(debounceTime(300), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
+      .pipe(debounceTime(DEFAULT_DEBOUNCE), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
       .subscribe((wait) => this.onWaitChanged.emit(wait));
   }
 

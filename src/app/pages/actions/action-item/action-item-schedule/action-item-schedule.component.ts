@@ -7,6 +7,7 @@ import { MatFormField } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { DEFAULT_DEBOUNCE } from 'src/app/common/constants';
 import { FormGroupValue } from 'src/app/common/types/form-group-value.type';
 import { ActionDocument, Schedule } from 'src/app/db/entities/action.entity';
 
@@ -39,7 +40,7 @@ export class ActionItemScheduleComponent implements OnInit {
     });
 
     this.schedule.valueChanges
-      .pipe(debounceTime(300), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
+      .pipe(debounceTime(DEFAULT_DEBOUNCE), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
       .subscribe((value) => {
         this.onScheduleChange.emit(value);
       });

@@ -1,0 +1,28 @@
+<div class="flex flex-col justify-between h-full">
+  <div class="p-2 overflow-auto">
+    @for (project of projects$ | async; track project.id) {
+    <mat-card appearance="outlined">
+      <mat-card-header [routerLink]="['.', project.id]">
+        <mat-card-subtitle> {{project.name}} </mat-card-subtitle>
+        <img mat-card-avatar />
+      </mat-card-header>
+      <mat-card-content
+        [routerLink]="['.', project.id]"
+        class="h-10 line-clamp-2 text-ellipsis text-sm"
+        >{{ project.details }}
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button>Actions</button>
+        <button mat-button>Waiting</button>
+        <button mat-button>Schedule</button>
+      </mat-card-actions>
+    </mat-card>
+    }
+  </div>
+
+  <div class="px-2">
+    <button class="my-2 w-full" mat-stroked-button (click)="addProject()">
+      {{ 'projects.btn.add' | translate }}
+    </button>
+  </div>
+</div>

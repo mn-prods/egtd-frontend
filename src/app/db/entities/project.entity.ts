@@ -3,7 +3,7 @@ import { BaseGtdDocument } from 'src/app/common/interfaces/base.interface';
 
 export interface ProjectDocument extends BaseGtdDocument {
   name: string;
-  details: string;
+  details?: string | null;
 }
 
 export type ProjectCollection = RxCollection<ProjectDocument>;

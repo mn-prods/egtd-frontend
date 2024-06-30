@@ -1,0 +1,9 @@
+<div class="flex gap-3">
+  <mat-form-field appearance="outline" class="flex-1">
+    <input type="text" matInput [formControl]="projectName" #nameInput />
+  </mat-form-field>
+  <button mat-stroked-button (click)="confirm()" [disabled]="!projectName.valid" class="mt-2">
+    <mat-icon>check</mat-icon>
+  </button>
+</div>
+

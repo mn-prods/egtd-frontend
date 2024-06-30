@@ -28,7 +28,14 @@
         "complete": "Complete"
     },
     "projects": {
-        "toolbar": "Projects"
+        "toolbar": "Projects",
+        "lbl": {
+            "name": "Name",
+            "details": "Description"
+        },
+        "btn": {
+            "add": "Create Project"
+        }
     },
     "next-actions": {
         "btn": {

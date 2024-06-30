@@ -1,12 +1,12 @@
 import { inject } from '@angular/core';
 import { ResolveFn } from '@angular/router';
 import { URLPARAM_ID_KEY } from 'src/app/common/constants';
-import { ActionsRepository } from 'src/app/db/actions.repository';
 import { RxDoc } from 'src/app/db/db.model';
-import { ActionDocument } from 'src/app/db/entities/action.entity';
+import { ProjectDocument } from 'src/app/db/entities/project.entity';
+import { ProjectsRepository } from 'src/app/db/project.repository';
 
-export const actionDetailResolver: ResolveFn<RxDoc<ActionDocument>> = (route, state) => {
-  const actionRepository = inject(ActionsRepository);
+export const projectDetailResolver: ResolveFn<RxDoc<ProjectDocument>> = (route, state) => {
+  const projectsRepository = inject(ProjectsRepository);
 
   const itemId = route.paramMap.get(URLPARAM_ID_KEY);
 
@@ -17,5 +17,5 @@ export const actionDetailResolver: ResolveFn<RxDoc<ActionDocument>> = (route, st
     );
   }
 
-  return actionRepository.getOneById(itemId);
+  return projectsRepository.getOneById(itemId);
 };

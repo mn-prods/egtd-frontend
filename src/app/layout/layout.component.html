@@ -1,15 +1,17 @@
 @if(settings()?.toolbar) {
-<mat-toolbar id="page-toolbar" color="primary" class="flex justify-between flex-grow-0">
+<mat-toolbar id="page-toolbar" color="primary" class="flex justify-between gap-2">
   @if (settings()?.showSidenavBtn) {
   <button mat-icon-button (click)="sidenav.toggle()" aria-label="Open sidebar">
     <mat-icon>menu</mat-icon>
   </button>
   } @if (settings()?.showBackBtn) {
-  <button mat-icon-button [routerLink]="settings()?.backBtnRoute">
+  <button mat-icon-button [routerLink]="settings()?.backBtnRoute" aria-label="Navigate back">
     <mat-icon>arrow_back</mat-icon>
   </button>
   }
-  <div>{{ settings()?.toolbarHeader || '' | translate }}</div>
+  <div class="overflow-hidden overflow-ellipsis">
+    {{ settings()?.toolbarHeader || '' | translate }}
+  </div>
   <img
     class="rounded-full h-5/6"
     [src]="user()?.photoURL"

@@ -17,7 +17,16 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { Router, RouterModule } from '@angular/router';
-import { Subject, debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil } from 'rxjs';
+import {
+  Subject,
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  map,
+  switchMap,
+  takeUntil
+} from 'rxjs';
+import { DEFAULT_DEBOUNCE } from 'src/app/common/constants';
 import { InboxDocument } from 'src/app/db/entities/inbox.entity';
 import { InboxRepository } from 'src/app/db/inbox.repository';
 
@@ -63,17 +72,19 @@ export class InboxItemComponent implements OnInit, AfterViewInit, OnDestroy {
       .pipe(
         filter(Boolean),
         distinctUntilChanged(),
-        debounceTime(500),
+        debounceTime(DEFAULT_DEBOUNCE),
         switchMap((body) => this.inboxRepository.update(this.item().id, { body })),
         takeUntil(this.unsub$)
       )
       .subscribe();
 
-    this.itemMarked.valueChanges.pipe(
-      takeUntil(this.unsub$),
-      map(marked => marked || false),
-      switchMap((marked) => this.inboxRepository.update(this.item().id, { marked }))
-    ).subscribe();
+    this.itemMarked.valueChanges
+      .pipe(
+        takeUntil(this.unsub$),
+        map((marked) => marked || false),
+        switchMap((marked) => this.inboxRepository.update(this.item().id, { marked }))
+      )
+      .subscribe();
   }
 
   ngAfterViewInit(): void {

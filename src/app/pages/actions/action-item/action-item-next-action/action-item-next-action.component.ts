@@ -13,6 +13,7 @@ import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { isNullOrUndefined } from 'src/app/common/value-check';
 import { ActionDocument, ActionEnvironment } from 'src/app/db/entities/action.entity';
 import { ActionEnvChipComponent } from '../action-env-chip/action-env-chip.component';
+import { DEFAULT_DEBOUNCE } from 'src/app/common/constants';
 
 @Component({
   standalone: true,
@@ -50,7 +51,7 @@ export class ActionItemNextActionComponent implements OnInit {
       .pipe(
         filter((body) => !isNullOrUndefined(body)),
         distinctUntilChanged(),
-        debounceTime(500),
+        debounceTime(DEFAULT_DEBOUNCE),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe((body) => this.onBodyChanged.emit(body!));
