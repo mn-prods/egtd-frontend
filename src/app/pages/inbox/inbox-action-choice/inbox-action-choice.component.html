@@ -1,6 +1,4 @@
-<div class="flex flex-col h-full">
-  @if (item) {
-
+<div class="flex flex-col h-full flex-initial">
   <div class="p-2 flex flex-col h-full gap-5">
     <div class="flex justify-between items-center mb-4">
       <div
@@ -15,7 +13,7 @@
       </button>
     </div>
 
-    <div class="flex flex-col h-full">
+    <div class="flex flex-col h-full flex-initial">
       <div class="flex items-start justify-between">
         <div>{{ 'inbox-choice.project?' | translate }}</div>
         <mat-form-field appearance="outline" class="mt-1">
@@ -45,11 +43,11 @@
       </div>
       @if (actionable.value === true) {
       <app-inbox-actions-list
-        class="flex flex-col h-full justify-between"
+        class="h-full flex-initial"
         [inboxItem]="item"
         [projectId]="selectedProject"
       ></app-inbox-actions-list>
-      } @if (actionable.value === false) {
+            } @if (actionable.value === false) {
       <div class="w-full flex justify-around">
         <button mat-icon-button><mat-icon>delete</mat-icon></button>
         <button mat-icon-button><mat-icon>timer</mat-icon></button>
@@ -58,5 +56,4 @@
       }
     </div>
   </div>
-  }
 </div>

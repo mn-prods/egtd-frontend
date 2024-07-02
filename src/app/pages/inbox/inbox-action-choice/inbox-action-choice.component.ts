@@ -44,7 +44,7 @@ export class InboxActionChoiceComponent implements OnInit {
   projectsRepository = inject(ProjectsRepository);
   selectedProject?: string;
 
-  item?: InboxDocument;
+  item!: InboxDocument;
   projects$?: BehaviorSubject<RxDoc<ProjectDocument>[]>;
 
   constructor() {
@@ -58,23 +58,24 @@ export class InboxActionChoiceComponent implements OnInit {
 
   ngOnInit(): void {
     this.item = this.route.snapshot.data['item'];
+
+    assert(this.item?.id !== undefined, 'Item should not be undefined, something went wrong');
+    
     this.projects$ = this.projectsRepository.observeAll('name', 'asc');
   }
 
   saveItemState(actionable: boolean) {
-    assert(this.item?.id !== undefined, 'Item should not be undefined, something went wrong');
-
-    this.inboxRepository.update(this.item!.id, { actionable });
+    this.inboxRepository.update(this.item.id, { actionable });
   }
 
   assingProjectToItemAndActions({ value: project }: MatSelectChange) {
     this.selectedProject = project;
-    this.inboxRepository.update(this.item!.id, { project });
-    this.actionsRepository.setProjectToAllInboxItemActions(this.item!.id, project);
+    this.inboxRepository.update(this.item.id, { project });
+    this.actionsRepository.setProjectToAllInboxItemActions(this.item.id, project);
   }
 
   markAsComplete() {
-    this.inboxRepository.update(this.item!.id, { marked: true });
+    this.inboxRepository.update(this.item.id, { marked: true });
     this.router.navigate(['..'], { relativeTo: this.route });
   }
 }
