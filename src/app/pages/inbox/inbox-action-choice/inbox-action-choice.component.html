@@ -1,7 +1,7 @@
 <div class="flex flex-col h-full">
   @if (item) {
 
-  <div class="p-2 flex flex-col flex-1 gap-5">
+  <div class="p-2 flex flex-col h-full gap-5">
     <div class="flex justify-between items-center mb-4">
       <div
         [style.view-transition-name]="'inbox-' + item.id"
@@ -15,7 +15,7 @@
       </button>
     </div>
 
-    <div class="flex flex-col flex-1">
+    <div class="flex flex-col h-full">
       <div class="flex items-start justify-between">
         <div>{{ 'inbox-choice.project?' | translate }}</div>
         <mat-form-field appearance="outline" class="mt-1">
@@ -45,7 +45,7 @@
       </div>
       @if (actionable.value === true) {
       <app-inbox-actions-list
-        class="h-full w-full"
+        class="flex flex-col h-full justify-between"
         [inboxItem]="item"
         [projectId]="selectedProject"
       ></app-inbox-actions-list>
