@@ -17,6 +17,7 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class InboxActionsListComponent implements OnInit {
   inboxItem = input.required<InboxDocument>();
+  projectId = input.required<string | undefined>();
 
   actionsRepository = inject(ActionsRepository);
 
@@ -36,7 +37,8 @@ export class InboxActionsListComponent implements OnInit {
       body: '',
       inboxItem: id,
       marked: false,
-      order
+      order,
+      project: this.projectId()
     });
   }
 }

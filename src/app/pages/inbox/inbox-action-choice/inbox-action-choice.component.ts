@@ -42,6 +42,7 @@ export class InboxActionChoiceComponent implements OnInit {
   inboxRepository = inject(InboxRepository);
   actionsRepository = inject(ActionsRepository);
   projectsRepository = inject(ProjectsRepository);
+  selectedProject?: string;
 
   item?: InboxDocument;
   projects$?: BehaviorSubject<RxDoc<ProjectDocument>[]>;
@@ -67,6 +68,7 @@ export class InboxActionChoiceComponent implements OnInit {
   }
 
   assingProjectToItemAndActions({ value: project }: MatSelectChange) {
+    this.selectedProject = project;
     this.inboxRepository.update(this.item!.id, { project });
     this.actionsRepository.setProjectToAllInboxItemActions(this.item!.id, project);
   }

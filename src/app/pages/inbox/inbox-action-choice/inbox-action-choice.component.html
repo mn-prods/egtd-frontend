@@ -44,7 +44,11 @@
         </div>
       </div>
       @if (actionable.value === true) {
-      <app-inbox-actions-list class="h-full w-full" [inboxItem]="item"></app-inbox-actions-list>
+      <app-inbox-actions-list
+        class="h-full w-full"
+        [inboxItem]="item"
+        [projectId]="selectedProject"
+      ></app-inbox-actions-list>
       } @if (actionable.value === false) {
       <div class="w-full flex justify-around">
         <button mat-icon-button><mat-icon>delete</mat-icon></button>
