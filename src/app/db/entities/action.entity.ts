@@ -35,6 +35,7 @@ export interface ActionDocument extends BaseGtdDocument {
   type: ActionType | null;
   at: ActionEnvironment | null;
   wait: Partial<Waiting> | null;
+  project?: string | null;
   schedule: Partial<Schedule> | null;
   typeIsFinal: boolean;
   _deleted?: boolean;
@@ -82,6 +83,11 @@ export const actionsSchema: RxJsonSchema<ActionDocument> = {
       type: 'string',
       format: 'uuid',
       ref: 'inbox'
+    },
+    project: {
+      type: 'string',
+      format: 'uuid',
+      ref: 'projects'
     },
     type: {
       type: 'string',

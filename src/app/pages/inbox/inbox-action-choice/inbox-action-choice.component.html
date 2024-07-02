@@ -19,7 +19,10 @@
       <div class="flex items-start justify-between">
         <div>{{ 'inbox-choice.project?' | translate }}</div>
         <mat-form-field appearance="outline" class="mt-1">
-          <mat-select [(value)]="item.project" (selectionChange)="saveItemToProject($event)">
+          <mat-select
+            [value]="item.project"
+            (selectionChange)="assingProjectToItemAndActions($event)"
+          >
             <mat-option [value]="null">{{ 'general.no' | translate }}</mat-option>
             @for (project of projects$ | async; track $index) {
             <mat-option [value]="project.id">{{ project.name }}</mat-option>

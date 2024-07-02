@@ -42,17 +42,25 @@ export class ActionsRepository extends BaseRepository<ActionDocument> {
     });
   }
 
-  observeManyByInboxItem(inboxItemId: string) {
+  observeManyByInboxItem(inboxItem: string) {
     return this.collection.find({
-      selector: { inboxItem: inboxItemId, _deleted: false },
+      selector: { inboxItem, _deleted: false },
       sort: [{ order: 'desc' }]
     }).$;
+  }
+
+  setProjectToAllInboxItemActions(inboxItem: string, project: string) {
+    this.collection
+      .find({
+        selector: { inboxItem, _deleted: false }
+      })
+      .update({ $set: { project } });
   }
 
   observeManyByTypeAndProject(type?: ActionType | null, project?: string | null) {
     let selector: MangoQuerySelector<ActionDocument> = {};
     if (type) selector.type = type;
-    // if (project) selector.project = project;
+    if (project) selector.project = project;
 
     return this.collection.find({
       selector,

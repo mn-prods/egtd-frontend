@@ -17,6 +17,7 @@ import { RxDoc } from 'src/app/db/db.model';
 import { ProjectDocument } from 'src/app/db/entities/project.entity';
 import { ProjectsRepository } from 'src/app/db/project.repository';
 import { InboxActionsListComponent } from '../../actions/actions-list-inbox/actions-list-inbox.component';
+import { ActionsRepository } from 'src/app/db/actions.repository';
 
 @Component({
   selector: 'app-inbox-action-choice',
@@ -39,6 +40,7 @@ export class InboxActionChoiceComponent implements OnInit {
   router = inject(Router);
   navigation = inject(NavigationService);
   inboxRepository = inject(InboxRepository);
+  actionsRepository = inject(ActionsRepository);
   projectsRepository = inject(ProjectsRepository);
 
   item?: InboxDocument;
@@ -64,8 +66,9 @@ export class InboxActionChoiceComponent implements OnInit {
     this.inboxRepository.update(this.item!.id, { actionable });
   }
 
-  saveItemToProject({ value: project }: MatSelectChange) {
+  assingProjectToItemAndActions({ value: project }: MatSelectChange) {
     this.inboxRepository.update(this.item!.id, { project });
+    this.actionsRepository.setProjectToAllInboxItemActions(this.item!.id, project);
   }
 
   markAsComplete() {

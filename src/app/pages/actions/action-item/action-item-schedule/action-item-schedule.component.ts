@@ -35,12 +35,16 @@ export class ActionItemScheduleComponent implements OnInit {
 
   ngOnInit(): void {
     this.schedule = new FormGroup({
-      to: new FormControl(),
-      on: new FormControl()
+      to: new FormControl(this.action().schedule?.to || null),
+      on: new FormControl(this.action().schedule?.on || null)
     });
 
     this.schedule.valueChanges
-      .pipe(debounceTime(DEFAULT_DEBOUNCE), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        debounceTime(DEFAULT_DEBOUNCE),
+        distinctUntilChanged(),
+        takeUntilDestroyed(this.destroyRef)
+      )
       .subscribe((value) => {
         this.onScheduleChange.emit(value);
       });
