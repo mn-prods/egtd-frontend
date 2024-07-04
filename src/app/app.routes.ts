@@ -1,5 +1,6 @@
 import { AuthGuard, redirectLoggedInTo, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
+import { TestComponent } from './pages/test-component/test.component';
 
 const redirectToHome = (_: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
   return redirectLoggedInTo(['/home']);
@@ -44,6 +45,10 @@ export const routes: Routes = [
     loadChildren: () => import('./pages/projects/projects.routes').then((mod) => mod.projectsRoutes),
     canActivate: [AuthGuard],
     data: { authGuardPipe: redirectToLogin }
+  },
+  {
+    path: 'test',
+    component: TestComponent
   },
   {
     path: '',

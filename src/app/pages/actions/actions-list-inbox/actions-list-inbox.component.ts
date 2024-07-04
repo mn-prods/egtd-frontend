@@ -13,6 +13,11 @@ import { MatButtonModule } from '@angular/material/button';
   standalone: true,
   templateUrl: './actions-list-inbox.component.html',
   selector: 'app-inbox-actions-list',
+  styles: `@import 'src/theme/variables.scss';
+  .standard-bg {
+    background-color: $background
+  }
+  `,
   imports: [ActionsListComponent, TranslateModule, CommonModule, MatButtonModule]
 })
 export class InboxActionsListComponent implements OnInit {

@@ -1,19 +1,18 @@
-<div class="flex flex-col h-full flex-initial">
-  <div class="p-2 flex flex-col h-full gap-5">
-    <div class="flex justify-between items-center mb-4">
-      <div
-        [style.view-transition-name]="'inbox-' + item.id"
-        [style.view-transition-class]="'inbox'"
-        class="text-2xl"
-      >
-        {{ item.body }}
+<div class="flex flex-col h-full">
+  <div class="flex flex-col flex-grow gap-5 overflow-hidden">
+    <div class="sticky top-0 z-10">
+      <div class="flex justify-between items-center mb-4 p-2">
+        <div
+          [style.view-transition-name]="'inbox-' + item.id"
+          [style.view-transition-class]="'inbox'"
+          class="text-2xl"
+        >
+          {{ item.body }}
+        </div>
+        <button mat-stroked-button (click)="markAsComplete()">
+          {{ 'inbox-choice.complete' | translate }}
+        </button>
       </div>
-      <button mat-stroked-button (click)="markAsComplete()">
-        {{ 'inbox-choice.complete' | translate }}
-      </button>
-    </div>
-
-    <div class="flex flex-col h-full flex-initial">
       <div class="flex items-start justify-between">
         <div>{{ 'inbox-choice.project?' | translate }}</div>
         <mat-form-field appearance="outline" class="mt-1">
@@ -41,13 +40,16 @@
           </mat-button-toggle-group>
         </div>
       </div>
+    </div>
+
+    <div class="flex flex-col flex-grow overflow-y-auto">
       @if (actionable.value === true) {
       <app-inbox-actions-list
-        class="h-full flex-initial"
+        class="flex-grow overflow-y-auto px-2"
         [inboxItem]="item"
         [projectId]="selectedProject"
       ></app-inbox-actions-list>
-            } @if (actionable.value === false) {
+      } @if (actionable.value === false) {
       <div class="w-full flex justify-around">
         <button mat-icon-button><mat-icon>delete</mat-icon></button>
         <button mat-icon-button><mat-icon>timer</mat-icon></button>
