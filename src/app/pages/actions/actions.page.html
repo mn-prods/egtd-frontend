@@ -1,35 +1,33 @@
-<div class="flex flex-col justify-between h-full gap-2">
-  <div class="p-2" [formGroup]="actionsFilter">
+<div class="flex flex-col justify-between h-full">
+  <div class="px-2 pt-2" [formGroup]="actionsFilter">
     <div class="flex justify-between items-start">
       <div class="flex items-center gap-2 grow-0">
         <mat-button-toggle-group formControlName="type">
           <mat-button-toggle [value]="types.do"
-          >{{ 'next-actions.type.'+ types.do | translate }}</mat-button-toggle
+            >{{ 'next-actions.type.'+ types.do | translate }}</mat-button-toggle
           >
           <mat-button-toggle [value]="types.wait"
-          >{{ 'next-actions.type.'+ types.wait | translate }}</mat-button-toggle
+            >{{ 'next-actions.type.'+ types.wait | translate }}</mat-button-toggle
           >
           <mat-button-toggle [value]="types.schedule"
-          >{{ 'next-actions.type.'+ types.schedule | translate }}</mat-button-toggle
+            >{{ 'next-actions.type.'+ types.schedule | translate }}</mat-button-toggle
           >
         </mat-button-toggle-group>
         <button mat-stroked-button [matMenuTriggerFor]="menu">
           <mat-icon class="material-symbols-outlined">tactic</mat-icon>
         </button>
-        
-        <div class="flex-1">
-          <div class="text-ellipsis overflow-hidden whitespace-nowrap">
-            {{ (selectedProjectName$ | async)?.name }}
-          </div>
-        </div>
       </div>
       <button mat-icon-button>
         <mat-icon>close</mat-icon>
       </button>
     </div>
+    <div [class.invisible]="!actionsFilter.value.project" class="flex items-center text-sm">
+      <mat-icon class="colo">filter_alt</mat-icon>
+      <span>{{ (selectedProjectName$ | async)?.name }}</span>
+    </div>
   </div>
-  <app-actions-list class="grow-0 overflow-auto px-2" [actions$]="actions$"></app-actions-list>
-  <button class="my-2" mat-stroked-button>add</button>
+  <app-actions-list class="flex-1 overflow-auto px-2" [actions$]="actions$"></app-actions-list>
+  <button class="m-2" mat-stroked-button>add</button>
 </div>
 
 <mat-menu #menu="matMenu">
