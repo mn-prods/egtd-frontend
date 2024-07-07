@@ -22,19 +22,9 @@ export class ActionDetailComponent implements OnInit {
   actionBody!: FormControl<string | null>;
   actionTypes = ActionType;
 
-  constructor() {
-    this.navigation.settings.next({
-      showBackBtn: true,
-      toolbar: true,
-      toolbarHeader: ''
-    });
-  }
-
   ngOnInit(): void {
     this.action.set(this.route.snapshot.data['action']);
 
     this.actionBody = new FormControl<string>(this.action()!.body);
-
-    this.navigation.updateSetting({ backBtnRoute: `inbox/${this.action()?.inboxItem}` });
   }
 }

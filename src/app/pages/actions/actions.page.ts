@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, OnInit, inject, input } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { BehaviorSubject, Subject, startWith, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, Subject, switchMap, tap } from 'rxjs';
 import { FormGroupValue } from 'src/app/common/types/form-group-value.type';
 import { ActionsRepository } from 'src/app/db/actions.repository';
 import { RxDoc } from 'src/app/db/db.model';
@@ -17,7 +17,6 @@ import { ProjectDocument } from 'src/app/db/entities/project.entity';
 import { ProjectsRepository } from 'src/app/db/project.repository';
 import { GtdPageLayout } from 'src/app/layout/layout.component';
 import { ToolbarComponent } from 'src/app/layout/toolbar/toolbar.component';
-import { NavigationService } from 'src/app/navigation.service';
 import { ActionsListComponent } from './actions-list/actions-list.component';
 
 type ActionsFilter = { type?: ActionType; project?: string };
@@ -40,24 +39,13 @@ type ActionsFilter = { type?: ActionType; project?: string };
   ]
 })
 export class ActionsPage implements OnInit {
-  type = input<ActionType>();
-  project = input<string>();
-
   route = inject(ActivatedRoute);
+  router = inject(Router);
   destroyRef = inject(DestroyRef);
-  navigation = inject(NavigationService);
   actionsRepository = inject(ActionsRepository);
   projectsRepository = inject(ProjectsRepository);
 
   readonly types = ActionType;
-
-  constructor() {
-    this.navigation.settings.next({
-      toolbar: true,
-      showSidenavBtn: true,
-      toolbarHeader: 'next-actions.toolbar'
-    });
-  }
 
   projects?: RxDoc<ProjectDocument>[];
 
@@ -68,17 +56,31 @@ export class ActionsPage implements OnInit {
   actionsFilter!: FormGroup<FormGroupValue<ActionsFilter>>;
 
   ngOnInit(): void {
+    const entryParams = this.route.snapshot.queryParams;
+
     this.actionsFilter = new FormGroup<FormGroupValue<ActionsFilter>>({
-      type: new FormControl(this.type()),
-      project: new FormControl(this.project())
+      type: new FormControl(entryParams['type']),
+      project: new FormControl(entryParams['project'])
     });
+
+    this.actionsFilter.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(({ project, type }) => {
+        this.router.navigate(['.'], {
+          relativeTo: this.route,
+          queryParams: {
+            project,
+            type
+          }
+        });
+      });
 
     this.projectsRepository
       .observeAll('name', 'asc')
       .pipe(
         switchMap((projects) => {
           this.projects = projects;
-          return this.actionsFilter.valueChanges.pipe(startWith(this.actionsFilter.value));
+          return this.route.queryParams;
         }),
         tap(({ project }) => {
           this.selectedProjectName$.next(this.projects!.find(({ id }) => id === project));
@@ -95,5 +97,9 @@ export class ActionsPage implements OnInit {
 
   setProjectFilter(project: string | null) {
     this.actionsFilter.patchValue({ project });
+  }
+
+  clear() {
+    this.actionsFilter.reset();
   }
 }

@@ -16,11 +16,11 @@ import { TranslateModule } from '@ngx-translate/core';
 import { BehaviorSubject, filter, first } from 'rxjs';
 import { PROJECT_NAME_MIN_LENGTH } from 'src/app/common/constants';
 import { RxDoc } from 'src/app/db/db.model';
+import { ActionType } from 'src/app/db/entities/action.entity';
 import { ProjectDocument } from 'src/app/db/entities/project.entity';
 import { ProjectsRepository } from 'src/app/db/project.repository';
 import { GtdPageLayout } from 'src/app/layout/layout.component';
 import { ToolbarComponent } from 'src/app/layout/toolbar/toolbar.component';
-import { NavigationService } from 'src/app/navigation.service';
 
 @Component({
   standalone: true,
@@ -40,18 +40,12 @@ import { NavigationService } from 'src/app/navigation.service';
 })
 export class ProjectsPage implements OnInit {
   bottomSheet = inject(MatBottomSheet);
-  navigation = inject(NavigationService);
+  router = inject(Router);
   projectsRepository = inject(ProjectsRepository);
 
   projects$?: BehaviorSubject<RxDoc<ProjectDocument>[]>;
 
-  constructor() {
-    this.navigation.settings.next({
-      toolbar: true,
-      showSidenavBtn: true,
-      toolbarHeader: 'projects.toolbar'
-    });
-  }
+
   ngOnInit(): void {
     this.projects$ = this.projectsRepository.observeAll();
   }
@@ -65,6 +59,20 @@ export class ProjectsPage implements OnInit {
         this.projectsRepository.create({ name });
       });
   }
+
+  toProjectSchedule(projectId: string) {
+    this.navigateToPrefilteredActionList(projectId, ActionType.schedule);
+  }
+  toProjectWaitlist(projectId: string) {
+    this.navigateToPrefilteredActionList(projectId, ActionType.wait);
+  }
+  toProjectActions(projectId: string) {
+    this.navigateToPrefilteredActionList(projectId, ActionType.do);
+  }
+
+  private navigateToPrefilteredActionList(project: string, type: ActionType) {
+    this.router.navigate(['/actions'], { queryParams: { project, type } });
+  }
 }
 
 @Component({
@@ -75,15 +83,18 @@ export class ProjectsPage implements OnInit {
 })
 export class CreateProjectSheet implements OnInit, AfterViewInit {
   nameInput = viewChild<ElementRef<HTMLInputElement>>('nameInput');
+
   bottomSheet = inject(MatBottomSheetRef);
 
   projectName!: FormControl<string | null>;
+
   ngOnInit(): void {
     this.projectName = new FormControl(null, [
       Validators.required,
       Validators.minLength(PROJECT_NAME_MIN_LENGTH)
     ]);
   }
+
   ngAfterViewInit(): void {
     this.nameInput()?.nativeElement.focus();
   }

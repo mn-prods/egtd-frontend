@@ -16,18 +16,9 @@ import { MatButtonModule } from '@angular/material/button';
 export class UserPage {
   auth = inject(Auth);
   router = inject(Router);
-  navigation = inject(NavigationService);
-
-  constructor() {
-    this.navigation.settings.next({
-      toolbar: true, 
-      showSidenavBtn: true
-    });
-
-   }
 
   async logout() {
     await this.auth.signOut();
-    await this.router.navigate(['.'])
+    await this.router.navigate(['.']);
   }
 }

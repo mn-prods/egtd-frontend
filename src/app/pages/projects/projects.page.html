@@ -13,9 +13,9 @@
         >{{ project.details }}
       </mat-card-content>
       <mat-card-actions>
-        <button mat-button>Actions</button>
-        <button mat-button>Waiting</button>
-        <button mat-button>Schedule</button>
+        <button mat-button (click)="toProjectActions(project.id)">Actions</button>
+        <button mat-button (click)="toProjectWaitlist(project.id)">Waiting</button>
+        <button mat-button (click)="toProjectSchedule(project.id)">Schedule</button>
       </mat-card-actions>
     </mat-card>
     }

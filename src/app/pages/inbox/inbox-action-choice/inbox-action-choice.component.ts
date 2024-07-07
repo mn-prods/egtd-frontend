@@ -19,7 +19,6 @@ import { InboxRepository } from 'src/app/db/inbox.repository';
 import { ProjectsRepository } from 'src/app/db/project.repository';
 import { GtdPageLayout } from 'src/app/layout/layout.component';
 import { ToolbarComponent } from 'src/app/layout/toolbar/toolbar.component';
-import { NavigationService } from 'src/app/navigation.service';
 import { ActionsListComponent } from '../../actions/actions-list/actions-list.component';
 
 @Component({
@@ -41,9 +40,8 @@ import { ActionsListComponent } from '../../actions/actions-list/actions-list.co
   styleUrl: './inbox-action-choice.component.scss'
 })
 export class InboxActionChoiceComponent implements OnInit {
-  route = inject(ActivatedRoute);
   router = inject(Router);
-  navigation = inject(NavigationService);
+  route = inject(ActivatedRoute);
   inboxRepository = inject(InboxRepository);
   actionsRepository = inject(ActionsRepository);
   projectsRepository = inject(ProjectsRepository);
@@ -54,15 +52,6 @@ export class InboxActionChoiceComponent implements OnInit {
   projects$?: BehaviorSubject<RxDoc<ProjectDocument>[]>;
   inboxItemActions$!: Observable<RxDoc<ActionDocument>[]>;
   anyItemIsInvalid$ = new Subject<boolean>();
-
-  constructor() {
-    this.navigation.settings.next({
-      toolbar: true,
-      showBackBtn: true,
-      backBtnRoute: 'inbox',
-      toolbarHeader: 'inbox-choice.toolbar'
-    });
-  }
 
   ngOnInit(): void {
     this.item = this.route.snapshot.data['item'];

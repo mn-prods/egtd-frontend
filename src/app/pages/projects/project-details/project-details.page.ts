@@ -1,13 +1,12 @@
 import { TextFieldModule } from '@angular/cdk/text-field';
-import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { debounceTime, filter, tap } from 'rxjs';
+import { debounceTime, filter } from 'rxjs';
 import { DEFAULT_DEBOUNCE, PROJECT_NAME_MIN_LENGTH } from 'src/app/common/constants';
 import { assert } from 'src/app/common/functions/assert';
 import { FormGroupValue } from 'src/app/common/types/form-group-value.type';
@@ -17,7 +16,6 @@ import { ProjectDocument } from 'src/app/db/entities/project.entity';
 import { ProjectsRepository } from 'src/app/db/project.repository';
 import { GtdPageLayout } from 'src/app/layout/layout.component';
 import { ToolbarComponent } from 'src/app/layout/toolbar/toolbar.component';
-import { NavigationService } from 'src/app/navigation.service';
 
 type FormValue = FormGroupValue<Pick<ProjectDocument, 'name' | 'details'>>;
 
@@ -38,18 +36,10 @@ type FormValue = FormGroupValue<Pick<ProjectDocument, 'name' | 'details'>>;
 export class ProjectDetailsPage implements OnInit {
   route = inject(ActivatedRoute);
   destroyRef = inject(DestroyRef);
-  navigation = inject(NavigationService);
   projectsRepository = inject(ProjectsRepository);
 
   constructor() {
     this.project = this.route.snapshot.data['project'];
-
-    this.navigation.settings.next({
-      toolbar: true,
-      showBackBtn: true,
-      backBtnRoute: 'projects',
-      toolbarHeader: `Project: ${this.project!.name}`
-    });
   }
 
   project!: RxDoc<ProjectDocument>;
@@ -70,7 +60,6 @@ export class ProjectDetailsPage implements OnInit {
     this.projectForm.valueChanges
       .pipe(
         filter(() => this.projectForm.valid),
-        tap(({ name }) => this.navigation.updateSetting({ toolbarHeader: `Project: ${name}` })),
         debounceTime(DEFAULT_DEBOUNCE),
         takeUntilDestroyed(this.destroyRef)
       )

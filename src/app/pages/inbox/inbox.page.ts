@@ -1,15 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
-import { BehaviorSubject, Observable, Subject, map, takeUntil } from 'rxjs';
-import { InboxItemComponent } from './inbox-item/inbox-item.component';
+import { BehaviorSubject, Observable, map } from 'rxjs';
+import { RxDoc } from 'src/app/db/db.model';
 import { InboxDocument } from 'src/app/db/entities/inbox.entity';
 import { InboxRepository } from 'src/app/db/inbox.repository';
-import { RxDoc } from 'src/app/db/db.model';
-import { NavigationService } from 'src/app/navigation.service';
-import { ToolbarComponent } from 'src/app/layout/toolbar/toolbar.component';
 import { GtdPageLayout } from 'src/app/layout/layout.component';
+import { ToolbarComponent } from 'src/app/layout/toolbar/toolbar.component';
+import { InboxItemComponent } from './inbox-item/inbox-item.component';
 
 @Component({
   selector: 'app-inbox',
@@ -25,30 +25,19 @@ import { GtdPageLayout } from 'src/app/layout/layout.component';
   templateUrl: './inbox.page.html',
   styleUrl: './inbox.page.scss'
 })
-export class InboxPage implements OnInit, OnDestroy {
+export class InboxPage implements OnInit {
   private readonly inboxRepository = inject(InboxRepository);
-  private readonly navigation = inject(NavigationService);
+  private readonly destroyRef = inject(DestroyRef);
 
   inboxItems$!: BehaviorSubject<RxDoc<InboxDocument>[]>;
 
   anItemIsEmpty$!: Observable<boolean>;
 
-  unsub$!: Subject<null>;
-
-  constructor() {
-    this.unsub$ = new Subject();
-    this.navigation.settings.next({
-      toolbar: true,
-      toolbarHeader: 'inbox.toolbar',
-      showSidenavBtn: true
-    });
-  }
-
   ngOnInit(): void {
     this.inboxItems$ = this.inboxRepository.observeAll();
     this.anItemIsEmpty$ = this.inboxItems$.pipe(
       map((items) => items.some(({ body }) => !body)),
-      takeUntil(this.unsub$)
+      takeUntilDestroyed(this.destroyRef)
     );
   }
 
@@ -61,11 +50,5 @@ export class InboxPage implements OnInit, OnDestroy {
 
   removeItem(id: string) {
     this.inboxRepository.delete(id);
-  }
-
-  ngOnDestroy(): void {
-    this.unsub$.next(null);
-    this.unsub$.complete();
-    this.unsub$.unsubscribe();
   }
 }
