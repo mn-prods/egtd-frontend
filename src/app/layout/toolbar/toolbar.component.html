@@ -1,0 +1,20 @@
+<mat-toolbar id="page-toolbar" color="primary" class="flex justify-between gap-2">
+  @if (menuBtn()) {
+  <button mat-icon-button (click)="toggleSideNav()" aria-label="Open sidebar">
+    <mat-icon>menu</mat-icon>
+  </button>
+  } @if (backBtn()) {
+  <button mat-icon-button [routerLink]="backRoute()" aria-label="Navigate back">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  }
+  <div class="overflow-hidden overflow-ellipsis">
+    {{ header() | translate }}
+  </div>
+  <img
+    class="rounded-full h-5/6"
+    [src]="user()?.photoURL"
+    alt="User profile img"
+    [routerLink]="['/user']"
+  />
+</mat-toolbar>

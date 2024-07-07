@@ -8,11 +8,20 @@ import { InboxDocument } from 'src/app/db/entities/inbox.entity';
 import { InboxRepository } from 'src/app/db/inbox.repository';
 import { RxDoc } from 'src/app/db/db.model';
 import { NavigationService } from 'src/app/navigation.service';
+import { ToolbarComponent } from 'src/app/layout/toolbar/toolbar.component';
+import { GtdPageLayout } from 'src/app/layout/layout.component';
 
 @Component({
   selector: 'app-inbox',
   standalone: true,
-  imports: [CommonModule, InboxItemComponent, MatButtonModule, TranslateModule],
+  imports: [
+    CommonModule,
+    InboxItemComponent,
+    MatButtonModule,
+    TranslateModule,
+    ToolbarComponent,
+    GtdPageLayout
+  ],
   templateUrl: './inbox.page.html',
   styleUrl: './inbox.page.scss'
 })

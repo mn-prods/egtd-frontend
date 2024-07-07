@@ -18,6 +18,8 @@ import { PROJECT_NAME_MIN_LENGTH } from 'src/app/common/constants';
 import { RxDoc } from 'src/app/db/db.model';
 import { ProjectDocument } from 'src/app/db/entities/project.entity';
 import { ProjectsRepository } from 'src/app/db/project.repository';
+import { GtdPageLayout } from 'src/app/layout/layout.component';
+import { ToolbarComponent } from 'src/app/layout/toolbar/toolbar.component';
 import { NavigationService } from 'src/app/navigation.service';
 
 @Component({
@@ -25,7 +27,16 @@ import { NavigationService } from 'src/app/navigation.service';
   selector: 'app-projects',
   templateUrl: './projects.page.html',
   styleUrl: './projects.page.scss',
-  imports: [CommonModule, TranslateModule, MatCardModule, MatButtonModule, MatBottomSheetModule, RouterLink]
+  imports: [
+    CommonModule,
+    TranslateModule,
+    MatCardModule,
+    MatButtonModule,
+    MatBottomSheetModule,
+    RouterLink,
+    GtdPageLayout,
+    ToolbarComponent
+  ]
 })
 export class ProjectsPage implements OnInit {
   bottomSheet = inject(MatBottomSheet);

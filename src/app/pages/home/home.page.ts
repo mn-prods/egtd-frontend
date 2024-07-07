@@ -1,4 +1,6 @@
 import { Component, inject } from '@angular/core';
+import { GtdPageLayout } from 'src/app/layout/layout.component';
+import { ToolbarComponent } from 'src/app/layout/toolbar/toolbar.component';
 import { NavigationService } from 'src/app/navigation.service';
 
 
@@ -7,7 +9,7 @@ import { NavigationService } from 'src/app/navigation.service';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: []
+  imports: [ToolbarComponent, GtdPageLayout]
 })
 export class HomePage {
   private readonly navigation = inject(NavigationService);

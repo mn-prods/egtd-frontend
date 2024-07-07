@@ -1,13 +1,15 @@
-<div class="flex flex-col justify-between h-full">
-  <div class="px-2 overflow-auto">
+<page-layout>
+  <app-toolbar [menuBtn]="true" header="inbox.toolbar"></app-toolbar>
+
+  <div class="px-2" scrollable>
     @for (item of inboxItems$ | async; track item.id) {
     <app-inbox-item [item]="item"></app-inbox-item>
     }
   </div>
 
-  <div class="px-2">
+  <div actions class="p-2">
     <button
-      class="my-2 w-full"
+      class="w-full"
       mat-stroked-button
       [disabled]="anItemIsEmpty$ | async"
       (click)="addItem()"
@@ -15,4 +17,4 @@
       {{ 'inbox.btn.add' | translate }}
     </button>
   </div>
-</div>
+</page-layout>

@@ -6,7 +6,7 @@ export interface InboxDocument extends BaseGtdDocument {
   body: string;
   marked: boolean;
   actionable: boolean;
-  project: string;
+  project: string | null;
   updatedAt: number;
   createdAt: number;
   _deleted?: boolean;

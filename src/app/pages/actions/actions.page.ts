@@ -1,23 +1,24 @@
+import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, OnInit, inject, input } from '@angular/core';
-import { ActionsListComponent } from './actions-list/actions-list.component';
-import { ActionsRepository } from 'src/app/db/actions.repository';
-import { ActionDocument, ActionType } from 'src/app/db/entities/action.entity';
-import { ActivatedRoute } from '@angular/router';
-import { NavigationService } from 'src/app/navigation.service';
-import { BehaviorSubject, Subject, startWith, switchMap, tap } from 'rxjs';
-import { RxDoc } from 'src/app/db/db.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { FormGroupValue } from 'src/app/common/types/form-group-value.type';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { TranslateModule } from '@ngx-translate/core';
-import { MatSelectModule } from '@angular/material/select';
-import { ProjectsRepository } from 'src/app/db/project.repository';
-import { CommonModule } from '@angular/common';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { ActivatedRoute } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
+import { BehaviorSubject, Subject, startWith, switchMap, tap } from 'rxjs';
+import { FormGroupValue } from 'src/app/common/types/form-group-value.type';
+import { ActionsRepository } from 'src/app/db/actions.repository';
+import { RxDoc } from 'src/app/db/db.model';
+import { ActionDocument, ActionType } from 'src/app/db/entities/action.entity';
 import { ProjectDocument } from 'src/app/db/entities/project.entity';
+import { ProjectsRepository } from 'src/app/db/project.repository';
+import { GtdPageLayout } from 'src/app/layout/layout.component';
+import { ToolbarComponent } from 'src/app/layout/toolbar/toolbar.component';
+import { NavigationService } from 'src/app/navigation.service';
+import { ActionsListComponent } from './actions-list/actions-list.component';
 
 type ActionsFilter = { type?: ActionType; project?: string };
 
@@ -33,7 +34,9 @@ type ActionsFilter = { type?: ActionType; project?: string };
     MatMenuModule,
     MatIconModule,
     MatButtonModule,
-    CommonModule
+    CommonModule,
+    GtdPageLayout,
+    ToolbarComponent
   ]
 })
 export class ActionsPage implements OnInit {

@@ -15,6 +15,8 @@ import { isNullOrUndefined } from 'src/app/common/value-check';
 import { RxDoc } from 'src/app/db/db.model';
 import { ProjectDocument } from 'src/app/db/entities/project.entity';
 import { ProjectsRepository } from 'src/app/db/project.repository';
+import { GtdPageLayout } from 'src/app/layout/layout.component';
+import { ToolbarComponent } from 'src/app/layout/toolbar/toolbar.component';
 import { NavigationService } from 'src/app/navigation.service';
 
 type FormValue = FormGroupValue<Pick<ProjectDocument, 'name' | 'details'>>;
@@ -23,7 +25,15 @@ type FormValue = FormGroupValue<Pick<ProjectDocument, 'name' | 'details'>>;
   standalone: true,
   templateUrl: './project-details.page.html',
   styleUrl: './project-details.page.scss',
-  imports: [MatFormFieldModule, MatInput, ReactiveFormsModule, TextFieldModule, TranslateModule]
+  imports: [
+    MatFormFieldModule,
+    MatInput,
+    ReactiveFormsModule,
+    TextFieldModule,
+    TranslateModule,
+    GtdPageLayout,
+    ToolbarComponent
+  ]
 })
 export class ProjectDetailsPage implements OnInit {
   route = inject(ActivatedRoute);

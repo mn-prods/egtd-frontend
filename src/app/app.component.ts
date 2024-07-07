@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import 'zone.js/plugins/zone-patch-rxjs';
-import { LayoutComponent } from './layout/layout.component';
+import { GtdPageLayout } from './layout/layout.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrl: 'app.component.scss',
   standalone: true,
-  imports: [LayoutComponent]
+  imports: [RouterModule]
 })
 export class AppComponent {}

@@ -1,15 +1,14 @@
+import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, OnInit, inject, input, output } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
-import { Observable, debounceTime, firstValueFrom, map, takeUntil, tap } from 'rxjs';
-import { NextActionItemComponent } from '../action-item/action-item.component';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Observable, firstValueFrom, map } from 'rxjs';
 import { ActionsRepository } from 'src/app/db/actions.repository';
-import { ActionDocument, ActionType } from 'src/app/db/entities/action.entity';
-import { InboxDocument } from 'src/app/db/entities/inbox.entity';
 import { RxDoc } from 'src/app/db/db.model';
+import { ActionDocument, ActionType } from 'src/app/db/entities/action.entity';
+import { NextActionItemComponent } from '../action-item/action-item.component';
 
 @Component({
   selector: 'app-actions-list',

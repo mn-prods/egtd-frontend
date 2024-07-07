@@ -1,5 +1,6 @@
-<div class="flex flex-col justify-between h-full">
-  <div class="px-2 pt-2" [formGroup]="actionsFilter">
+<page-layout>
+  <app-toolbar [menuBtn]="true" header="next-actions.toolbar"></app-toolbar>
+  <div class="px-2 pt-2" [formGroup]="actionsFilter" header>
     <div class="flex justify-between items-start">
       <div class="flex items-center gap-2 grow-0">
         <mat-button-toggle-group formControlName="type">
@@ -21,14 +22,20 @@
         <mat-icon>close</mat-icon>
       </button>
     </div>
-    <div [class.invisible]="!actionsFilter.value.project" class="flex items-center text-sm">
-      <mat-icon class="colo">filter_alt</mat-icon>
-      <span>{{ (selectedProjectName$ | async)?.name }}</span>
+    <div>
+      <div [class.invisible]="!actionsFilter.value.project" class="flex items-center text-sm">
+        <mat-icon class="colo">filter_alt</mat-icon>
+        <span>{{ (selectedProjectName$ | async)?.name }}</span>
+      </div>
     </div>
   </div>
-  <app-actions-list class="flex-1 overflow-auto px-2" [actions$]="actions$"></app-actions-list>
-  <button class="m-2" mat-stroked-button>add</button>
-</div>
+  <div scrollable class="px-2">
+    <app-actions-list [actions$]="actions$"></app-actions-list>
+  </div>
+  <div actions class="p-2">
+    <button mat-stroked-button class="w-full">add</button>
+  </div>
+</page-layout>
 
 <mat-menu #menu="matMenu">
   <button mat-menu-item (click)="setProjectFilter(null)">{{ 'general.all' | translate }}</button>

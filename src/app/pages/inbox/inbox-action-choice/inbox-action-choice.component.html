@@ -1,10 +1,11 @@
-<div class="flex flex-col h-full">
-  <div class="flex flex-col flex-grow gap-5 overflow-hidden">
-    <div class="flex justify-between items-center mb-4 p-2">
+<page-layout>
+  <app-toolbar [backBtn]="true"></app-toolbar>
+  <div header class="p-2 flex flex-col gap-2">
+    <div class="flex justify-between items-center">
       <div
         [style.view-transition-name]="'inbox-' + item.id"
         [style.view-transition-class]="'inbox'"
-        class="text-2xl"
+        class="text-xl"
       >
         {{ item.body }}
       </div>
@@ -14,17 +15,9 @@
     </div>
     <div class="flex items-start justify-between">
       <div>{{ 'inbox-choice.project?' | translate }}</div>
-      <mat-form-field appearance="outline" class="mt-1">
-        <mat-select
-          [value]="item.project"
-          (selectionChange)="assingProjectToItemAndActions($event)"
-        >
-          <mat-option [value]="null">{{ 'general.no' | translate }}</mat-option>
-          @for (project of projects$ | async; track $index) {
-          <mat-option [value]="project.id">{{ project.name }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
+      <button mat-stroked-button [matMenuTriggerFor]="menu">
+        <mat-icon class="material-symbols-outlined">tactic</mat-icon>
+      </button>
     </div>
     <div class="flex items-center justify-between">
       <div>{{ 'inbox-choice.actionable?' | translate }}</div>
@@ -39,21 +32,40 @@
         </mat-button-toggle-group>
       </div>
     </div>
-
-    <div class="flex flex-col flex-grow overflow-y-auto">
-      @if (actionable.value === true) {
-      <app-inbox-actions-list
-        class=""
-        [inboxItem]="item"
-        [projectId]="selectedProject"
-      ></app-inbox-actions-list>
-      } @if (actionable.value === false) {
-      <div class="w-full flex justify-around">
-        <button mat-icon-button><mat-icon>delete</mat-icon></button>
-        <button mat-icon-button><mat-icon>timer</mat-icon></button>
-        <button mat-icon-button><mat-icon>book</mat-icon></button>
-      </div>
-      }
-    </div>
   </div>
-</div>
+  <div class="flex flex-col flex-grow overflow-y-auto" scrollable>
+    @if (actionable.value) {
+    <app-actions-list
+      class="p-2"
+      [actions$]="inboxItemActions$"
+      (anyItemIsInvalid)="anyItemIsInvalid$.next($event)"
+    ></app-actions-list>
+    } @if (actionable.value === false) {
+    <div class="w-full flex justify-around">
+      <button mat-icon-button><mat-icon>delete</mat-icon></button>
+      <button mat-icon-button><mat-icon>timer</mat-icon></button>
+      <button mat-icon-button><mat-icon>book</mat-icon></button>
+    </div>
+    }
+  </div>
+  @if (actionable.value) {
+
+  <div class="p-2" actions>
+    <button
+      class="w-full"
+      mat-stroked-button
+      (click)="addNextAction()"
+      [disabled]="anyItemIsInvalid$ | async"
+    >
+      {{ 'next-actions.btn.add' | translate }}
+    </button>
+  </div>
+  }
+</page-layout>
+
+<mat-menu #menu="matMenu">
+  <button mat-menu-item (click)="assingToProject(null)">{{ 'general.all' | translate }}</button>
+  @for (project of projects$ |async ; track $index) {
+  <button mat-menu-item (click)="assingToProject(project.id)">{{ project.name }}</button>
+  }
+</mat-menu>

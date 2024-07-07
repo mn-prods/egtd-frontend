@@ -1,1 +1,9 @@
-<button (click)="logout()">logout</button>
+<page-layout>
+  <app-toolbar [menuBtn]="true" ></app-toolbar>
+
+  <div scrollable></div>
+
+  <div class="p-2" actions>
+    <button mat-stroked-button class="w-full" (click)="logout()">logout</button>
+  </div>
+</page-layout>

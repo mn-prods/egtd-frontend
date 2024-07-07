@@ -1,5 +1,6 @@
-<div class="flex flex-col justify-between h-full">
-  <div class="p-2 overflow-auto flex flex-col gap-2">
+<page-layout>
+  <app-toolbar [menuBtn]="true" header="projects.toolbar"></app-toolbar>
+  <div scrollable class="p-2 flex flex-col gap-2">
     @for (project of projects$ | async; track project.id) {
     <mat-card appearance="outlined">
       <mat-card-header [routerLink]="['.', project.id]">
@@ -19,10 +20,9 @@
     </mat-card>
     }
   </div>
-
-  <div class="px-2">
-    <button class="my-2 w-full" mat-stroked-button (click)="addProject()">
+  <div actions class="p-2">
+    <button class="w-full" mat-stroked-button (click)="addProject()">
       {{ 'projects.btn.add' | translate }}
     </button>
   </div>
-</div>
+</page-layout>

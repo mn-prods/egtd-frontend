@@ -49,7 +49,7 @@ export class ActionsRepository extends BaseRepository<ActionDocument> {
     }).$;
   }
 
-  setProjectToAllInboxItemActions(inboxItem: string, project: string) {
+  setProjectToAllInboxItemActions(inboxItem: string, project: string | null) {
     this.collection
       .find({
         selector: { inboxItem, _deleted: false }

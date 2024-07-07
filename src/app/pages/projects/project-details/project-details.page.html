@@ -1,19 +1,22 @@
-@if (projectForm) {
-<form [formGroup]="projectForm" class="flex flex-col items-start m-2">
-  <mat-form-field appearance="outline" class="w-full">
-    <mat-label> {{ 'projects.lbl.name' | translate }} </mat-label>
-    <input type="text" matInput formControlName="name" />
-  </mat-form-field>
-  <mat-form-field appearance="outline" class="w-full">
-    <mat-label> {{ 'projects.lbl.details' | translate }} </mat-label>
-    <textarea
-      matInput
-      type="text"
-      formControlName="details"
-      cdkTextareaAutosize
-      cdkAutosizeMinRows="10"
-      cdkAutosizeMaxRows="20"
-    ></textarea>
-  </mat-form-field>
-</form>
-}
+<page-layout>
+  <app-toolbar [backBtn]="true"></app-toolbar>
+  @if (projectForm) {
+  <form [formGroup]="projectForm" class="flex flex-col items-start m-2" scrollable>
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label> {{ 'projects.lbl.name' | translate }} </mat-label>
+      <input type="text" matInput formControlName="name" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label> {{ 'projects.lbl.details' | translate }} </mat-label>
+      <textarea
+        matInput
+        type="text"
+        formControlName="details"
+        cdkTextareaAutosize
+        cdkAutosizeMinRows="10"
+        cdkAutosizeMaxRows="20"
+      ></textarea>
+    </mat-form-field>
+  </form>
+  }
+</page-layout>
