@@ -2,7 +2,8 @@
     "general": {
         "yes": "Yes",
         "no": "No",
-        "all": "All"
+        "all": "All",
+        "none": "None"
     },
     "sidenav": {
         "toolbar": "Menu",
