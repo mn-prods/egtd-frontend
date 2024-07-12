@@ -67,11 +67,6 @@ export class NextActionItemComponent implements OnInit, AfterViewInit, OnDestroy
   itemSelected = signal(0);
 
   actionType = ActionType;
-  typeIcons = {
-    [ActionType.wait]: 'hourglass_top',
-    [ActionType.schedule]: 'event',
-    [ActionType.do]: 'commit'
-  };
 
   async ngOnInit() {
     this.unsub$ = new Subject();

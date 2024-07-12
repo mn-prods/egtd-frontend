@@ -7,15 +7,16 @@ import { MatFormField } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { DEFAULT_DEBOUNCE } from 'src/app/common/constants';
+import { actionTypeIcons, DEFAULT_DEBOUNCE } from 'src/app/common/constants';
 import { FormGroupValue } from 'src/app/common/types/form-group-value.type';
 import { ActionDocument, Schedule } from 'src/app/db/entities/action.entity';
+import { ActionItem } from '../action-item.interface';
 
 @Component({
   standalone: true,
   selector: 'app-action-item-schedule',
   templateUrl: './action-item-schedule.component.html',
-  styleUrl: './action-item-schedule.component.scss',
+  styleUrls: ['./action-item-schedule.component.scss', '../action-item.component.scss'],
   imports: [
     MatFormField,
     MatInputModule,
@@ -25,13 +26,17 @@ import { ActionDocument, Schedule } from 'src/app/db/entities/action.entity';
     ReactiveFormsModule
   ]
 })
-export class ActionItemScheduleComponent implements OnInit {
+export class ActionItemScheduleComponent implements ActionItem, OnInit {
   action = input.required<ActionDocument>();
   onScheduleChange = output<Partial<Schedule>>();
 
   destroyRef = inject(DestroyRef);
 
   schedule!: FormGroup<FormGroupValue<Schedule>>;
+
+  public get icon() {
+    return actionTypeIcons.schedule;
+  }
 
   ngOnInit(): void {
     this.schedule = new FormGroup({

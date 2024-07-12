@@ -1,17 +1,21 @@
 import { TextFieldModule } from '@angular/cdk/text-field';
+import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { debounceTime, filter } from 'rxjs';
-import { DEFAULT_DEBOUNCE, PROJECT_NAME_MIN_LENGTH } from 'src/app/common/constants';
+import { BehaviorSubject, debounceTime, filter } from 'rxjs';
+import { DEFAULT_DEBOUNCE, PROJECT_NAME_MIN_LENGTH, actionTypeIcons } from 'src/app/common/constants';
 import { assert } from 'src/app/common/functions/assert';
 import { FormGroupValue } from 'src/app/common/types/form-group-value.type';
 import { isNullOrUndefined } from 'src/app/common/value-check';
+import { ActionsRepository } from 'src/app/db/actions.repository';
 import { RxDoc } from 'src/app/db/db.model';
+import { ActionDocument } from 'src/app/db/entities/action.entity';
 import { ProjectDocument } from 'src/app/db/entities/project.entity';
 import { ProjectsRepository } from 'src/app/db/project.repository';
 import { GtdPageLayout } from 'src/app/layout/layout.component';
@@ -24,18 +28,22 @@ type FormValue = FormGroupValue<Pick<ProjectDocument, 'name' | 'details'>>;
   templateUrl: './project-details.page.html',
   styleUrl: './project-details.page.scss',
   imports: [
+    CommonModule,
     MatFormFieldModule,
     MatInput,
     ReactiveFormsModule,
     TextFieldModule,
     TranslateModule,
     GtdPageLayout,
-    ToolbarComponent
+    ToolbarComponent,
+    RouterModule,
+    MatIcon
   ]
 })
 export class ProjectDetailsPage implements OnInit {
   route = inject(ActivatedRoute);
   destroyRef = inject(DestroyRef);
+  actionsRepository = inject(ActionsRepository);
   projectsRepository = inject(ProjectsRepository);
 
   constructor() {
@@ -46,8 +54,17 @@ export class ProjectDetailsPage implements OnInit {
 
   projectForm!: FormGroup<FormValue>;
 
+  projectActions$!: BehaviorSubject<RxDoc<ActionDocument>[]>;
+
+  typeIcons = actionTypeIcons;
+
   ngOnInit(): void {
     assert(!isNullOrUndefined(this.project), 'Project should exists');
+
+    this.projectActions$ = this.actionsRepository.observeManyByTypeAndProject(
+      null,
+      this.project.id
+    );
 
     this.projectForm = new FormGroup<FormValue>({
       name: new FormControl(this.project!.name, [

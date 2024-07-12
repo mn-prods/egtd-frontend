@@ -1,0 +1,16 @@
+.item {
+  @apply border-red-400 border-solid z-20;
+
+  &.completed {
+    @apply bg-red-400;
+  }
+  &:not(.completed) {
+    @apply bg-white;
+  }
+}
+
+hr.vertical {
+  top: 55%;
+  width: 2px;
+  height: 1.1rem;
+}

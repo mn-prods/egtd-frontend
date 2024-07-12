@@ -1,11 +1,4 @@
-import {
-  Component,
-  DestroyRef,
-  OnInit,
-  inject,
-  input,
-  output
-} from '@angular/core';
+import { Component, DestroyRef, OnInit, inject, input, output } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatIconButton } from '@angular/material/button';
@@ -15,16 +8,17 @@ import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { TranslateModule } from '@ngx-translate/core';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { DEFAULT_DEBOUNCE } from 'src/app/common/constants';
+import { actionTypeIcons, DEFAULT_DEBOUNCE } from 'src/app/common/constants';
 import { FormGroupValue } from 'src/app/common/types/form-group-value.type';
 import { ActionsRepository } from 'src/app/db/actions.repository';
 import { ActionDocument, Waiting } from 'src/app/db/entities/action.entity';
+import { ActionItem } from '../action-item.interface';
 
 @Component({
   standalone: true,
   selector: 'app-action-item-wait-for',
   templateUrl: './action-item-wait-for.component.html',
-  styleUrl: './action-item-wait-for.component.scss',
+  styleUrls: ['./action-item-wait-for.component.scss', '../action-item.component.scss'],
   imports: [
     MatFormFieldModule,
     MatIcon,
@@ -35,8 +29,7 @@ import { ActionDocument, Waiting } from 'src/app/db/entities/action.entity';
     ReactiveFormsModule
   ]
 })
-export class ActionItemWaitForComponent implements OnInit {
-
+export class ActionItemWaitForComponent implements ActionItem, OnInit {
   action = input.required<ActionDocument>();
   onWaitChanged = output<Partial<Waiting>>();
 
@@ -44,6 +37,10 @@ export class ActionItemWaitForComponent implements OnInit {
   destroyRef = inject(DestroyRef);
 
   waitingFor!: FormGroup<FormGroupValue<Waiting>>;
+
+  public get icon() {
+    return actionTypeIcons.wait;
+  }
 
   ngOnInit(): void {
     this.waitingFor = new FormGroup({
@@ -53,8 +50,11 @@ export class ActionItemWaitForComponent implements OnInit {
     });
 
     this.waitingFor.valueChanges
-      .pipe(debounceTime(DEFAULT_DEBOUNCE), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        debounceTime(DEFAULT_DEBOUNCE),
+        distinctUntilChanged(),
+        takeUntilDestroyed(this.destroyRef)
+      )
       .subscribe((wait) => this.onWaitChanged.emit(wait));
   }
-
 }
