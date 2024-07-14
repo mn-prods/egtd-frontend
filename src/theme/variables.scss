@@ -30,7 +30,11 @@ $secondary-20: mat.get-theme-color($theme, secondary, 20);
 $primary-80: mat.get-theme-color($theme, primary, 80);
 $secondary-80: mat.get-theme-color($theme, secondary, 80);
 
+$on-primary: mat.get-theme-color($theme, on-primary);
+$on-secondary: mat.get-theme-color($theme, on-secondary);
+
 $background: mat.get-theme-color($theme, surface);
+
 
 $btn-width: 4.5em;
 $final-bg-color: #e20b76;

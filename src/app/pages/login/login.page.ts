@@ -19,21 +19,18 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.authForm = new FormGroup({
-      email: new FormControl<string>("", [Validators.required, Validators.email]),
-      password: new FormControl<string>("", [Validators.required, Validators.minLength(6)])
+      email: new FormControl<string>('', [Validators.required, Validators.email]),
+      password: new FormControl<string>('', [Validators.required, Validators.minLength(6)])
     });
   }
 
   async singIn() {
-    await signInWithPopup(
-      this.auth,
-      new GoogleAuthProvider()
-    );
+    let provider = new GoogleAuthProvider();
+    provider.addScope('https://www.googleapis.com/auth/calendar');
 
-    await this.router.navigate(['.'])
+    const result = await signInWithPopup(this.auth, provider);
+    console.log(result);
+
+    await this.router.navigate(['.']);
   }
-
-
-
-
 }

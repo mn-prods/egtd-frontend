@@ -21,10 +21,10 @@ export class ToolbarComponent implements OnInit {
   backRoute = input<string>('../');
   menuBtn = input<boolean>();
 
-  user = signal<FirebaseUser | null>(null);
-
   private readonly navigation = inject(NavigationService);
   private readonly auth = inject(Auth);
+
+  user = signal<FirebaseUser | null>(this.auth.currentUser);
 
   ngOnInit(): void {
     this.auth.onAuthStateChanged((user) => this.user.set(user));

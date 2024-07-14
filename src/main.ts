@@ -61,7 +61,7 @@ bootstrapApplication(AppComponent, {
     provideHttpClient(withInterceptorsFromDi()),
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     provideNativeDateAdapter(),
-    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+    { provide: MAT_DATE_LOCALE, useValue: navigator.languages.filter((l) => l.includes('-'))[0] },
     {
       provide: APP_INITIALIZER,
       useFactory: initializeApplication,

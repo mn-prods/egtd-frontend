@@ -1,0 +1,20 @@
+@import 'src/theme/variables.scss';
+
+:host {
+  ::ng-deep {
+    .custom-date-class::after {
+      content: attr(data-content);
+      width: fit-content;
+      height: fit-content;
+      border-radius: 50%;
+      background-color: $primary-50;
+      color: $on-primary;
+      font-size: 0.6rem;
+      position: absolute;
+      left: 70%;
+      top: 10%;
+      padding-inline: 0.2rem;
+      z-index: 10;
+    }
+  }
+}
