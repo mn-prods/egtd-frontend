@@ -5,7 +5,6 @@
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
-    "esModuleInterop": true,
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
@@ -15,21 +14,27 @@
     "declaration": false,
     "experimentalDecorators": true,
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "importHelpers": true,
     "target": "es2022",
     "module": "es2020",
     "lib": [
-      "es2020", 
+      "es2020",
       "es2022",
       "ES2021.WeakRef",
-      "dom"
+      "dom",
+      "dom.iterable"
     ],
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "types": [
+      "gapi",
+      "gapi.calendar"
+    ]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
-  }
+  },
 }

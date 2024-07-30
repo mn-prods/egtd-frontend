@@ -1,1 +1,5 @@
-<button (click)="singIn()">login</button>
+<page-layout class="px-2">
+  <div actions >
+    <button mat-stroked-button (click)="singIn()" class="my-2 w-full">{{ 'login.btn.login' | translate }}</button>
+  </div>
+</page-layout>

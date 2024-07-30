@@ -1,7 +1,16 @@
 <page-layout>
-  <app-toolbar [backBtn]="true"></app-toolbar>
-  <div class="p-2" scrollable>
-    <mat-form-field class="flex-1">
+  <app-toolbar [backBtn]="true" header="waiting.toolbar"></app-toolbar>
+  <div class="p-2 flex flex-col" scrollable>
+    <mat-form-field class="flex-1 px-4">
+      <mat-icon matIconPrefix>person</mat-icon>
+      <input
+        type="text"
+        matInput
+        formControlName="for"
+        [placeholder]="'waiting.lbl.for' | translate"
+      />
+    </mat-form-field>
+    <mat-form-field class="flex-1 px-4">
       <mat-icon matIconPrefix class="material-symbols-outlined"> {{ icon }} </mat-icon>
       <textarea
         matInput
@@ -10,20 +19,17 @@
         cdkAutosizeMinRows="1"
         cdkAutosizeMaxRows="5"
         formControlName="to"
+        [placeholder]="'waiting.lbl.to' | translate"
       ></textarea>
     </mat-form-field>
-    <mat-form-field class="flex-1">
-      <mat-icon matIconPrefix>person</mat-icon>
-      <input type="text" matInput formControlName="for" />
-    </mat-form-field>
-    @if (waitEvents && scheduleEvents) {
+
     <mat-calendar
       [dateClass]="dateClass"
       [selected]="action().wait?.by || null"
       (selectedChange)="calendarEvent($event)"
-    ></mat-calendar>
-    }
+      (monthSelected)="retrieveMonthEvents($event)"
+    >
+    </mat-calendar>
   </div>
   <div actions>actions</div>
 </page-layout>
-

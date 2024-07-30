@@ -1,6 +1,20 @@
-import { Component, inject, input, OnInit, Renderer2, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  inject,
+  input,
+  OnInit,
+  Renderer2,
+  ViewChild
+} from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { MatCalendar, MatDatepickerIntl, MatDatepickerModule } from '@angular/material/datepicker';
+import {
+  MatCalendar,
+  MatCalendarCellClassFunction,
+  MatDatepickerIntl,
+  MatDatepickerModule
+} from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
@@ -17,6 +31,9 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { assert } from 'src/app/common/functions/assert';
 import { isNullOrUndefined } from 'src/app/common/value-check';
 import { GoogleCalendarService } from 'src/app/common/services/google-calendar.service';
+import { Auth } from '@angular/fire/auth';
+import { GoogleCalendarEvents } from 'src/app/common/types/google.type';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-wait-for-detail',
@@ -24,6 +41,7 @@ import { GoogleCalendarService } from 'src/app/common/services/google-calendar.s
   templateUrl: './wait-for-detail.component.html',
   styleUrls: ['./wait-for-detail.component.scss'],
   imports: [
+    TranslateModule,
     ActionTypeButtonComponent,
     MatFormFieldModule,
     MatInput,
@@ -34,24 +52,28 @@ import { GoogleCalendarService } from 'src/app/common/services/google-calendar.s
     MatDatepickerModule
   ]
 })
-export class WaitForDetailComponent implements ActionItem, OnInit {
+export class WaitForDetailComponent implements ActionItem, OnInit, AfterViewInit {
   @ViewChild(MatCalendar, { static: false }) calendar?: MatCalendar<Date>;
 
   actionsRepository = inject(ActionsRepository);
   googleCalendar = inject(GoogleCalendarService);
   renderer = inject(Renderer2);
+  auth = inject(Auth);
   locale = inject(MAT_DATE_LOCALE) as string;
 
   action = input.required<RxDoc<ActionDocument>>();
 
   waitEvents?: RxDoc<ActionDocument>[];
   scheduleEvents?: RxDoc<ActionDocument>[];
+  googleEvents?: GoogleCalendarEvents;
 
   get icon() {
     return actionTypeIcons.wait;
   }
 
-  async ngOnInit() {
+  async ngOnInit() {}
+
+  async ngAfterViewInit() {
     this.waitEvents = await firstValueFrom(
       this.actionsRepository.observeManyByTypeAndProject(ActionType.wait)
     );
@@ -60,7 +82,11 @@ export class WaitForDetailComponent implements ActionItem, OnInit {
       this.actionsRepository.observeManyByTypeAndProject(ActionType.schedule)
     );
 
-    this.googleCalendar.getCalendars().subscribe();
+    this.googleEvents = await firstValueFrom(
+      this.retrieveMonthEvents(this.calendar?.activeDate || new Date())
+    );
+
+    this.calendar?.updateTodaysDate();
   }
 
   /**
@@ -68,22 +94,39 @@ export class WaitForDetailComponent implements ActionItem, OnInit {
    * Since this function relies on data fetched asynchronously, the mat-calendar must
    * not be drawn until those values are available.
    */
-  dateClass = (date: Date): string => {
+  dateClass: MatCalendarCellClassFunction<Date> = (date: Date): string => {
     let dates: Record<number, number> = {};
 
-    this.waitEvents!.map((action) => action.wait?.by)
-      .filter((date): date is Date => !!date)
-      .reduce((acc, curr) => {
-        acc[+curr] = (acc[+curr] || 0) + 1;
-        return acc;
-      }, dates);
+    if (this.waitEvents) {
+      this.waitEvents
+        .map((action) => action.wait?.by)
+        .filter((date): date is Date => !!date)
+        .reduce((acc, curr) => {
+          acc[+curr] = (acc[+curr] || 0) + 1;
+          return acc;
+        }, dates);
+    }
 
-    this.scheduleEvents!.map((action) => action.schedule?.on)
-      .filter((date): date is Date => !!date)
-      .reduce((acc, curr) => {
-        acc[+curr] = (acc[+curr] || 0) + 1;
-        return acc;
-      }, dates);
+    if (this.scheduleEvents) {
+      this.scheduleEvents
+        .map((action) => action.schedule?.on)
+        .filter((date): date is Date => !!date)
+        .reduce((acc, curr) => {
+          acc[+curr] = (acc[+curr] || 0) + 1;
+          return acc;
+        }, dates);
+    }
+
+    if (this.googleEvents) {
+      this.googleEvents.items
+        ?.map((event) => new Date(event.start.dateTime!))
+        .filter((date): date is Date => !!date)
+        .reduce((acc, curr) => {
+          let currentDate = new Date(curr.getFullYear(), curr.getMonth(), curr.getDate());
+          acc[+currentDate] = (acc[+currentDate] || 0) + 1;
+          return acc;
+        }, dates);
+    }
 
     if (!(+date in dates)) {
       return '';
@@ -116,6 +159,20 @@ export class WaitForDetailComponent implements ActionItem, OnInit {
 
     return 'custom-date-class';
   };
+
+  retrieveMonthEvents(date: Date) {
+    let month = date.getMonth();
+    let year = date.getFullYear();
+
+    const startDate = new Date(year, month, 1);
+    const endDate = new Date(year, month + 1, 0);
+
+    return this.googleCalendar.getEvents(
+      this.auth.currentUser?.email as string,
+      startDate,
+      endDate
+    );
+  }
 
   calendarEvent(event: any) {
     console.log(event);

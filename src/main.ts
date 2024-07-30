@@ -20,6 +20,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { AuthInterceptor } from './app/common/interceptors/auth.interceptor';
 import { MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
 import { RxdbProvider } from './app/common/services/db.provider';
+import { GoogleApisInterceptor } from './app/common/interceptors/googleapis.interceptor';
 
 // https://stackoverflow.com/questions/67152273/angular-circular-dependency-when-inject-translateservice-to-interceptor
 export function HttpLoaderFactory(handler: HttpBackend) {
@@ -36,6 +37,7 @@ if (environment.production) {
 
 bootstrapApplication(AppComponent, {
   providers: [
+    provideHttpClient(withInterceptorsFromDi()),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => {
       const firestore = getFirestore();
@@ -46,7 +48,7 @@ bootstrapApplication(AppComponent, {
       return firestore;
     }),
     provideAuth(() => getAuth()),
-    provideRouter(routes, withHashLocation(), withViewTransitions()),
+    provideRouter(routes, withViewTransitions()),
     provideAnimationsAsync(),
     importProvidersFrom(
       TranslateModule.forRoot({
@@ -58,8 +60,8 @@ bootstrapApplication(AppComponent, {
         }
       })
     ),
-    provideHttpClient(withInterceptorsFromDi()),
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: GoogleApisInterceptor, multi: true },
     provideNativeDateAdapter(),
     { provide: MAT_DATE_LOCALE, useValue: navigator.languages.filter((l) => l.includes('-'))[0] },
     {

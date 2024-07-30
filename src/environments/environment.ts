@@ -7,7 +7,8 @@ export const environment = {
   appName: 'gtd',
   firebase,
   production: false,
-  api: 'http://localhost:3000'
+  api: 'http://localhost:3000',
+  redirectUri: 'http://localhost:4200/oauth_callback',
 };
 
 /*

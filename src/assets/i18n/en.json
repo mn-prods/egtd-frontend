@@ -14,6 +14,11 @@
             "actions": "Actions"
         }
     },
+    "login": {
+        "btn": {
+            "login": "Login with Google"
+        }
+    },
     "home": {
         "toolbar": "Home"
     },
@@ -38,6 +43,13 @@
         },
         "btn": {
             "add": "Create Project"
+        }
+    },
+    "waiting": {
+        "toolbar": "Waiting for...",
+        "lbl": {
+            "for": "Someone...",
+            "to": "To do something..."
         }
     },
     "next-actions": {
