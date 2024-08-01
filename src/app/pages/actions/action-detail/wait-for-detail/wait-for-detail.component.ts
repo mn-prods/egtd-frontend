@@ -185,4 +185,11 @@ export class WaitForDetailComponent implements ActionItem, OnInit, AfterViewInit
   calendarEvent(event: any) {
     console.log(event);
   }
+
+  showContacts() {
+    if (!('contacts' in navigator)) return;
+    if (!('ContactsManager' in window)) return;
+
+    console.log(navigator.contacts);
+  }
 }
