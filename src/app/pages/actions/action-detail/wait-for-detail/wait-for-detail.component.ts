@@ -86,6 +86,9 @@ export class WaitForDetailComponent implements ActionItem, OnInit, AfterViewInit
       this.retrieveMonthEvents(this.calendar?.activeDate || new Date())
     );
 
+    /**  this is only used to trigger partial re-rendering and force the dateClass
+     * function to be called again
+     */
     this.calendar?.updateTodaysDate();
   }
 
@@ -172,6 +175,11 @@ export class WaitForDetailComponent implements ActionItem, OnInit, AfterViewInit
       startDate,
       endDate
     );
+  }
+
+  async setGoogleCalendarEvents(date: Date) {
+    this.googleEvents = await firstValueFrom(this.retrieveMonthEvents(date));
+    this.calendar?.updateTodaysDate();
   }
 
   calendarEvent(event: any) {

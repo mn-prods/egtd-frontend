@@ -27,7 +27,7 @@
       [dateClass]="dateClass"
       [selected]="action().wait?.by || null"
       (selectedChange)="calendarEvent($event)"
-      (monthSelected)="retrieveMonthEvents($event)"
+      (monthSelected)="setGoogleCalendarEvents($event)"
     >
     </mat-calendar>
   </div>
