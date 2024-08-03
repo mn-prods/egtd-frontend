@@ -8,6 +8,7 @@ import {
   Renderer2,
   ViewChild
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Auth } from '@angular/fire/auth';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,7 +23,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import { TranslateModule } from '@ngx-translate/core';
-import { debounceTime, firstValueFrom, of, switchMap } from 'rxjs';
+import { debounceTime, firstValueFrom, switchMap } from 'rxjs';
 import { actionTypeIcons } from 'src/app/common/constants';
 import { assert } from 'src/app/common/functions/assert';
 import { GoogleCalendarService } from 'src/app/common/services/google-calendar.service';
@@ -36,7 +37,6 @@ import { GtdPageLayout } from 'src/app/layout/layout.component';
 import { ToolbarComponent } from 'src/app/layout/toolbar/toolbar.component';
 import { ActionItem } from '../../action-item/action-item.interface';
 import { ActionTypeButtonComponent } from '../../action-item/action-type-button/action-type-button.component';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-wait-for-detail',
