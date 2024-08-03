@@ -50,6 +50,9 @@
         "lbl": {
             "for": "Someone...",
             "to": "To do something..."
+        },
+        "btn": {
+            "complete": "Complete"
         }
     },
     "next-actions": {

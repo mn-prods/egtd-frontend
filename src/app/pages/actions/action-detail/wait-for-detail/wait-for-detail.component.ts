@@ -1,39 +1,42 @@
 import {
   AfterViewInit,
-  ChangeDetectorRef,
   Component,
+  DestroyRef,
   inject,
   input,
   OnInit,
   Renderer2,
   ViewChild
 } from '@angular/core';
+import { Auth } from '@angular/fire/auth';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 import {
   MatCalendar,
   MatCalendarCellClassFunction,
-  MatDatepickerIntl,
   MatDatepickerModule
 } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
-import { first, firstValueFrom } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
+import { debounceTime, firstValueFrom, of, switchMap } from 'rxjs';
 import { actionTypeIcons } from 'src/app/common/constants';
+import { assert } from 'src/app/common/functions/assert';
+import { GoogleCalendarService } from 'src/app/common/services/google-calendar.service';
+import { FormGroupValue } from 'src/app/common/types/form-group-value.type';
+import { GoogleCalendarEvents } from 'src/app/common/types/google.type';
+import { isNullOrUndefined } from 'src/app/common/value-check';
 import { ActionsRepository } from 'src/app/db/actions.repository';
 import { RxDoc } from 'src/app/db/db.model';
-import { ActionDocument, ActionType } from 'src/app/db/entities/action.entity';
+import { ActionDocument, ActionType, Waiting } from 'src/app/db/entities/action.entity';
 import { GtdPageLayout } from 'src/app/layout/layout.component';
 import { ToolbarComponent } from 'src/app/layout/toolbar/toolbar.component';
 import { ActionItem } from '../../action-item/action-item.interface';
 import { ActionTypeButtonComponent } from '../../action-item/action-type-button/action-type-button.component';
-import { MAT_DATE_LOCALE } from '@angular/material/core';
-import { assert } from 'src/app/common/functions/assert';
-import { isNullOrUndefined } from 'src/app/common/value-check';
-import { GoogleCalendarService } from 'src/app/common/services/google-calendar.service';
-import { Auth } from '@angular/fire/auth';
-import { GoogleCalendarEvents } from 'src/app/common/types/google.type';
-import { TranslateModule } from '@ngx-translate/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-wait-for-detail',
@@ -49,6 +52,8 @@ import { TranslateModule } from '@ngx-translate/core';
     ToolbarComponent,
     MatIconModule,
     MatCardModule,
+    MatButtonModule,
+    ReactiveFormsModule,
     MatDatepickerModule
   ]
 })
@@ -60,6 +65,7 @@ export class WaitForDetailComponent implements ActionItem, OnInit, AfterViewInit
   renderer = inject(Renderer2);
   auth = inject(Auth);
   locale = inject(MAT_DATE_LOCALE) as string;
+  destroyRef = inject(DestroyRef);
 
   action = input.required<RxDoc<ActionDocument>>();
 
@@ -67,11 +73,40 @@ export class WaitForDetailComponent implements ActionItem, OnInit, AfterViewInit
   scheduleEvents?: RxDoc<ActionDocument>[];
   googleEvents?: GoogleCalendarEvents;
 
+  waitingFor!: FormGroup<FormGroupValue<Waiting>>;
+
+  selectedDate: Date | null = null;
+
   get icon() {
     return actionTypeIcons.wait;
   }
 
-  async ngOnInit() {}
+  async ngOnInit() {
+    this.selectedDate = this.action().wait?.by || null;
+
+    this.waitingFor = new FormGroup<FormGroupValue<Waiting>>({
+      for: new FormControl(this.action().wait?.for || null),
+      by: new FormControl(this.action().wait?.by || null),
+      to: new FormControl(this.action().wait?.to || null)
+    });
+
+    this.waitingFor.valueChanges
+      .pipe(
+        debounceTime(200),
+        switchMap((wait) => {
+          return this.actionsRepository.update(this.action().id, {
+            wait
+          });
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe((s) => {
+        if (!this.calendar) return;
+        if (!s.wait?.by) return;
+        this.selectedDate = s.wait.by;
+        this.calendar.updateTodaysDate();
+      });
+  }
 
   async ngAfterViewInit() {
     this.waitEvents = await firstValueFrom(
@@ -182,8 +217,10 @@ export class WaitForDetailComponent implements ActionItem, OnInit, AfterViewInit
     this.calendar?.updateTodaysDate();
   }
 
-  calendarEvent(event: any) {
-    console.log(event);
+  setWaitingBy(selectedDate: Date | null) {
+    if (!selectedDate) return;
+
+    this.waitingFor.patchValue({ by: selectedDate });
   }
 
   showContacts() {

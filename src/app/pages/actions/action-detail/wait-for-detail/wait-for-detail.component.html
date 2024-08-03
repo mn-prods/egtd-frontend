@@ -1,6 +1,6 @@
 <page-layout>
   <app-toolbar [backBtn]="true" header="waiting.toolbar"></app-toolbar>
-  <div class="p-2 flex flex-col" scrollable>
+  <div class="p-2 flex flex-col" scrollable [formGroup]="waitingFor">
     <mat-form-field class="flex-1 px-4">
       <mat-icon matIconPrefix>person</mat-icon>
       <input
@@ -26,11 +26,17 @@
 
     <mat-calendar
       [dateClass]="dateClass"
-      [selected]="action().wait?.by || null"
-      (selectedChange)="calendarEvent($event)"
+      [selected]="selectedDate"
+      (selectedChange)="setWaitingBy($event)"
       (monthSelected)="setGoogleCalendarEvents($event)"
     >
     </mat-calendar>
   </div>
-  <div actions>actions</div>
+  <div actions class="p-2">
+    <div class="flex-1">
+      <button mat-stroked-button class="w-full">
+        {{ 'waiting.btn.complete' | translate }}
+      </button>
+    </div>
+  </div>
 </page-layout>
