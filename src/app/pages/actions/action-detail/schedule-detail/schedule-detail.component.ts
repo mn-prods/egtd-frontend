@@ -90,7 +90,7 @@ export class ScheduleDetailComponent implements ActionItem, OnInit, AfterViewIni
   selectedDate: Date | null = null;
 
   get icon() {
-    return actionTypeIcons.wait;
+    return actionTypeIcons.schedule;
   }
 
   async ngOnInit() {

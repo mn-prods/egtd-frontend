@@ -68,6 +68,15 @@
             "complete": "Complete"
         }
     },
+    "next-action": {
+        "toolbar": "Next action...",
+        "lbl": {
+            "is": "is something actionable..."
+        },
+        "btn": {
+            "complete": "Complete"
+        }
+    },
     "next-actions": {
         "toolbar": "Actions",
         "btn": {

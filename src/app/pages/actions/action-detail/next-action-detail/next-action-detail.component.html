@@ -1,0 +1,49 @@
+<page-layout>
+  <app-toolbar [backBtn]="true" header="next-action.toolbar"></app-toolbar>
+  <div class="p-2 flex flex-col" scrollable>
+    <mat-form-field class="flex-1 px-4">
+      <mat-icon matIconPrefix class="material-symbols-outlined"> {{ icon }} </mat-icon>
+      <textarea
+        matInput
+        type="text"
+        cdkTextareaAutosize
+        cdkAutosizeMinRows="1"
+        cdkAutosizeMaxRows="5"
+        [formControl]="nextActionBody"
+        [placeholder]="'next-action.lbl.is' | translate"
+      ></textarea>
+    </mat-form-field>
+    <div class="flex flex-row items-start pl-1 mt-1 h-6 text-sm">
+      <div class="btn-offset"></div>
+      <div class="flex justify-between flex-1">
+        <app-action-env-chip
+          [class.invisible]="!action().at"
+          [environment]="action().at!"
+        ></app-action-env-chip>
+        <button mat-icon-button [matMenuTriggerFor]="menu" class="mr-1">
+          <mat-icon>alternate_email</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div actions class="p-2">
+    <div class="flex-1">
+      <button
+        mat-stroked-button
+        class="w-full"
+        (click)="setCompleted()"
+        [disabled]="!action().body"
+      >
+        {{ 'next-action.btn.complete' | translate }}
+      </button>
+    </div>
+  </div>
+</page-layout>
+
+<mat-menu #menu="matMenu">
+  @for (item of environments | keyvalue; track $index) {
+  <button mat-menu-item (click)="setActionAt(item.value)" role="menuitemradio">
+    {{ 'next-actions.at.' + item.value | translate }}
+  </button>
+  }
+</mat-menu>

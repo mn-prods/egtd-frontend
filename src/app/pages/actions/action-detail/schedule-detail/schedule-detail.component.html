@@ -37,7 +37,7 @@
         mat-stroked-button
         class="w-full"
         (click)="setCompleted()"
-        [disabled]="!action().wait?.by || !action().wait?.for || !action().wait?.to"
+        [disabled]="!action().schedule?.on || !action().schedule?.to"
       >
         {{ 'schedule.btn.complete' | translate }}
       </button>
