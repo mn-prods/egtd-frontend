@@ -4,6 +4,7 @@ import {
   DestroyRef,
   inject,
   input,
+  model,
   OnInit,
   Renderer2,
   ViewChild
@@ -23,7 +24,17 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import { TranslateModule } from '@ngx-translate/core';
-import { debounceTime, firstValueFrom, switchMap } from 'rxjs';
+import {
+  debounce,
+  debounceTime,
+  firstValueFrom,
+  map,
+  pairwise,
+  startWith,
+  switchMap,
+  tap,
+  timer
+} from 'rxjs';
 import { actionTypeIcons } from 'src/app/common/constants';
 import { assert } from 'src/app/common/functions/assert';
 import { GoogleCalendarService } from 'src/app/common/services/google-calendar.service';
@@ -37,6 +48,7 @@ import { GtdPageLayout } from 'src/app/layout/layout.component';
 import { ToolbarComponent } from 'src/app/layout/toolbar/toolbar.component';
 import { ActionItem } from '../../action-item/action-item.interface';
 import { ActionTypeButtonComponent } from '../../action-item/action-type-button/action-type-button.component';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-wait-for-detail',
@@ -64,10 +76,12 @@ export class WaitForDetailComponent implements ActionItem, OnInit, AfterViewInit
   googleCalendar = inject(GoogleCalendarService);
   renderer = inject(Renderer2);
   auth = inject(Auth);
+  router = inject(Router);
+  route = inject(ActivatedRoute);
   locale = inject(MAT_DATE_LOCALE) as string;
   destroyRef = inject(DestroyRef);
 
-  action = input.required<RxDoc<ActionDocument>>();
+  action = model.required<RxDoc<ActionDocument>>();
 
   waitEvents?: RxDoc<ActionDocument>[];
   scheduleEvents?: RxDoc<ActionDocument>[];
@@ -92,18 +106,28 @@ export class WaitForDetailComponent implements ActionItem, OnInit, AfterViewInit
 
     this.waitingFor.valueChanges
       .pipe(
-        debounceTime(200),
+        startWith(this.waitingFor.value),
+        pairwise(),
+        debounce(([prev, curr]) => {
+          if (prev.for !== curr.for || prev.to !== curr.to) {
+            return timer(200);
+          }
+          return timer(0);
+        }),
+        map(([_, curr]) => curr),
         switchMap((wait) => {
           return this.actionsRepository.update(this.action().id, {
             wait
           });
         }),
+        tap((updatedAction) => this.action.set(updatedAction)),
         takeUntilDestroyed(this.destroyRef)
       )
-      .subscribe((s) => {
+      .subscribe((updatedAction) => {
         if (!this.calendar) return;
-        if (!s.wait?.by) return;
-        this.selectedDate = s.wait.by;
+        if (!updatedAction.wait?.by) return;
+
+        this.selectedDate = updatedAction.wait.by;
         this.calendar.updateTodaysDate();
       });
   }
@@ -221,6 +245,13 @@ export class WaitForDetailComponent implements ActionItem, OnInit, AfterViewInit
     if (!selectedDate) return;
 
     this.waitingFor.patchValue({ by: selectedDate });
+  }
+
+  setCompleted() {
+    this.actionsRepository.update(this.action().id, { marked: true }).then((updatedAction) => {
+      this.action.set(updatedAction);
+    });
+    this.router.navigate(['..'], { relativeTo: this.route });
   }
 
   showContacts() {

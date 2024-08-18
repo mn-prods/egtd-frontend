@@ -49,7 +49,9 @@
         "toolbar": "Waiting for...",
         "lbl": {
             "for": "Someone...",
-            "to": "To do something..."
+            "to": "To do something...",
+            "selectedDate": "selected date",
+            "currentDate": "current date"
         },
         "btn": {
             "complete": "Complete"
