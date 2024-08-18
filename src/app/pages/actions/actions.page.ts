@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -55,6 +55,8 @@ export class ActionsPage implements OnInit {
 
   actionsFilter!: FormGroup<FormGroupValue<ActionsFilter>>;
 
+  actionListUnfiltered = signal(true);
+
   ngOnInit(): void {
     const entryParams = this.route.snapshot.queryParams;
 
@@ -64,7 +66,12 @@ export class ActionsPage implements OnInit {
     });
 
     this.actionsFilter.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        tap(({ project, type }) => {
+          this.actionListUnfiltered.set(!project && !type);
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
       .subscribe(({ project, type }) => {
         this.router.navigate(['.'], {
           relativeTo: this.route,

@@ -18,7 +18,7 @@
           <mat-icon class="material-symbols-outlined">tactic</mat-icon>
         </button>
       </div>
-      <button mat-icon-button (click)="clear()">
+      <button mat-icon-button (click)="clear()" [disabled]="actionListUnfiltered()">
         <mat-icon>close</mat-icon>
       </button>
     </div>
