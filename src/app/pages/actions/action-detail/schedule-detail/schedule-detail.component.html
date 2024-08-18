@@ -1,0 +1,46 @@
+<page-layout>
+  <app-toolbar [backBtn]="true" header="schedule.toolbar"></app-toolbar>
+  <div class="p-2 flex flex-col" scrollable [formGroup]="schedule">
+    <mat-form-field class="flex-1 px-4">
+      <mat-icon matIconPrefix class="material-symbols-outlined"> {{ icon }} </mat-icon>
+      <textarea
+        matInput
+        type="text"
+        cdkTextareaAutosize
+        cdkAutosizeMinRows="1"
+        cdkAutosizeMaxRows="5"
+        formControlName="to"
+        [placeholder]="'schedule.lbl.to' | translate"
+      ></textarea>
+    </mat-form-field>
+    <div class="px-4 flex flex-col items-end gap-1 text-xs text-slate-500">
+      <div class="flex gap-3">
+        <div>{{ 'schedule.lbl.selectedDate' | translate }}</div>
+        <div class="size-2 rounded-full border-solid border-slate-600 bg-slate-600"></div>
+      </div>
+      <div class="flex gap-3">
+        <div>{{ 'schedule.lbl.currentDate' | translate }}</div>
+        <div class="size-2 rounded-full border-solid border-slate-600"></div>
+      </div>
+    </div>
+    <mat-calendar
+      [dateClass]="dateClass"
+      [selected]="selectedDate"
+      (selectedChange)="setScheduleOn($event)"
+      (monthSelected)="setGoogleCalendarEvents($event)"
+    >
+    </mat-calendar>
+  </div>
+  <div actions class="p-2">
+    <div class="flex-1">
+      <button
+        mat-stroked-button
+        class="w-full"
+        (click)="setCompleted()"
+        [disabled]="!action().wait?.by || !action().wait?.for || !action().wait?.to"
+      >
+        {{ 'schedule.btn.complete' | translate }}
+      </button>
+    </div>
+  </div>
+</page-layout>

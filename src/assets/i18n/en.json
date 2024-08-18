@@ -57,6 +57,17 @@
             "complete": "Complete"
         }
     },
+    "schedule": {
+        "toolbar": "Schedule...",
+        "lbl": {
+            "to": "To do something...",
+            "selectedDate": "selected date",
+            "currentDate": "current date"
+        },
+        "btn": {
+            "complete": "Complete"
+        }
+    },
     "next-actions": {
         "toolbar": "Actions",
         "btn": {
