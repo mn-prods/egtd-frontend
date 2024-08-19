@@ -2,7 +2,6 @@
 
 .action-type-btn {
   border: unset;
-  @apply py-1 px-4 rounded;
   width: $btn-width;
   background: linear-gradient(to right, rgb(247, 246, 246) 50%, $final-bg-color 50%) left;
   background-size: 200%;

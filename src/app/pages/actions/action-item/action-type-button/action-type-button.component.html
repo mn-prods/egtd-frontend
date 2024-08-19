@@ -1,6 +1,6 @@
 <button
   matRipple
-  class="action-type-btn"
+  class="action-type-btn rounded"
   [class.fill-up]="!action().typeIsFinal && pressedFor()"
   [class.final]="action().typeIsFinal"
   [disabled]="disabled()"
@@ -12,7 +12,10 @@
   (onLongPressing)="onLongPressing.emit($event)"
   (onReleasePressing)="onReleasePressing.emit($event)"
 >
-  <div class="flex items-center">
+  <div class="flex py-1 gap-1">
+    <mat-icon [inline]="true" class="material-symbols-outlined">
+      {{ action().typeIsFinal ? 'login': 'autorenew' }}
+    </mat-icon>
     <div class="text-xs">{{ 'next-actions.type.' + action().type | translate }}</div>
   </div>
 </button>
